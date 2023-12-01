@@ -1,0 +1,92 @@
+# ..pre-commit-config.yaml
+repos:
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0    # this is optional, use `pre-commit autoupdate` to get the latest rev!
+  hooks:
+  - id: check-ast
+  - id: check-toml
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: fix-encoding-pragma
+  - id: trailing-whitespace
+
+  # Python stuff
+- repo: https://github.com/psf/black
+  rev: 23.10.1
+  hooks:
+  - id: black
+        # It is recommended to specify the latest version of Python
+        # supported by your project here, or alternatively use
+        # pre-commit's default_language_version, see
+        # https://pre-commit.com/#top_level-default_language_version
+    language_version: python3.11
+- repo: https://github.com/MarcoGorelli/absolufy-imports
+  rev: v0.3.1
+  hooks:
+  - id: absolufy-imports
+- repo: https://github.com/sondrelg/pep585-upgrade
+  rev: v1.0    # Use the sha / tag you want to point at
+  hooks:
+  - id: upgrade-type-hints
+
+  # Shellchecks
+
+  #  Shellcheck that runs in python
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.9.0.6
+  hooks:
+  - id: shellcheck
+  #  Shellcheck that runs in docker
+- repo: https://github.com/koalaman/shellcheck-precommit
+  rev: v0.9.0
+  hooks:
+  - id: shellcheck
+
+  # Various lints
+
+- repo: https://github.com/comkieffer/pre-commit-xmllint.git
+  rev: 1.0.0
+  hooks:
+  - id: xmllint
+    rgs: [--format]
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.11.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
+
+  #  SQLfluff
+
+- repo: https://github.com/sqlfluff/sqlfluff
+  rev: 2.3.5
+  hooks:
+  - id: sqlfluff-lint
+    args: [--dialect=postgres, --rules, layout.long_lines=120]
+  - id: sqlfluff-fix
+    args: [--dialect=postgres, --rules, layout.long_lines=120]
+- repo: https://github.com/tconbeer/sqlfmt
+  rev: v0.21.0
+  hooks:
+  - id: sqlfmt
+    language_version: python
+    stages: [commit]
+
+    # Terraform
+
+- repo: https://github.com/gruntwork-io/pre-commit
+  rev: v0.1.22   # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+  hooks:
+  - id: tflint
+    args:
+    - --module
+    - --deep
+    - --config=.tflint.hcl
+  - id: terraform-validate
+  - id: terraform-fmt
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.83.5   # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+  hooks:
+  - id: terraform_tfsec
+  - id: terraform_docs
+  - id: checkov
