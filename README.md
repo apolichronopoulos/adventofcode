@@ -13,9 +13,12 @@ Personal repository for advent of code challenges
 - [Day 5](https://adventofcode.com/2023/day/5)
 - [Day 6](https://adventofcode.com/2023/day/6)
 
-## Create a venv with custom requirements
+## Python
+
+Create a venv with custom requirements
 
 ```bash
+cd ./python
 python3.11 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
