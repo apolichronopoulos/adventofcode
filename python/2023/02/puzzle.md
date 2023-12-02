@@ -1,7 +1,3 @@
-
-Our sponsors help make Advent of Code possible:
-Monta - Monta is the ultimate platform powering the entire EV charging ecosystem. From drivers, to businesses, to industry partners, we offer software solutions that cover all EV charging needs.
-
 --- Day 2: Cube Conundrum ---
 You're launched high into the atmosphere! The apex of your trajectory just barely reaches the surface of a large island floating in the sky. You gently land in a fluffy pile of leaves. It's quite cold, but you don't see much snow. An Elf runs over to greet you.
 
@@ -30,8 +26,6 @@ Determine which games would have been possible if the bag had been loaded with o
 
 Your puzzle answer was 2169.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---
 The Elf says they've stopped producing snow because they aren't getting any water! He isn't sure why the water stopped; however, he can show you how to get to the water source to check it out for yourself. It's just up ahead!
 
@@ -53,9 +47,12 @@ The power of a set of cubes is equal to the numbers of red, green, and blue cube
 
 For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?
 
-Answer: 
- 
+Your puzzle answer was 60948.
 
-Although it hasn't changed, you can still get your puzzle input.
+Both parts of this puzzle are complete! They provide two gold stars: **
+
+At this point, you should return to your Advent calendar and try another puzzle.
+
+If you still want to see it, you can get your puzzle input.
 
 You can also [Share] this puzzle.
