@@ -59,12 +59,9 @@ static def puzzle2(filename) {
 }
 
 static void main(String[] args) {
-    println "Hello world!"
-
-// Uncomment the lines below to run the script
-//    puzzle1('example.txt', [r: 12, g: 13, b: 14])  // result -> 8
-// puzzle1('input.txt', [r: 12, g: 13, b: 14])  // result -> 2169
-// puzzle2('example.txt')  // result -> 2286
- puzzle2('input.txt')  // correct -> 60948
-
+    // Uncomment the lines below to run the script
+    puzzle1('../../../../puzzles/2023/02/example.txt', [r: 12, g: 13, b: 14])  // result -> 8
+    puzzle1('../../../../puzzles/2023/02/input.txt', [r: 12, g: 13, b: 14])  // result -> 2169
+    puzzle2('../../../../puzzles/2023/02/example.txt')  // result -> 2286
+    puzzle2('../../../../puzzles/2023/02/input.txt')  // correct -> 60948
 }

@@ -115,8 +115,8 @@ func max(a, b int) int {
 
 func main() {
 	// Uncomment the lines below to run the script
-	//puzzle1("example.txt", map[byte]int{'r': 12, 'g': 13, 'b': 14}) // result -> 8
-	// puzzle1("input.txt", map[byte]int{'r': 12, 'g': 13, 'b': 14})  // result -> 2169
-	// puzzle2("example.txt")  // result -> 2286
-	puzzle2("input.txt") // correct -> 60948
+	puzzle1("../puzzles/2023/02/example.txt", map[byte]int{'r': 12, 'g': 13, 'b': 14}) // result -> 8
+	puzzle1("../puzzles/2023/02/input.txt", map[byte]int{'r': 12, 'g': 13, 'b': 14})   // result -> 2169
+	puzzle2("../puzzles/2023/02/example.txt")                                          // result -> 2286
+	puzzle2("../puzzles/2023/02/input.txt")                                            // correct -> 60948
 }

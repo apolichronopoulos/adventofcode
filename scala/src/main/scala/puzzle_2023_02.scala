@@ -1,8 +1,6 @@
-package puzzle_2023_02
-
 import scala.io.Source
 
-object PuzzleSolver {
+object puzzle_2023_02 {
   def puzzle1(filename: String, maxColors: Map[Char, Int]): Unit = {
     val file = Source.fromFile(filename)
     var sum = 0
@@ -63,9 +61,9 @@ object PuzzleSolver {
 
   def main(args: Array[String]): Unit = {
     // Uncomment the lines below to run the script
-    puzzle1("example.txt", Map('r' -> 12, 'g' -> 13, 'b' -> 14)) // result -> 8
-    puzzle1("input.txt", Map('r' -> 12, 'g' -> 13, 'b' -> 14)) // result -> 2169
-    puzzle2("example.txt") // result -> 2286
-    puzzle2("input.txt") // correct -> 60948
+    puzzle1("puzzles/2023/02/example.txt", Map('r' -> 12, 'g' -> 13, 'b' -> 14)) // result -> 8
+    puzzle1("puzzles/2023/02/input.txt", Map('r' -> 12, 'g' -> 13, 'b' -> 14)) // result -> 2169
+    puzzle2("puzzles/2023/02/example.txt") // result -> 2286
+    puzzle2("puzzles/2023/02/input.txt") // correct -> 60948
   }
 }
