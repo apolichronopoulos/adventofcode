@@ -1,0 +1,155 @@
+def check_adjustment_cells(grid, i, j, m, n, distance=1):
+    i_from = min(max(0, i - distance), m)
+    i_to = min(max(0, i + distance + 1), m)
+    j_from = min(max(0, j - distance), n)
+    j_to = min(max(0, j + distance + 1), n)
+    # print(f"i, j: {i},{j}")
+    neighbors = []
+    res = False
+    for h in range(i_from, i_to):
+        l = []
+        for f in range(j_from, j_to):
+            cell = grid[h][f]
+            l.append(cell)
+            # print(f"cell: {cell}")
+            # print(f"h, f: {h},{f}")
+            if (not cell.isdigit()) and (cell != "."):
+                res = True
+                # return True
+        neighbors.append(l)
+    if not res:
+        print(f"i, j: {i},{j}")
+        print("---")
+        for i in neighbors:
+            for j in i:
+                print(j, end=" ")
+            print("")
+        print("---")
+    return res
+    # return False
+
+
+def check_adjustment_gear(grid, i, j, m, n, distance=1):
+    i_from = min(max(0, i - distance), m)
+    i_to = min(max(0, i + distance + 1), m)
+    j_from = min(max(0, j - distance), n)
+    j_to = min(max(0, j + distance + 1), n)
+    # print(f"i, j: {i},{j}")
+    neighbors = []
+    res = [-1, -1]
+    for h in range(i_from, i_to):
+        l = []
+        for f in range(j_from, j_to):
+            cell = grid[h][f]
+            l.append(cell)
+            # print(f"cell: {cell}")
+            # print(f"h, f: {h},{f}")
+            if cell == "*":
+                res = [h, f]
+                return res
+        neighbors.append(l)
+    # if res[0] == -1:
+    #     print(f"i, j: {i},{j}")
+    #     print("---")
+    #     for i in neighbors:
+    #         for j in i:
+    #             print(j, end=" ")
+    #         print("")
+    #     print("---")
+    return res
+
+
+def puzzle1(filename):
+    grid = []
+    with open(filename, 'r') as f:
+        for line in f.readlines():
+            array_line = []
+            for c in line.strip():
+                array_line.append(c)
+            grid.append(array_line)
+    sum = 0
+    m = len(grid)
+    n = len(grid[0])
+    i = 0
+    while i < m:
+        j = 0
+        number = ""
+        while j < n:
+            check_number = False
+            if grid[i][j].isdigit():
+                number += grid[i][j]
+                if j == n - 1:
+                    check_number = True
+            elif number != "":
+                check_number = True
+            if check_number:
+                has_symbol = False
+                for x in range(j - len(number), j):
+                    print("------------")
+                    print(f"number {number} : i:{i} - j:{x}")
+                    if check_adjustment_cells(grid, i, x, m, n):
+                        sum += int(number)
+                        has_symbol = True
+                        # print(f"number with symbol: {number} (i:{i}, j:{j - len(number)})")
+                        break
+                if not has_symbol:
+                    print(f"number without symbol: {number} (i:{i}, j:{j - len(number)})")
+                number = ""
+            j += 1
+        i += 1
+    print(f"result: {sum}")
+
+
+def puzzle2(filename):
+    grid = []
+    with open(filename, 'r') as f:
+        for line in f.readlines():
+            array_line = []
+            for c in line.strip():
+                array_line.append(c)
+            grid.append(array_line)
+    sum = 0
+    gears = {
+
+    }
+    m = len(grid)
+    n = len(grid[0])
+    i = 0
+    while i < m:
+        j = 0
+        number = ""
+        while j < n:
+            check_number = False
+            if grid[i][j].isdigit():
+                number += grid[i][j]
+                if j == n - 1:
+                    check_number = True
+            elif number != "":
+                check_number = True
+            if check_number:
+                for x in range(j - len(number), j):
+                    print("------------")
+                    print(f"number {number} : i:{i} - j:{x}")
+                    gear = check_adjustment_gear(grid, i, x, m, n)
+                    if gear[0] != -1:
+                        key = str(f"{gear[0]}:{gear[1]}")
+                        if key not in gears:
+                            gears[str(f"{gear[0]}:{gear[1]}")] = []
+                        gears[str(f"{gear[0]}:{gear[1]}")].append(int(number))
+                        break
+                number = ""
+            j += 1
+        i += 1
+    for g in gears:
+        if len(gears[g]) == 2:
+            sum += (gears[g][0] * gears[g][1])
+    print(f"result: {sum}")
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    puzzle1('../puzzles/2023/03/example.txt')
+    puzzle1('../puzzles/2023/03/input.txt')  # 524899 too low
+    puzzle1('../puzzles/2023/03/input.txt')  # 526404 correct
+    puzzle2('../puzzles/2023/03/example.txt')  # should be 467835 (16345 + 451490)
+    puzzle2('../puzzles/2023/03/input.txt')  # 84399773 correct
