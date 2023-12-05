@@ -43,38 +43,34 @@ def read_file(filename):
 
 def puzzle1(filename):
     read_file(filename)
-    # print(f"{seeds}")
-    # print(f"{seed_mapping}")
-    for key in seed_mapping:
-        map = {}
-        for record in seed_mapping[key]:
-            d = int(record[0])
-            s = int(record[1])
-            r = int(record[2])
-            for i in range(0, r):
-                # print(f"{d} {s} {r}")
-                map[s + i] = d + i
-        mapping[key] = map
+    print(f"{seeds}")
+    print(f"{seed_mapping}")
 
     res = []
     for seed in seeds:
         k = int(seed)
         error = False
+        print(f"seed: {seed}")
         for step in steps:
-            if k in mapping[step]:
-                k = (mapping[step])[k]
-            if not k:
-                error = True
-                break
+            for record in seed_mapping[step]:
+                d = int(record[0])
+                s = int(record[1])
+                r = int(record[2])
+                if k in range(s, s + r + 1):
+                    x = k - s
+                    k = d + x
+                    break
         if not error:
             res.append(int(k))
+
+        print(f"{step}: {k}")
 
     print(f"min seed: {min(res)}")
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
-    puzzle1('../puzzles/2023/05/input.txt')  # result ->
+    puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
+    puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
     # puzzle2('../puzzles/2023/05/example.txt')  # result ->
     # puzzle2('../puzzles/2023/05/input.txt')  # correct ->
