@@ -33,10 +33,10 @@ def read_file(filename):
             key_list = []
             continue
         x = line.split()
-        destination = x[0]
-        source = x[1]
-        range = x[2]
-        key_list.append([destination, source, range])
+        d = x[0]
+        s = x[1]
+        r = x[2]
+        key_list.append([d, s, r])
     if key_list:
         seed_mapping[map_key] = key_list
 
@@ -68,9 +68,64 @@ def puzzle1(filename):
     print(f"min seed: {min(res)}")
 
 
+def puzzle2(filename):
+    read_file(filename)
+    print(f"{seeds}")
+
+    min_res = 0
+    for i in range(0, len(seeds), 2):
+        seed = int(seeds[i])
+        s_min = seed
+        s_max = s_min + int(seeds[i + 1]) - 1
+        seed_list = [[s_min, s_max]]
+        for step in steps:
+            print(f"seed_list: {seed_list}")
+            print(f"i: {i} seed: {seed}, step: {step}")
+            seed_list_step = []
+            for m in seed_list:
+                s1_min = m[0]
+                s1_max = m[1]
+                found = False
+                for record in seed_mapping[step]:
+                    d = int(record[0])
+                    s = int(record[1])
+                    r = int(record[2])
+                    s2_min = s
+                    s2_max = s + r - 1
+
+                    d2_min = d
+                    d2_max = d + r - 1
+
+                    overlap_min = max(s1_min, s2_min)
+                    overlap_max = min(s1_max, s2_max)
+                    if overlap_min < overlap_max: # example has an issue with (46,56) that maps on humidity-to-location (60 56 37)
+                    # if overlap_min <= overlap_max:
+                        dif_min = max(0, s1_min - s2_min)
+                        dif_max = s2_max - s1_max
+                        d_min = d2_min + dif_min
+                        d_max = min(d2_max, d2_max - dif_max)
+                        seed_list_step.append([d_min, d_max])
+                        found = True
+                        print(
+                            f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})")
+                if not found:
+                    print(f"not found {s1_min, s1_max}")
+                    seed_list_step.append([s1_min, s1_max])
+
+            seed_list = seed_list_step
+
+        print(f"seed_list: {seed_list}")
+        for item in seed_list:
+            if min_res == 0 or min_res > item[0]:
+                min_res = item[0]
+
+    print(f"min seed: {min_res}")
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
-    puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
-    # puzzle2('../puzzles/2023/05/example.txt')  # result ->
-    # puzzle2('../puzzles/2023/05/input.txt')  # correct ->
+    # puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
+    # puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
+    puzzle2('../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
+    # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 63092906 too high
+    # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 60568880 correct
