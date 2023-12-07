@@ -18,10 +18,11 @@ cards = {
 
 
 def read_file(filename, part=1):
+    hands.clear()
+    bids.clear()
     f = open(filename, "r")
     for line in f:
         line = line.strip()
-        print(line)
         if line == "":
             continue
 
@@ -37,16 +38,15 @@ def read_file(filename, part=1):
 
 
 def solve():
-    print(f"{hands}")
-    print(f"{bids}")
     results = []
     for i in range(0, len(hands)):
         hand = hands[i]
-        print(f"hand {hand}")
 
         singles = []
-        doubles = []
+        pairs = []
+        triads = []
         counts = {}
+
         for c in hand:
             count = 0
             singles.append(cards[c])
@@ -59,50 +59,54 @@ def solve():
             count = counts[c]
             v = cards[c]
             if count == 2:
-                doubles.append(v)
+                pairs.append(v)
+            if count == 3:
+                triads.append(v)
             if v > vals[count - 1]:
                 vals[count - 1] = v
 
         score = ""
         for v in vals:
-            score = str(v).zfill(2) + score
+            score = str(1 if v > 0 else 0) + score
 
+        fullhouse = 1 if pairs and triads else 0
+        has_pairs = 1 if len(pairs) == 2 else 0
 
-        double1 = "00"
-        double2 = "00"
-        if len(doubles) == 2:
-            double1 = str(doubles[0]).zfill(2)
-            double2 = str(doubles[1]).zfill(2)
+        score = score[:2] + str(fullhouse) + score[2:4] + str(has_pairs) + score[4:]
 
-        score = score[:6] + double1 + double2 + score[6:]
-
-        # singles = sorted(singles, key=lambda x: x['score'])
-        singles.sort(reverse=True)
         for c in singles:
             score = score + str(c).zfill(2)
 
-        result = {"hand": hands[i], "bid": bids[i], "score": score}
+        # result = {"hand": hands[i], "bid": bids[i], "score": score}
+        result = {"hand": hands[i], "bid": bids[i], "score": int(score)}
         results.append(result)
 
     results = sorted(results, key=lambda x: x['score'])
-    print(results)
+    # print(results)
 
     res = 0
+
+    scores = {}
+
+    f = open("output.txt", "w")
 
     duplicates = 0
     for i in range(0, len(results)):
         r = results[i]
-        # if i < len(results) - 2:
-        #     next = results[i + 1]
-        #     if r['score'] == next['score']:
-        #         duplicates += 1
-        #         print(f"xxxxxxxxx we have a duplicate ranking for score {r['score']}")
+        if r['score'] in scores:
+            duplicates += 1
+            print(f"xxxxxxxxx we have a duplicate ranking for score {r['score']}")
         rank = i + 1 - duplicates
-        print(f"{rank} * {int(r['bid'])} // score = {r['score']} // hand = {r['hand']}")
+        scores[r['score']] = r['score']
+        print(
+            f"{rank} * {int(r['bid'])} // score = {r['score']} // hand = {r['hand']} // hand = {''.join(sorted(r['hand']))}")
         res += rank * int(r['bid'])
+        f.write(f"{r['hand']} {int(r['bid'])} {''.join(sorted(r['hand']))}\n")
+
 
     print(f"res: {res}")
     print(f"duplicates: {duplicates}")
+    f.close()
 
 
 def puzzle1(filename):
@@ -124,6 +128,10 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241042455
     # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241542955
     # puzzle1('../puzzles/2023/07/example2.txt')  # result -> 6440
-    puzzle1('../puzzles/2023/07/input.txt')  # result -> 241298043
-    # puzzle2('../puzzles/2023/07/example.txt')  # result ->
+    # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241298043
+    # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241556315
+    # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241480245
+    # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241344943
+    # ########################################
+    puzzle2('../puzzles/2023/07/example.txt')  # result ->
     # puzzle2('../puzzles/2023/07/input.txt')  # correct ->
