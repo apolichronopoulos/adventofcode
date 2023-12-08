@@ -1,12 +1,14 @@
 step_list = []
 map = {}
-mapping = {
+guide = {
     "L": 0,
     "R": 1,
 }
+position = ""
 
 
 def read_file(filename, part=1):
+    global position
     step_list.clear()
     map.clear()
     f = open(filename, "r")
@@ -29,26 +31,33 @@ def read_file(filename, part=1):
             l = value[0].strip()
             r = value[1].strip()
             map[key] = [l, r]
+            if position == "":
+                position = key
         index += 1
 
 
 def solve(part=1):
-    results = []
-    for step in step_list:
+    global position
+    start = "AAA"
+    end = "ZZZ"
+    step_count = 0
 
-        key = step_list[i]
+    position = start
+    while position != end:
+        for step in step_list:
+            before = position
+            g = guide[step]
+            position = (map[position])[g]
+            step_count += 1
 
-        result = key
+            print(f"step {step_count}: from {before} ({step}) to {position}")
+            if position == end:
+                break
 
-        if part == 2:
-            print("part 2")
+            if part == 2:
+                print("part 2")
 
-        results.append(result)
-
-    res = 0
-    for i in range(0, len(results)):
-        res += 1
-
+    res = step_count
     print(f"res: {res}")
 
 
@@ -56,8 +65,8 @@ def puzzle1(filename):
     read_file(filename)
     print(step_list)
     print(map)
-    print(mapping)
-    # solve()
+    print(guide)
+    solve()
 
 
 def puzzle2(filename):
@@ -67,7 +76,7 @@ def puzzle2(filename):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    puzzle1('../puzzles/2023/08/example.txt')  # result -> ??
-    # puzzle1('../puzzles/2023/08/input.txt')  # result -> ??
+    # puzzle1('../puzzles/2023/08/example.txt')  # result -> 6
+    puzzle1('../puzzles/2023/08/input.txt')  # result -> ??
     # puzzle2('../puzzles/2023/08/example.txt')  # result -> ??
     # puzzle2('../puzzles/2023/08/input.txt')  # result -> ??
