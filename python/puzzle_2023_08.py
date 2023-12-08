@@ -1,45 +1,42 @@
-keys = []
-values = []
+step_list = []
+map = {}
 mapping = {
-    "A": 13,
-    "K": 12,
-    "Q": 11,
-    "J": 10,
-    "T": 9,
-    "9": 8,
-    "8": 7,
-    "7": 6,
-    "6": 5,
-    "5": 4,
-    "4": 3,
-    "3": 2,
-    "2": 1
+    "L": 0,
+    "R": 1,
 }
 
 
 def read_file(filename, part=1):
-    keys.clear()
-    values.clear()
+    step_list.clear()
+    map.clear()
     f = open(filename, "r")
 
     if part == 2:
         print("part 2")
 
+    index = 0
     for line in f:
         line = line.strip()
         if line == "":
             continue
-        x = line.split()
-        key = x[0]
-        value = x[1]
-        keys.append(key)
-        values.append(value)
+        if index == 0:
+            step_list.extend([*line])
+        else:
+            x = line.split("=")
+            key = x[0].strip()
+            value = x[1].strip()
+            value = value[1:len(value) - 1].split(",")
+            l = value[0].strip()
+            r = value[1].strip()
+            map[key] = [l, r]
+        index += 1
 
 
 def solve(part=1):
     results = []
-    for i in range(0, len(keys)):
-        key = keys[i]
+    for step in step_list:
+
+        key = step_list[i]
 
         result = key
 
@@ -57,7 +54,10 @@ def solve(part=1):
 
 def puzzle1(filename):
     read_file(filename)
-    solve()
+    print(step_list)
+    print(map)
+    print(mapping)
+    # solve()
 
 
 def puzzle2(filename):
