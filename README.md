@@ -19,6 +19,7 @@ Create a venv with custom requirements
 
 ```bash
 cd ./python
+rm -rf venv
 python3.11 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
