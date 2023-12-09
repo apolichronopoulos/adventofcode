@@ -1,4 +1,6 @@
 from timeit import default_timer as timer
+from datetime import datetime
+import numpy as np
 
 steps = []
 nodes = {}
@@ -31,7 +33,7 @@ def read_file(filename, part=1):
         index += 1
 
 
-def solve(part=1):
+def solve_brute_force(part=1):
     start = "AAA"
     end = "ZZZ"
     step_count = 0
@@ -47,9 +49,7 @@ def solve(part=1):
 
     iterations = 0
     finished = False
-    loop = []
     while not finished:
-        print(f"iterations: {iterations}")
         iterations += 1
 
         for step in steps:
@@ -57,24 +57,12 @@ def solve(part=1):
                 break
             g = guide[step]
             step_count += 1
-            # print(f"count: {step_count}, going {step}")
-            # print(f"positions: {positions}")
-
-            # x = "".join(positions)
-            # if x in loop:
-            #     print(f"loop in {x}")
-            #     exit(1)
-            # loop.append(x)
 
             z = 0
             for i in range(0, len(positions)):
                 positions[i] = (nodes[positions[i]])[g]
                 if positions[i].endswith(end):
                     z += 1
-
-            # if z > 0:
-            #     print(f"{step_count} ending with z: {z}/{len(positions)}")
-            #     print(f"{positions}")
 
             if z == len(positions):
                 finished = True
@@ -84,30 +72,113 @@ def solve(part=1):
     print(f"res: {res}")
 
 
+def compute_lcm(x, y):
+    # choose the greater number
+    if x > y:
+        greater = x
+    else:
+        greater = y
+
+    while (True):
+        if ((greater % x == 0) and (greater % y == 0)):
+            lcm = greater
+            break
+        greater += 1
+
+    return lcm
+
+
+def solve_smart(part=1):
+    start = "AAA"
+    end = "ZZZ"
+
+    positions = [start]
+    if part == 2:
+        start = 'A'
+        end = 'Z'
+        positions.clear()
+        for node in nodes:
+            if node.endswith('A'):
+                positions.append(node)
+
+    final_nodes_all = []
+
+    for i in range(0, len(positions)):
+
+        current_node = positions[i]
+
+        step_i = 0
+        final_nodes = {}
+        visited = {}
+        looped = False
+
+        while True:
+            if looped:
+                break
+            for step in steps:
+                path = guide[step]
+
+                visit = f"{current_node}_{step}_{step_i % len(steps)}"
+                if visit in visited:
+                    looped = True
+                    break
+                else:
+                    visited[visit] = step_i
+
+                if current_node.endswith(end):
+                    final_nodes[current_node] = step_i
+
+                current_node = (nodes[current_node])[path]
+                step_i += 1
+
+        print(f"finished {i} path")
+        final_nodes_all.append(final_nodes)
+
+    fn = []
+    for i in range(0, len(final_nodes_all)):
+        final_node_steps = final_nodes_all[i].popitem()[1]
+        fn.append(final_node_steps)
+
+    print(f"fn: {fn}")
+
+    arr = np.array(fn)
+    x = np.lcm.reduce(arr)
+    print(x)
+
+
+
 def puzzle1(filename):
     start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename)
-    # print(steps)
-    # print(nodes)
-    # print(guide)
-    solve()
+    solve_brute_force()
     end = timer()
     print(f"Time elapsed (in seconds): {end - start}")
 
 
-def puzzle2(filename):
+def puzzle2(filename, brute=True):
     start = timer()
     print(f"\n\npuzzle2: {filename}")
     read_file(filename, 2)
-    solve(2)
+    if brute:
+        solve_brute_force(2)
+    else:
+        solve_smart(2)
     end = timer()
     print(f"Time elapsed (in seconds): {end - start}")
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("Start Time =", current_time)
     # puzzle1('../puzzles/2023/08/example.txt')  # result -> 6
     # puzzle1('../puzzles/2023/08/input.txt')  # result -> 19637
     # puzzle2('../puzzles/2023/08/example2.txt')  # result -> 6
-    puzzle2('../puzzles/2023/08/input.txt')  # result -> ??
+    # puzzle2('../puzzles/2023/08/example2.txt', False)  # result -> 6
+    puzzle2('../puzzles/2023/08/input.txt', False)  # result -> 8811050362409
+
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("End Time =", current_time)
