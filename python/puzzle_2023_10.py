@@ -24,17 +24,6 @@ def read_file(filename, part=1):
         elements.append(elements_i)
 
 
-def solve_recursive(part=1):
-    res = 0
-    path = [start]
-    path = navigate(path)
-
-    print(f"path: {path}")
-    print(np.matrix(path))
-    res = len(path) // 2
-    print(f"res: {res}")
-
-
 def solve(part=1):
     final_paths = []
     paths = [[start]]
@@ -61,57 +50,38 @@ def solve(part=1):
                 new_paths.append(path2)
         paths = new_paths
 
-    # final_path = final_paths[0]
+    results = []
     for final_path in final_paths:
-        # for i in range(0, len(elements)):
-        #     for j in range(0, len(elements[i])):
-        #         if [i, j] in final_path:
-        #             print("x", end=" "),
-        #         else:
-        #             print("-", end=" "),
-        #     print(""),
-        # print(f"final_path: {final_path}")
-        # print(np.matrix(final_path))
-        res = (len(final_path) - 1) // 2
-        print(f"res: {res}")
+        results.append((len(final_path) - 1) // 2)
 
+    max_res = 0
+    duplicates = [number for number in results if results.count(number) > 1]
+    results = list(set(duplicates))
+    for res in results:
+        max_res = res
 
-def navigate(path):
-    current = path[len(path) - 1]
-    x = current[0]
-    y = current[1]
-    c = elements[x][y]
+    final_path = []
+    for path in final_paths:
+        if max_res == (len(path) - 1) // 2:
+            final_path = path
+            break
 
-    previous_x = -1
-    previous_y = -1
-    if len(path) > 1:
-        previous = path[len(path) - 2]
-        previous_x = previous[0]
-        previous_y = previous[1]
-        if x == start[0] and y == start[1]:
-            # looped // remove last ?
-            return path
+    if part == 1:
+        # print(f"---------> final path: {final_path} <---------")
+        print(f"---------> final res: {max_res} <---------")
+    else:
+        print(f"---------> final path: {final_path} <---------")
 
-    cases = find_cases(x, y, previous_x, previous_y)
-    for case in cases:
-        path2 = []
-        path2.extend(path)
-        path2.extend([case])
-        path2 = navigate(path2)
-        if len(path2) > 1 and path2[0][0] == path2[len(path2) - 1][0] and path2[0][1] == path2[len(path2) - 1][1]:
-            return path2
-
-    return path
+    return final_path
 
 
 def puzzle1(filename):
-    start = timer()
+    t_start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename)
-    # solve_recursive()
     solve()
-    end = timer()
-    print(f"Time elapsed (in seconds): {end - start}")
+    t_end = timer()
+    print(f"Time elapsed (in seconds): {t_end - t_start}")
 
 
 def find_cases(x, y, previous_x, previous_y):
@@ -156,14 +126,107 @@ def find_cases(x, y, previous_x, previous_y):
 
 
 def puzzle2(filename):
-    start = timer()
+    t_start = timer()
     print(f"\n\npuzzle2: {filename}")
     read_file(filename)
-    # solve_recursive(2)
-    solve(2)
-    end = timer()
-    print(f"Time elapsed (in seconds): {end - start}")
+    path = solve(2)
+    count_inside_tiles(path)
+    t_end = timer()
+    print(f"Time elapsed (in seconds): {t_end - t_start}")
 
+
+def count_inside_tiles(path):
+    print(f"---------> final path: {path} <---------")
+
+    min_i = -1
+    min_j = -1
+    max_i = -1
+    max_j = -1
+
+    for node in path:
+        i = node[0]
+        j = node[1]
+        if min_i == -1 or i < min_i:
+            min_i = i
+        if min_j == -1 or j < min_j:
+            min_j = j
+        if max_i == -1 or i > max_i:
+            max_i = i
+        if max_j == -1 or j > max_j:
+            max_j = j
+
+    count = 0
+    counts = []
+    for i in range(min_i, max_i + 1):
+        temp_count = 0
+        temp_counts = []
+        contains = False
+        for j in range(min_j, max_j + 1):
+            c = elements[i][j]
+            if [i, j] in path:
+                if c in ['F', '7', 'J', 'L', '|']:
+                    contains = True
+                if contains:
+                    count += temp_count
+                    counts.extend(temp_counts)
+                temp_count = 0
+                temp_counts.clear()
+            else:
+                if contains and i != min_i and j != min_j and i != max_i and j != max_j:
+                    temp_count += 1
+                    temp_counts.append([i, j])
+
+    count2 = 0
+    counts2 = []
+    for j in range(min_j, max_j + 1):
+        temp_count = 0
+        temp_counts = []
+        contains = False
+        for i in range(min_i, max_i + 1):
+            c = elements[i][j]
+            if [i, j] in path:
+                if c in ['F', '7', 'J', 'L', '-']:
+                    contains = True
+                if contains:
+                    count2 += temp_count
+                    counts2.extend(temp_counts)
+                temp_count = 0
+                temp_counts.clear()
+            else:
+                if contains and i != min_i and j != min_j and i != max_i and j != max_j:
+                    temp_count += 1
+                    temp_counts.append([i, j])
+
+    final_counts = []
+    for c in counts:
+        # final_counts.append(c)
+        if c in counts2:
+            final_counts.append(c)
+
+    print_index(path, final_counts)
+    count = len(final_counts)
+
+    print(f"---------> final res: {count} <---------")
+    return count
+
+
+def print_index(path=[], counts=[]):
+    for i in range(0, len(elements)):
+        for j in range(0, len(elements[i])):
+            c = elements[i][j]
+            if [i, j] == start:
+                print("S", end=" ")
+            elif [i, j] in path:
+                print("x", end=" ")
+            elif [i, j] in counts:
+                print("I", end=" ")
+            else:
+                print("-", end=" ")
+        print(""),
+
+
+# print(f"final_path: {path}")
+# print(np.matrix(path))
 
 
 # Press the green button in the gutter to run the script.
@@ -173,10 +236,10 @@ if __name__ == '__main__':
     print("Start Time =", current_time)
     # puzzle1('../puzzles/2023/10/example.txt')  # result -> 4
     # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
-    # puzzle1('../puzzles/2023/10/input.txt')  # result -> 48 wrong
-    # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6828 wrong
     # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
-    puzzle2('../puzzles/2023/10/example.txt')  # result -> ?
+    # puzzle2('../puzzles/2023/10/example_part2_small.txt')  # result -> 4 should be 4
+    puzzle2('../puzzles/2023/10/example_part2_large.txt')  # result -> ? should be 8
+    # puzzle2('../puzzles/2023/10/example_part2_large2.txt')  # result -> ? should be 10
     # puzzle2('../puzzles/2023/10/input.txt')  # result -> ?
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
