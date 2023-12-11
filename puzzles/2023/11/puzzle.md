@@ -1,7 +1,4 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Alexandros Polichronopoulos 20*
-/^2023$/[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Panthera Investment - We solve Financial Markets. Do you want to join?
+
 --- Day 11: Cosmic Expansion ---
 You continue following signs for "Hot Springs" and eventually come across an observatory. The Elf within turns out to be a researcher studying cosmic expansion using the giant telescope here.
 
@@ -94,8 +91,6 @@ Expand the universe, then find the length of the shortest path between every pai
 
 Your puzzle answer was 9957702.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---
 The galaxies are much older (and thus much farther apart) than the researcher initially estimated.
 
@@ -105,9 +100,12 @@ Now, instead of the expansion you did before, make each empty row or column one 
 
 Starting with the same initial image, expand the universe according to these new rules, then find the length of the shortest path between every pair of galaxies. What is the sum of these lengths?
 
-Answer:
+Your puzzle answer was 512240933238.
 
+Both parts of this puzzle are complete! They provide two gold stars: **
 
-Although it hasn't changed, you can still get your puzzle input.
+At this point, you should return to your Advent calendar and try another puzzle.
+
+If you still want to see it, you can get your puzzle input.
 
 You can also [Share] this puzzle.
