@@ -3,6 +3,8 @@ import itertools
 from timeit import default_timer as timer
 from datetime import datetime
 
+from utils.utils import get_combinations, print_index
+
 universe = []
 expand_cols = []
 expand_rows = []
@@ -65,15 +67,6 @@ def expand_universe():
     # print_index(expanded_universe)
 
     return expanded_universe
-
-
-def get_combinations(my_list):  # creating a user-defined method
-    my_result = []
-    for i in range(0, len(my_list)):
-        for j in range(i, len(my_list)):
-            if i != j:
-                my_result.append((my_list[i], my_list[j]))
-    return my_result
 
 
 def solve(part=1):
@@ -146,14 +139,6 @@ def puzzle2(filename, expand_number=1):
     solve(2)
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
-
-
-def print_index(index=[]):
-    for i in range(0, len(index)):
-        for j in range(0, len(index[i])):
-            c = index[i][j]
-            print(c, end=" ")
-        print(""),
 
 
 # Press the green button in the gutter to run the script.
