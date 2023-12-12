@@ -7,8 +7,8 @@ from utils.utils import print_index, split_into_tokens, replace_char
 gears = []
 gears_numbers = []
 
-case_s = ""
-combinations = []
+global_case = ""
+global_combinations = []
 
 
 def read_file(filename, part=1):
@@ -74,35 +74,35 @@ def solve(part=1):
     return res
 
 
-def generate_combinations(s, index, current_combination, combinations, case_s):
+def generate_combinations(s, index, current_combination, combinations, case):
     # print(''.join(current_combination))
     if index == len(s):
         combinations.append(''.join(current_combination))
         return
     if s[index] == '?':
         current_combination[index] = '.'
-        generate_combinations(s, index + 1, current_combination, combinations, case_s)
+        generate_combinations(s, index + 1, current_combination, combinations, case)
         current_combination[index] = '#'
-        generate_combinations(s, index + 1, current_combination, combinations, case_s)
+        generate_combinations(s, index + 1, current_combination, combinations, case)
         current_combination[index] = '?'  # reset for backtracking
     else:
         fgs = ",".join(find_gears("".join(current_combination)))
-        if fgs == '' or case_s.startswith(fgs):
-            generate_combinations(s, index + 1, current_combination, combinations, case_s)
+        if fgs == '' or case.startswith(fgs):
+            generate_combinations(s, index + 1, current_combination, combinations, case)
 
 
 @lru_cache(maxsize=None)
 def generate_combinations2(s, index, current_combination):
-    global combinations, case_s
+    global global_combinations, global_case
     if index == len(s):
-        combinations.append(current_combination)
+        global_combinations.append(current_combination)
         return
     if s[index] == '?':
         generate_combinations2(s, index + 1, replace_char(current_combination, '.', index))
         generate_combinations2(s, index + 1, replace_char(current_combination, '#', index))
     else:
         fgs = ",".join(find_gears("".join(current_combination)))
-        if fgs == '' or case_s.startswith(fgs):
+        if fgs == '' or global_case.startswith(fgs):
             generate_combinations2(s, index + 1, current_combination)
 
 
@@ -113,7 +113,6 @@ def solve_smart(part=1):
     res = 0
     for i, case in enumerate(gears_numbers):
         print(f"{i} - {gears[i]} - {case}")
-        global case_s
         case_s = ",".join(case)
         input_string = gears[i]
 
@@ -123,10 +122,12 @@ def solve_smart(part=1):
         # generate_combinations(input_string, 0, initial_combination, all_combinations, case_s)
 
         # TODO: generate_combinations2
+        global global_case
+        global_case = case_s
         initial_combination = input_string
-        combinations.clear()
+        global_combinations.clear()
         generate_combinations2(input_string, 0, initial_combination)
-        all_combinations = combinations
+        all_combinations = global_combinations
 
         count = 0
         for combination in all_combinations:
