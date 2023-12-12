@@ -31,3 +31,7 @@ def get_combinations(my_list):  # creating a user-defined method
             if i != j:
                 my_result.append((my_list[i], my_list[j]))
     return my_result
+
+
+def split_into_tokens(s, token_size):
+    return [s[i:i + token_size] for i in range(0, len(s), token_size)]

@@ -2,7 +2,7 @@ from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
-from utils.utils import print_index
+from utils.utils import print_index, split_into_tokens
 
 gears = []
 gears_numbers = []
@@ -31,17 +31,12 @@ def read_file(filename, part=1):
 @lru_cache(maxsize=None)
 def find_gears(line):
     results = []
-    count = 0
-    for i, c in enumerate(line):
-        if c == '#':
-            count += 1
-        elif c == '?':
+    chunks = list(filter(None, line.split(".")))
+    for chunk in chunks:
+        if '?' in chunk:
             return results
-        elif count > 0:
-            results.append(str(count))
-            count = 0
-    if count > 0:
-        results.append(str(count))
+        else:
+            results.append(str(len(chunk)))
     return results
 
 
@@ -76,19 +71,36 @@ def solve(part=1):
     return res
 
 
-def generate_combinations(s, index, current_combination, combinations):
+def generate_combinations(s, index, current_combination, combinations, case_s):
+    # print(''.join(current_combination))
+
     if index == len(s):
         combinations.append(''.join(current_combination))
         return
 
     if s[index] == '?':
         current_combination[index] = '.'
-        generate_combinations(s, index + 1, current_combination, combinations)
+        generate_combinations(s, index + 1, current_combination, combinations, case_s)
         current_combination[index] = '#'
-        generate_combinations(s, index + 1, current_combination, combinations)
+        generate_combinations(s, index + 1, current_combination, combinations, case_s)
         current_combination[index] = '?'  # reset for backtracking
     else:
-        generate_combinations(s, index + 1, current_combination, combinations)
+        fgs = ",".join(find_gears("".join(current_combination)))
+        if fgs == '' or case_s.startswith(fgs):
+            generate_combinations(s, index + 1, current_combination, combinations, case_s)
+
+
+@lru_cache(maxsize=None)
+def generate_combinations2(s, index, current_combination):
+    if index == len(s):
+        return current_combination
+
+    if s[index] == '?':
+        result_dot = generate_combinations2(s, index + 1, current_combination + '.')
+        result_hash = generate_combinations2(s, index + 1, current_combination + '#')
+        return result_dot + result_hash
+    else:
+        return generate_combinations2(s, index + 1, current_combination + s[index])
 
 
 def solve_smart(part=1):
@@ -98,11 +110,21 @@ def solve_smart(part=1):
     res = 0
     for i, case in enumerate(gears_numbers):
         print(f"{i} - {gears[i]} - {case}")
+        case_s = ",".join(case)
 
         input_string = gears[i]
+
+        # TODO: generate_combinations
         initial_combination = list(input_string)
         all_combinations = []
-        generate_combinations(input_string, 0, initial_combination, all_combinations)
+        generate_combinations(input_string, 0, initial_combination, all_combinations, case_s)
+
+        # TODO: generate_combinations2
+        # original_size = len(input_string)
+        # initial_combination = ''
+        # result = generate_combinations2(input_string, 0, initial_combination)
+        # all_combinations = split_into_tokens(result, original_size)
+
         count = 0
         for combination in all_combinations:
             if find_gears(combination) == case:
@@ -145,14 +167,13 @@ if __name__ == '__main__':
 
     # puzzle1('../puzzles/2023/12/example.txt')  # result -> 6
     # puzzle1('../puzzles/2023/12/example2.txt')  # result -> 21
-    # puzzle1('../puzzles/2023/12/input.txt')  # result -> ?
 
     # puzzle1('../puzzles/2023/12/example.txt', False)  # result -> 6
     # puzzle1('../puzzles/2023/12/example2.txt', False)  # result -> 21
     # puzzle1('../puzzles/2023/12/input.txt', False)  # result -> 6981
 
-    puzzle2('../puzzles/2023/12/example.txt', False)  # result -> result 6
-    # puzzle2('../puzzles/2023/12/example2.txt', False)  # result -> should be ?
+    # puzzle2('../puzzles/2023/12/example.txt', False)  # result -> result 6
+    puzzle2('../puzzles/2023/12/example2.txt', False)  # result -> should be 525152 ??? won't run under 10 mins
     # puzzle2('../puzzles/2023/12/input.txt', False)  # result -> ?
 
     now = datetime.now()
