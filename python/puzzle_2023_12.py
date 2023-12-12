@@ -2,10 +2,13 @@ from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
-from utils.utils import print_index, split_into_tokens
+from utils.utils import print_index, split_into_tokens, replace_char
 
 gears = []
 gears_numbers = []
+
+case_s = ""
+combinations = []
 
 
 def read_file(filename, part=1):
@@ -73,11 +76,9 @@ def solve(part=1):
 
 def generate_combinations(s, index, current_combination, combinations, case_s):
     # print(''.join(current_combination))
-
     if index == len(s):
         combinations.append(''.join(current_combination))
         return
-
     if s[index] == '?':
         current_combination[index] = '.'
         generate_combinations(s, index + 1, current_combination, combinations, case_s)
@@ -92,15 +93,17 @@ def generate_combinations(s, index, current_combination, combinations, case_s):
 
 @lru_cache(maxsize=None)
 def generate_combinations2(s, index, current_combination):
+    global combinations, case_s
     if index == len(s):
-        return current_combination
-
+        combinations.append(current_combination)
+        return
     if s[index] == '?':
-        result_dot = generate_combinations2(s, index + 1, current_combination + '.')
-        result_hash = generate_combinations2(s, index + 1, current_combination + '#')
-        return result_dot + result_hash
+        generate_combinations2(s, index + 1, replace_char(current_combination, '.', index))
+        generate_combinations2(s, index + 1, replace_char(current_combination, '#', index))
     else:
-        return generate_combinations2(s, index + 1, current_combination + s[index])
+        fgs = ",".join(find_gears("".join(current_combination)))
+        if fgs == '' or case_s.startswith(fgs):
+            generate_combinations2(s, index + 1, current_combination)
 
 
 def solve_smart(part=1):
@@ -110,20 +113,20 @@ def solve_smart(part=1):
     res = 0
     for i, case in enumerate(gears_numbers):
         print(f"{i} - {gears[i]} - {case}")
+        global case_s
         case_s = ",".join(case)
-
         input_string = gears[i]
 
         # TODO: generate_combinations
-        initial_combination = list(input_string)
-        all_combinations = []
-        generate_combinations(input_string, 0, initial_combination, all_combinations, case_s)
+        # initial_combination = list(input_string)
+        # all_combinations = []
+        # generate_combinations(input_string, 0, initial_combination, all_combinations, case_s)
 
         # TODO: generate_combinations2
-        # original_size = len(input_string)
-        # initial_combination = ''
-        # result = generate_combinations2(input_string, 0, initial_combination)
-        # all_combinations = split_into_tokens(result, original_size)
+        initial_combination = input_string
+        combinations.clear()
+        generate_combinations2(input_string, 0, initial_combination)
+        all_combinations = combinations
 
         count = 0
         for combination in all_combinations:

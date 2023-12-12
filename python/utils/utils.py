@@ -35,3 +35,7 @@ def get_combinations(my_list):  # creating a user-defined method
 
 def split_into_tokens(s, token_size):
     return [s[i:i + token_size] for i in range(0, len(s), token_size)]
+
+
+def replace_char(s, c, i):
+    return s[:i] + c + s[i + 1:]
