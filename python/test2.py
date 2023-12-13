@@ -21,6 +21,7 @@ def find_gears(line):
 
 @lru_cache(maxsize=None)
 def generate_combinations2(s, index, current_combination):
+    print(f"{current_combination}")
     global combinations, case_s
     if index == len(s):
         combinations.append(current_combination)
@@ -29,10 +30,17 @@ def generate_combinations2(s, index, current_combination):
         generate_combinations2(s, index + 1, replace_char(current_combination, '.', index))
         generate_combinations2(s, index + 1, replace_char(current_combination, '#', index))
     else:
-        fgs = ",".join(find_gears("".join(current_combination)))
-        if fgs == '' or case_s.startswith(fgs):
-            generate_combinations2(s, index + 1, current_combination)
+        cc = "".join(current_combination)
 
+        fg1 = ",".join(find_gears(cc))
+        if fg1 != '' and not case_s.startswith(fg1):
+            return
+
+        fg2 = ",".join(find_gears(cc[::-1])[::-1])
+        if fg2 != '' and not case_s.endswith(fg2):
+            return
+
+        generate_combinations2(s, index + 1, current_combination)
 
 
 # should produce 506250
@@ -42,6 +50,10 @@ case = ['3', '2', '1', '3', '2', '1', '3', '2', '1', '3', '2', '1', '3', '2', '1
 # should produce 2500
 # input_string = "????.######..#####.?????.######..#####.?????.######..#####.?????.######..#####.?????.######..#####."
 # case = ['1', '6', '5', '1', '6', '5', '1', '6', '5', '1', '6', '5', '1', '6', '5']
+
+# should produce 6
+# input_string = "?#???.??#??#???#???."
+# case = ['2', '10', '1']
 
 
 # TODO: generate_combinations2

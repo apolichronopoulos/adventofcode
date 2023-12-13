@@ -13,6 +13,7 @@ global_combinations = []
 
 def read_file(filename, part=1):
     gears.clear()
+    gears_numbers.clear()
     f = open(filename, "r")
     for line in f:
         if line == "":
@@ -29,10 +30,11 @@ def read_file(filename, part=1):
 
         gears.append(g)
         gears_numbers.append(gn.split(","))
+        # gears_numbers.append(tuple([int(d) for d in gn.split(",")]))
 
 
-@lru_cache(maxsize=None)
-def find_gears(line):
+@lru_cache
+def find_gears(line: str):
     results = []
     chunks = list(filter(None, line.split(".")))
     for chunk in chunks:
@@ -41,37 +43,6 @@ def find_gears(line):
         else:
             results.append(str(len(chunk)))
     return results
-
-
-def solve(part=1):
-    # print_index(gears)
-    # print_index(gears_numbers)
-
-    res = 0
-    for i, case in enumerate(gears_numbers):
-        case_s = ",".join(case)
-        print(f"{i} - {gears[i]} - {case}")
-        works = []
-        lines = [gears[i]]
-        while lines:
-            line = lines[len(lines) - 1]
-            del lines[len(lines) - 1]
-            if '?' in line:
-                for j, c in enumerate(line):
-                    if c == '?':
-                        for new_c in ['.', '#']:
-                            line1 = line[:j] + new_c + line[j + 1:]
-                            fgs = ",".join(find_gears(line1))
-                            if fgs == '' or case_s.startswith(fgs):
-                                lines.append(line1)
-            else:
-                if find_gears(line) == case:
-                    works.append(line)
-        res += len(set(works))
-        print(f"---------> result: {len(set(works))} <---------")
-
-    print(f"---------> final result: {res} <---------")
-    return res
 
 
 def generate_combinations(s, index, current_combination, combinations, case):
@@ -86,12 +57,28 @@ def generate_combinations(s, index, current_combination, combinations, case):
         generate_combinations(s, index + 1, current_combination, combinations, case)
         current_combination[index] = '?'  # reset for backtracking
     else:
-        fgs = ",".join(find_gears("".join(current_combination)))
-        if fgs == '' or case.startswith(fgs):
-            generate_combinations(s, index + 1, current_combination, combinations, case)
+        cc = "".join(current_combination)
+
+        fg1 = ",".join(find_gears(cc))
+        if fg1 != '' and not case.startswith(fg1):
+            return
+
+        fg2 = ",".join(find_gears(cc[::-1])[::-1])
+        if fg2 != '' and not case.endswith(fg2):
+            return
+
+        chunks = list(filter(None, cc.split(".")))
+        count = len(chunks)
+        for chunk in chunks:
+            if '?' in chunk:
+                count += chunk.count('?') // 2 + chunk.count('?')
+        if count < len(case.split(",")):
+            return
+
+        generate_combinations(s, index + 1, current_combination, combinations, case)
 
 
-@lru_cache(maxsize=None)
+@lru_cache
 def generate_combinations2(s, index, current_combination):
     global global_combinations, global_case
     if index == len(s):
@@ -106,9 +93,7 @@ def generate_combinations2(s, index, current_combination):
             generate_combinations2(s, index + 1, current_combination)
 
 
-def solve_smart(part=1):
-    # print_index(gears)
-    # print_index(gears_numbers)
+def solve():
 
     res = 0
     for i, case in enumerate(gears_numbers):
@@ -139,26 +124,20 @@ def solve_smart(part=1):
     return res
 
 
-def puzzle1(filename, brute=True):
+def puzzle1(filename):
     t_start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename)
-    if brute:
-        solve()
-    else:
-        solve_smart()
+    solve()
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
 
 
-def puzzle2(filename, brute=True):
+def puzzle2(filename):
     t_start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename, part=2)
-    if brute:
-        solve()
-    else:
-        solve_smart()
+    solve()
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
 
@@ -171,14 +150,11 @@ if __name__ == '__main__':
 
     # puzzle1('../puzzles/2023/12/example.txt')  # result -> 6
     # puzzle1('../puzzles/2023/12/example2.txt')  # result -> 21
+    puzzle1('../puzzles/2023/12/input.txt')  # result -> 6981
 
-    # puzzle1('../puzzles/2023/12/example.txt', False)  # result -> 6
-    # puzzle1('../puzzles/2023/12/example2.txt', False)  # result -> 21
-    # puzzle1('../puzzles/2023/12/input.txt', False)  # result -> 6981
-
-    # puzzle2('../puzzles/2023/12/example.txt', False)  # result -> result 6
-    puzzle2('../puzzles/2023/12/example2.txt', False)  # result -> should be 525152 ??? won't run under 10 mins
-    # puzzle2('../puzzles/2023/12/input.txt', False)  # result -> ?
+    # puzzle2('../puzzles/2023/12/example.txt')  # result -> result 6
+    # puzzle2('../puzzles/2023/12/example2.txt')  # result -> should be 525152 ??? won't run // sigkill error
+    # puzzle2('../puzzles/2023/12/input.txt')  # result -> 4546215031609 but won't run // sigkill error
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
