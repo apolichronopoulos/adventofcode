@@ -16,11 +16,11 @@ def read_file(filename, separator=""):
     return elements
 
 
-def print_index(index=[]):
+def print_index(index=[], ending=" "):
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
-            print(c, end=" ")
+            print(c, end=ending)
         print(""),
 
 
