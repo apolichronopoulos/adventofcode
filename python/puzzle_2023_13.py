@@ -34,8 +34,8 @@ def solve():
     # print_index(gears, "\n")
     res = 0
     for c, case in enumerate(gears):
-        res_rows = check_symmetric_in_rows(array(case))
-        res_cols = check_symmetric_in_cols(array(case))
+        res_rows = check_symmetric_in_rows(case.copy())
+        res_cols = check_symmetric_in_cols(case.copy())
         print(f"---------> res_cols: {res_cols} <---------")
         print(f"---------> res_rows: {res_rows} <---------")
         res += ((res_rows * 100) + res_cols)
@@ -47,8 +47,8 @@ def check_symmetric_in_rows(rows):
     size = len(rows) // 2
     odd = len(rows) % 2 == 1
     if odd:
-        c1 = check_symmetric_in_rows(array(rows[:-1]))
-        c2 = check_symmetric_in_rows(array(rows[1:]))
+        c1 = check_symmetric_in_rows(rows.copy()[:-1])
+        c2 = check_symmetric_in_rows(rows.copy()[1:])
         return c1 + (c2 + 1 if c2 else 0)
     else:
         for i in range(0, size):
@@ -97,8 +97,8 @@ if __name__ == '__main__':
     print("Start Time =", current_time)
 
     # puzzle1('../puzzles/2023/13/example.txt')  # result -> 405
-    puzzle1('../puzzles/2023/13/example2.txt')  # result -> 700?
-    # puzzle1('../puzzles/2023/13/input.txt')  # result -> 716 is not correct
+    # puzzle1('../puzzles/2023/13/example2.txt')  # result -> 700?
+    puzzle1('../puzzles/2023/13/input.txt')  # result -> 716 is not correct
     # puzzle1('../puzzles/2023/13/input.txt')  # result -> 2849 That's not the right answer; your answer is too low.
     # puzzle2('../puzzles/2023/13/example.txt')  # result -> result 6
     # puzzle2('../puzzles/2023/13/input.txt')  # result -> 4546215031609 but won't run // sigkill error
