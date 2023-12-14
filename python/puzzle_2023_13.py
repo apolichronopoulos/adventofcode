@@ -31,31 +31,31 @@ def solve(part=1):
     res = 0
     for c, case in enumerate(gears):
         res_rows = check_symmetric_in_rows(case)
-        if part == 1:
-            res_cols = check_symmetric_in_cols(case)
-        else:
-            res_cols = 0
-
+        res_cols = check_symmetric_in_cols(case)
         res_rows0 = res_rows
+        res_cols0 = res_cols
         if part == 2:
             for i in range(0, len(case)):
-                if res_rows0 != res_rows:
+                if res_rows0 != res_rows or res_cols0 != res_cols:
                     break
                 for j in range(0, len(case[0])):
+                    if res_rows0 != res_rows or res_cols0 != res_cols:
+                        break
                     case2 = case.copy()
                     new_c = '#' if case2[i][j] == '.' else '.'
                     case2[i] = replace_char(case2[i], new_c, j)
                     res_rows2 = check_symmetric_in_rows(case2)
+                    res_cols2 = check_symmetric_in_cols(case2)
                     if 0 < res_rows2 != res_rows:
                         res_rows = res_rows2
-                        break
+                        break  # do we want to skip the other ?
+                    if 0 < res_cols2 != res_cols:
+                        res_cols = res_cols2
+                        break  # do we want to skip the other ?
             if res_rows0 == res_rows:
                 res_rows = 0
-
-        # if res_rows:
-        #     print(f"---------> res_rows: {res_rows} <---------")
-        # if res_cols:
-        #     print(f"---------> res_cols: {res_cols} <---------")
+            if res_cols0 == res_cols:
+                res_cols = 0
         res += ((res_rows * 100) + res_cols)
     print(f"---------> final result: {res} <---------")
     return res
@@ -112,11 +112,13 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/13/example3.txt')  # result -> 709
     # puzzle1('../puzzles/2023/13/input.txt')  # result -> 30802 correct
 
-    puzzle2('../puzzles/2023/13/example.txt')  # result -> should be 400 ? 405 ?
-    puzzle2('../puzzles/2023/13/example3.txt')  # result -> should be 1400 ? 1409 ?
+    puzzle2('../puzzles/2023/13/example.txt')  # result -> should be 400
+    puzzle2('../puzzles/2023/13/example3.txt')  # result -> should be 1400
     # puzzle2('../puzzles/2023/13/input.txt')  # result -> 13882 That's not the right answer; your answer is too low
     # puzzle2('../puzzles/2023/13/input.txt')  # result -> 24900 wrong
-    puzzle2('../puzzles/2023/13/input.txt')  # result -> ????
+    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 25049 wrong
+    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 25079 wrong wrong wrong wrong
+    puzzle2('../puzzles/2023/13/input.txt')  # result ????
     # puzzle2('../puzzles/2023/13/input.txt')  # result -> 38500 That's not the right answer; your answer is too high
     # puzzle2('../puzzles/2023/13/input.txt')  # result -> 38868 That's not the right answer; your answer is too high
 
