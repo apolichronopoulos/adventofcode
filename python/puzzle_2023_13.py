@@ -35,23 +35,24 @@ def solve(part=1):
         res_rows0 = res_rows
         res_cols0 = res_cols
         if part == 2:
-            for i in range(0, len(case)):
-                if res_rows0 != res_rows or res_cols0 != res_cols:
-                    break
-                for j in range(0, len(case[0])):
+            if res_rows0 != 0 or res_cols0 != 0:  # TODO: not sure if this is needed
+                for i in range(0, len(case)):
                     if res_rows0 != res_rows or res_cols0 != res_cols:
                         break
-                    case2 = case.copy()
-                    new_c = '#' if case2[i][j] == '.' else '.'
-                    case2[i] = replace_char(case2[i], new_c, j)
-                    res_rows2 = check_symmetric_in_rows(case2)
-                    res_cols2 = check_symmetric_in_cols(case2)
-                    if 0 < res_rows2 != res_rows0:
-                        res_rows = res_rows2
-                        break  # do we want to skip the other ?
-                    if 0 < res_cols2 != res_cols0:
-                        res_cols = res_cols2
-                        break  # do we want to skip the other ?
+                    for j in range(0, len(case[0])):
+                        if res_rows0 != res_rows or res_cols0 != res_cols:
+                            break
+                        case2 = case.copy()
+                        new_c = '#' if case2[i][j] == '.' else '.'
+                        case2[i] = replace_char(case2[i], new_c, j)
+                        res_rows2 = check_symmetric_in_rows(case2)
+                        res_cols2 = check_symmetric_in_cols(case2)
+                        if 0 < res_rows2 != res_rows0:
+                            res_rows = res_rows2
+                            break  # do we want to skip the other ?
+                        if 0 < res_cols2 != res_cols0:
+                            res_cols = res_cols2
+                            break  # do we want to skip the other ?
             if res_rows0 == res_rows:
                 res_rows = 0
             if res_cols0 == res_cols:
