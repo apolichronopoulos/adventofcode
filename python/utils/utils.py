@@ -1,3 +1,7 @@
+from colorama import Fore, Back, Style, init
+from termcolor import colored
+
+
 def read_file(filename, separator=""):
     elements = []
     f = open(filename, "r")
@@ -16,12 +20,15 @@ def read_file(filename, separator=""):
     return elements
 
 
-def print_index(index=[], ending=" "):
+def print_index(index=[], ending=" ", color=Fore.RESET):
+    set_print_color(color=color)
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
             print(c, end=ending)
         print(""),
+    reset_print_color()
+
 
 
 def get_combinations(my_list):  # creating a user-defined method
@@ -39,3 +46,14 @@ def split_into_tokens(s, token_size):
 
 def replace_char(s, c, i):
     return s[:i] + c + s[i + 1:]
+
+
+def print_color(s, color=Fore.RED, background=Back.RESET, ending="\n"):
+    print(color + background + s + Fore.RESET + Back.RESET, end=ending)
+
+
+def set_print_color(color=Fore.RED, background=Back.RESET):
+    print(color + background, end="")
+
+def reset_print_color():
+    print(Fore.RESET + Back.RESET, end="")
