@@ -20,7 +20,6 @@ def read_file(filename, part=1):
 
 def solve(part=1):
     print_index(platform, color=Fore.CYAN, ending="")
-    # original_platform = platform.copy()
 
     res = 0
     if part == 1:
