@@ -153,24 +153,6 @@ def calculate_damage(platform):
     return damage
 
 
-# / ↑ north / ← west / ↓ south / → east /
-@DeprecationWarning
-def rotate_platform(platform, index=0, clockwise=True):
-    num_cols = len(platform[0])
-    rotated = num_cols * ['']
-    for i, row in enumerate(platform):
-        for j, c in enumerate(row):
-            rotated[j] = c + rotated[j]
-
-    platform.clear()
-    platform.extend(rotated)
-
-    if index == 0:
-        return platform
-    else:
-        return rotate_platform(platform, index - 1)
-
-
 def puzzle1(filename):
     t_start = timer()
     print_color(f"puzzle1: {filename}", Fore.MAGENTA)

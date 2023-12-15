@@ -1,5 +1,4 @@
-from colorama import Fore, Back, Style, init
-from termcolor import colored
+from colorama import Fore, Back
 
 
 def read_file(filename, separator=""):
@@ -30,7 +29,6 @@ def print_index(index=[], ending=" ", color=Fore.RESET):
     reset_print_color()
 
 
-
 def get_combinations(my_list):  # creating a user-defined method
     my_result = []
     for i in range(0, len(my_list)):
@@ -55,5 +53,35 @@ def print_color(s, color=Fore.RED, background=Back.RESET, ending="\n"):
 def set_print_color(color=Fore.RED, background=Back.RESET):
     print(color + background, end="")
 
+
 def reset_print_color():
     print(Fore.RESET + Back.RESET, end="")
+
+
+def flip_and_rotate_grid(grid, index=1):
+    num_cols = len(grid[0])
+    rotated = num_cols * ['']
+    for i, row in enumerate(grid):
+        for j, c in enumerate(row):
+            rotated[j] += c
+    grid.clear()
+    grid.extend(rotated)
+    if index == 0:
+        return grid
+    else:
+        return rotate_grid(grid, index - 1)
+
+
+# Clockwise rotation
+def rotate_grid(grid, index=1):
+    num_cols = len(grid[0])
+    rotated = num_cols * ['']
+    for i, row in enumerate(grid):
+        for j, c in enumerate(row):
+            rotated[j] = c + rotated[j]
+    grid.clear()
+    grid.extend(rotated)
+    if index == 0:
+        return grid
+    else:
+        return rotate_grid(grid, index - 1)
