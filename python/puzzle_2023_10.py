@@ -1,6 +1,9 @@
-from timeit import default_timer as timer
 from datetime import datetime
-import numpy as np
+from timeit import default_timer as timer
+
+from colorama import Fore
+
+from utils.utils import print_color
 
 elements = []
 max_size = 0
@@ -69,8 +72,8 @@ def solve(part=1):
     if part == 1:
         # print(f"---------> final path: {final_path} <---------")
         print(f"---------> final res: {max_res} <---------")
-    else:
-        print(f"---------> final path: {final_path} <---------")
+    # else:
+    #     print(f"---------> final path: {final_path} <---------")
 
     return final_path
 
@@ -155,59 +158,88 @@ def count_inside_tiles(path):
         if max_j == -1 or j > max_j:
             max_j = j
 
-    count = 0
-    counts = []
+    # print_index(path)
+
+    row_openers = [[] for x in range(min_i, max_i + 1)]
+    column_openers = [[] for x in range(min_j, max_j + 1)]
+
+    counts_rows = []
+    counts_cols = []
+
     for i in range(min_i, max_i + 1):
-        temp_count = 0
-        temp_counts = []
-        contains = False
         for j in range(min_j, max_j + 1):
             c = elements[i][j]
             if [i, j] in path:
-                if c in ['F', '7', 'J', 'L', '|']:
-                    contains = True
-                if contains:
-                    count += temp_count
-                    counts.extend(temp_counts)
-                temp_count = 0
-                temp_counts.clear()
-            else:
-                if contains and i != min_i and j != min_j and i != max_i and j != max_j:
-                    temp_count += 1
-                    temp_counts.append([i, j])
+                if open_row(c):
+                    row_openers[i - min_i].append(j)
+                if open_col(c):
+                    column_openers[j - min_j].append(i)
 
-    count2 = 0
-    counts2 = []
-    for j in range(min_j, max_j + 1):
-        temp_count = 0
-        temp_counts = []
-        contains = False
-        for i in range(min_i, max_i + 1):
-            c = elements[i][j]
-            if [i, j] in path:
-                if c in ['F', '7', 'J', 'L', '-']:
-                    contains = True
-                if contains:
-                    count2 += temp_count
-                    counts2.extend(temp_counts)
-                temp_count = 0
-                temp_counts.clear()
-            else:
-                if contains and i != min_i and j != min_j and i != max_i and j != max_j:
-                    temp_count += 1
-                    temp_counts.append([i, j])
+    for i in range(min_i, max_i + 1):
+        for j in range(min_j, max_j + 1):
+            if [i, j] not in path:
+                count = 0
+                for index in row_openers[i - min_i]:
+                    if j < index:
+                        break
+                    count += 1
+                if count % 2 != 0:
+                    counts_rows.append([i, j])
+                count = 0
+                for index in column_openers[j - min_j]:
+                    if i < index:
+                        break
+                    count += 1
+                if count % 2 != 0:
+                    counts_cols.append([i, j])
 
-    final_counts = []
-    for c in counts:
-        # final_counts.append(c)
-        if c in counts2:
-            final_counts.append(c)
+    print_index(path, counts_rows)
+    print(f"counts_rows: {len(counts_rows)}")
 
-    print_index(path, final_counts)
-    count = len(final_counts)
+    counts = []
+    for c in counts_rows:
+        # counts.append(c)
+        if c in counts_cols:
+            counts.append(c)
+
+    print_index(path, counts)
+    count = len(counts)
 
     print(f"---------> final res: {count} <---------")
     return count
+
+
+# -
+# L
+# F
+
+# |
+# J
+# 7
+
+def open_row(c):
+    return c in ['|', 'L', 'F', 'J', '7']
+
+
+def close_row(c):
+    return c in ['|', 'J', '7']
+
+
+def open_col(c):
+    return c in ['-', 'L', 'F', 'J', '7']
+
+
+def close_col(c):
+    return c in ['-', 'L', 'J']
+
+
+#
+# def touch_in_row(c1, c2):
+#     return c1 in ['L', 'F', '-'] and c2 in ['7', 'J', '-']
+#
+#
+# def touch_in_col(c1, c2):
+#     return c1 in ['7', 'F', '|'] and c2 in ['L', 'J', '|']
 
 
 def print_index(path=[], counts=[]):
@@ -215,13 +247,13 @@ def print_index(path=[], counts=[]):
         for j in range(0, len(elements[i])):
             c = elements[i][j]
             if [i, j] == start:
-                print("S", end=" ")
+                print_color("S", ending=" ", color=Fore.MAGENTA)
             elif [i, j] in path:
-                print("x", end=" ")
+                print_color(c, ending=" ")
             elif [i, j] in counts:
-                print("I", end=" ")
+                print_color("I", ending=" ", color=Fore.CYAN)
             else:
-                print("-", end=" ")
+                print(".", end=" ")
         print(""),
 
 
