@@ -19,12 +19,19 @@ def read_file(filename, separator=""):
     return elements
 
 
-def print_index(index=[], ending=" ", color=Fore.RESET):
+def print_index(index=[], counts=[], results=[], ending=" ", color=Fore.RESET):
     set_print_color(color=color)
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
-            print(c, end=ending)
+            if [i, j] in counts:
+                print_color(c, color=Fore.RED, ending=ending)
+            elif [i, j] in results:
+                print_color('#', color=Fore.MAGENTA, ending=ending)
+            elif results:
+                print_color('.', color=color, ending=ending)
+            else:
+                print_color(c, color=color, ending=ending)
         print(""),
     reset_print_color()
 
