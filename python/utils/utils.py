@@ -92,3 +92,13 @@ def rotate_grid(grid, index=1):
         return grid
     else:
         return rotate_grid(grid, index - 1)
+
+
+def find_neighbors(x, y, tiles):
+    all_cases = [[x, y + 1], [x - 1, y], [x + 1, y], [x, y - 1]]
+    cases = []
+    for case in all_cases:
+        if case[0] < 0 or case[1] < 0 or case[0] >= len(tiles) or case[1] >= len(tiles[0]):
+            continue
+        cases.append(case)
+    return cases
