@@ -13,7 +13,7 @@ class Graph():
         self.edges = defaultdict(list)
         self.weights = {}
 
-    def add_edge(self, from_node, to_node, weight):
+    def add_edge(self, from_node, to_node, weight=0):
         # Note: assumes edges are bi-directional
         self.edges[from_node].append(to_node)
         self.edges[to_node].append(from_node)
