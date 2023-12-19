@@ -6,13 +6,49 @@ from colorama import Fore
 from utils.utils import print_color
 
 elements = []
-max_size = 0
+counts = []
+touch_sides = []
+
 start = [-1, -1]
+
+min_i, min_j, max_i, max_j = -1, -1, -1, -1
+
+
+# 7 F
+# 7 J
+# 7 L
+# F 7
+# F J
+# J F
+# J L
+# L 7
+# L J
+
+
+# |, -, 7, J, L, F
+def touch_close(c1, c2, horizontally=True):
+    if horizontally:
+        return [c1, c2] in [
+            ['7', 'F'],
+            ['7', 'L'],
+            ['F', '7'],
+            # ['F', 'J'],  # not close
+            ['J', 'F'],
+            ['J', 'L'],
+            # ['L', '7'],  # not close
+            ['L', 'J']
+        ]
+    else:
+        return [c1, c2] in [
+            # ['7', 'L'],
+            ['7', 'J'],
+            ['F', 'L'],
+            # ['F', 'J'],
+        ]
 
 
 def read_file(filename, part=1):
     global start
-    global max_size
     elements.clear()
     f = open(filename, "r")
     for line in f:
@@ -28,6 +64,9 @@ def read_file(filename, part=1):
 
 
 def solve(part=1):
+    counts.clear()
+    touch_sides.clear()
+
     final_paths = []
     paths = [[start]]
     while paths:
@@ -133,22 +172,18 @@ def puzzle2(filename):
     print(f"\n\npuzzle2: {filename}")
     read_file(filename)
     path = solve(2)
-    count_inside_tiles(path)
+    res = count_inside_elements(path)
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
+    return res
 
 
-def count_inside_tiles(path):
-    print(f"---------> final path: {path} <---------")
+def count_inside_elements(path):
+    rows, cols = len(elements), len(elements[0])
 
-    min_i = -1
-    min_j = -1
-    max_i = -1
-    max_j = -1
-
+    global min_i, min_j, max_i, max_j
     for node in path:
-        i = node[0]
-        j = node[1]
+        i, j = node[0], node[1]
         if min_i == -1 or i < min_i:
             min_i = i
         if min_j == -1 or j < min_j:
@@ -158,50 +193,36 @@ def count_inside_tiles(path):
         if max_j == -1 or j > max_j:
             max_j = j
 
-    # print_index(path)
+    # print_index(path, counts)
 
-    row_openers = [[] for x in range(min_i, max_i + 1)]
-    column_openers = [[] for x in range(min_j, max_j + 1)]
-
-    counts_rows = []
-    counts_cols = []
+    for i in range(rows):
+        for j in range(cols):
+            if [i, j] not in path:
+                if touches_sides(i, j):
+                    touch_sides.append([i, j])
 
     for i in range(min_i, max_i + 1):
+        open_row = False
+        last_c_row = '.'
         for j in range(min_j, max_j + 1):
             c = elements[i][j]
-            if [i, j] in path:
-                if open_row(c):
-                    row_openers[i - min_i].append(j)
-                if open_col(c):
-                    column_openers[j - min_j].append(i)
-
-    for i in range(min_i, max_i + 1):
-        for j in range(min_j, max_j + 1):
+            if [i, j] in touch_sides:
+                continue
             if [i, j] not in path:
-                count = 0
-                for index in row_openers[i - min_i]:
-                    if j < index:
-                        break
-                    count += 1
-                if count % 2 != 0:
-                    counts_rows.append([i, j])
-                count = 0
-                for index in column_openers[j - min_j]:
-                    if i < index:
-                        break
-                    count += 1
-                if count % 2 != 0:
-                    counts_cols.append([i, j])
+                last_c_row = '.'
+                if open_row:
+                    counts.append([i, j])
+                continue
+            elif c == '|' or last_c_row == '|':
+                open_row = not open_row
+            elif c == '-':
+                continue
+            elif c in ['7', 'L', 'F', 'J']:
+                if last_c_row == '.' or touch_close(last_c_row, c):
+                    open_row = not open_row
+            last_c_row = c
 
-    print_index(path, counts_rows)
-    print(f"counts_rows: {len(counts_rows)}")
-
-    counts = []
-    for c in counts_rows:
-        # counts.append(c)
-        if c in counts_cols:
-            counts.append(c)
-
+    print(f"counts: {len(counts)}")
     print_index(path, counts)
     count = len(counts)
 
@@ -209,40 +230,30 @@ def count_inside_tiles(path):
     return count
 
 
-# -
-# L
-# F
-
-# |
-# J
-# 7
-
-def open_row(c):
-    return c in ['|', 'L', 'F', 'J', '7']
-
-
-def close_row(c):
-    return c in ['|', 'J', '7']
-
-
-def open_col(c):
-    return c in ['-', 'L', 'F', 'J', '7']
-
-
-def close_col(c):
-    return c in ['-', 'L', 'J']
-
-
-#
-# def touch_in_row(c1, c2):
-#     return c1 in ['L', 'F', '-'] and c2 in ['7', 'J', '-']
-#
-#
-# def touch_in_col(c1, c2):
-#     return c1 in ['7', 'F', '|'] and c2 in ['L', 'J', '|']
+def touches_sides(i, j):
+    t1, t2, t3, t4 = True, True, True, True
+    for x in range(0, i):
+        if elements[x][j] != '.':
+            t1 = False
+            break
+    for x in range(i + 1, len(elements)):
+        if elements[x][j] != '.':
+            t2 = False
+            break
+    for x in range(0, j):
+        if elements[i][x] != '.':
+            t3 = False
+            break
+    for x in range(j + 1, len(elements[0])):
+        if elements[i][x] != '.':
+            t4 = False
+            break
+    return t1 or t2 or t3 or t4
 
 
 def print_index(path=[], counts=[]):
+    # if len(elements) > 100 or len(elements[0]) > 100:
+    #     return
     for i in range(0, len(elements)):
         for j in range(0, len(elements[i])):
             c = elements[i][j]
@@ -251,9 +262,11 @@ def print_index(path=[], counts=[]):
             elif [i, j] in path:
                 print_color(c, ending=" ")
             elif [i, j] in counts:
-                print_color("I", ending=" ", color=Fore.CYAN)
+                print_color(c, ending=" ", color=Fore.CYAN)
+                # print_color("I", ending=" ", color=Fore.CYAN)
             else:
-                print(".", end=" ")
+                # print(".", end=" ")
+                print(c, end=" ")
         print(""),
 
 
@@ -266,13 +279,18 @@ if __name__ == '__main__':
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
+
     # puzzle1('../puzzles/2023/10/example.txt')  # result -> 4
     # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
     # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
-    # puzzle2('../puzzles/2023/10/example_part2_small.txt')  # result -> 4 should be 4
-    puzzle2('../puzzles/2023/10/example_part2_large.txt')  # result -> ? should be 8
-    # puzzle2('../puzzles/2023/10/example_part2_large2.txt')  # result -> ? should be 10
-    # puzzle2('../puzzles/2023/10/input.txt')  # result -> ?
+
+    # assert puzzle2('../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
+    # assert puzzle2('../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
+    # assert puzzle2('../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
+
+    final_res = puzzle2('../puzzles/2023/10/input.txt')
+    assert final_res > 244 and final_res != 68 and final_res != 227 and final_res != 481
+
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("End Time =", current_time)
