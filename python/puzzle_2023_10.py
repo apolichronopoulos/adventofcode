@@ -7,7 +7,7 @@ from utils.utils import print_color
 
 elements = []
 counts = []
-touch_sides = []
+touch_sides = {}
 
 start = [-1, -1]
 
@@ -109,10 +109,7 @@ def solve(part=1):
             break
 
     if part == 1:
-        # print(f"---------> final path: {final_path} <---------")
         print(f"---------> final res: {max_res} <---------")
-    # else:
-    #     print(f"---------> final path: {final_path} <---------")
 
     return final_path
 
@@ -193,20 +190,18 @@ def count_inside_elements(path):
         if max_j == -1 or j > max_j:
             max_j = j
 
-    # print_index(path, counts)
-
     for i in range(rows):
         for j in range(cols):
             if [i, j] not in path:
-                if touches_sides(i, j):
-                    touch_sides.append([i, j])
+                if touches_sides(i, j, path):
+                    touch_sides[(i, j)] = True
 
     for i in range(min_i, max_i + 1):
         open_row = False
         last_c_row = '.'
         for j in range(min_j, max_j + 1):
             c = elements[i][j]
-            if [i, j] in touch_sides:
+            if (i, j) in touch_sides:
                 continue
             if [i, j] not in path:
                 last_c_row = '.'
@@ -230,22 +225,22 @@ def count_inside_elements(path):
     return count
 
 
-def touches_sides(i, j):
+def touches_sides(i, j, path):
     t1, t2, t3, t4 = True, True, True, True
     for x in range(0, i):
-        if elements[x][j] != '.':
+        if [x, j] in path:
             t1 = False
             break
     for x in range(i + 1, len(elements)):
-        if elements[x][j] != '.':
+        if [x, j] in path:
             t2 = False
             break
     for x in range(0, j):
-        if elements[i][x] != '.':
+        if [i, x] in path:
             t3 = False
             break
     for x in range(j + 1, len(elements[0])):
-        if elements[i][x] != '.':
+        if [i, x] in path:
             t4 = False
             break
     return t1 or t2 or t3 or t4
@@ -284,12 +279,13 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
     # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
 
-    # assert puzzle2('../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
-    # assert puzzle2('../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
-    # assert puzzle2('../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
+    assert puzzle2('../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
+    assert puzzle2('../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
+    assert puzzle2('../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
 
     final_res = puzzle2('../puzzles/2023/10/input.txt')
     assert final_res > 244 and final_res != 68 and final_res != 227 and final_res != 481
+    assert final_res == 471
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
