@@ -1,10 +1,10 @@
 from datetime import datetime
-from functools import lru_cache
 from timeit import default_timer as timer
 
-from utils.utils import print_index, split_into_tokens, replace_char
-
+from colorama import Fore, Back
 from numpy import *
+
+from utils.utils import print_index, replace_char, print_color
 
 gears = []
 
@@ -27,39 +27,89 @@ def read_file(filename, part=1):
         gears.append(temp_gears)
 
 
+def printx(case, res_rows, res_cols, changed=[]):
+    counts, results = [], []
+    results.append(changed)
+    if res_rows:
+        for j in range(len(case[0])):
+            counts.append([res_rows - 1, j])
+            counts.append([res_rows, j])
+        print(f'-------------- index: res_rows {res_rows}')
+        print_index(case, counts=counts, results=results)
+    if res_cols:
+        for i in range(len(case)):
+            counts.append([i, res_cols - 1])
+            counts.append([i, res_cols])
+        print(f'-------------- index: res_cols {res_cols}')
+        print_index(case, counts=counts, results=results)
+
+
 def solve(part=1):
     res = 0
     for c, case in enumerate(gears):
+        print_color(f"\n\n--- {c} - case ---\n\n")
         res_rows = check_symmetric_in_rows(case)
         res_cols = check_symmetric_in_cols(case)
-        res_rows0 = res_rows
-        res_cols0 = res_cols
+        print_color(f"before", color=Fore.YELLOW)
+        printx(case, res_rows, res_cols)
         if part == 2:
-            if res_rows0 != 0 or res_cols0 != 0:  # TODO: not sure if this is needed
-                for i in range(0, len(case)):
-                    if res_rows0 != res_rows or res_cols0 != res_cols:
+            #   = res_rows
+            # res_cols0 = res_cols
+            indexes_rows0 = find_all_indexes(case)
+            indexes_cols0 = find_all_indexes(rotate_case(case))
+            found_different = False
+            if not indexes_rows0 and not indexes_cols0:  # TODO: not sure if this is needed
+                continue
+            for i in range(0, len(case)):
+                if found_different:
+                    break
+                for j in range(0, len(case[0])):
+                    if found_different:
                         break
-                    for j in range(0, len(case[0])):
-                        if res_rows0 != res_rows or res_cols0 != res_cols:
+                    case2 = case.copy()
+                    new_c = '#' if case2[i][j] == '.' else '.'
+                    case2[i] = replace_char(case2[i], new_c, j)
+                    indexes_rows = find_all_indexes(case2)
+                    indexes_cols = find_all_indexes(rotate_case(case2))
+
+                    # res_rows = check_symmetric_in_rows(case2)
+                    # res_cols = check_symmetric_in_cols(case2)
+                    # res_rows = min(indexes_rows) if indexes_rows else 0
+                    # res_cols = min(indexes_cols) if indexes_cols else 0
+
+                    for x in indexes_rows:
+                        # if indexes_rows0 and x not in indexes_rows0:
+                        if x not in indexes_rows0:
+                            res_rows = x
+                            res_cols = 0
+                            found_different = True
                             break
-                        case2 = case.copy()
-                        new_c = '#' if case2[i][j] == '.' else '.'
-                        case2[i] = replace_char(case2[i], new_c, j)
-                        res_rows2 = check_symmetric_in_rows(case2)
-                        res_cols2 = check_symmetric_in_cols(case2)
-                        if 0 < res_rows2 != res_rows0:
-                            res_rows = res_rows2
-                            break  # do we want to skip the other ?
-                        if 0 < res_cols2 != res_cols0:
-                            res_cols = res_cols2
-                            break  # do we want to skip the other ?
-            if res_rows0 == res_rows:
+                    for x in indexes_cols:
+                        # if indexes_cols0 and x not in indexes_cols0:
+                        if x not in indexes_cols0:
+                            res_cols = x
+                            res_rows = 0
+                            found_different = True
+                            break
+                    if found_different:
+                        print_color(f"after", color=Fore.BLUE)
+                        printx(case2, res_rows, res_cols, [i, j])
+                        break
+            if not found_different:
                 res_rows = 0
-            if res_cols0 == res_cols:
                 res_cols = 0
         res += ((res_rows * 100) + res_cols)
-    print(f"---------> final result: {res} <---------")
+    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     return res
+
+
+def find_all_indexes(rows):
+    indexes = []
+    i = check_symmetric_in_rows(rows)
+    while i != 0:
+        indexes.append(i)
+        i = check_symmetric_in_rows(rows, i + 1)
+    return indexes
 
 
 def check_symmetric_in_rows(rows, index=1):
@@ -85,22 +135,33 @@ def check_symmetric_in_cols(rows, index=1):
     return check_symmetric_in_rows(cols, index)
 
 
+def rotate_case(rows):
+    num_cols = len(rows[0])
+    cols = num_cols * ['']
+    for i, row in enumerate(rows):
+        for j, c in enumerate(row):
+            cols[j] += c
+    return cols
+
+
 def puzzle1(filename):
     t_start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename)
-    solve()
+    res = solve()
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
+    return res
 
 
 def puzzle2(filename):
     t_start = timer()
     print(f"\n\npuzzle1: {filename}")
     read_file(filename, part=2)
-    solve(part=2)
+    res = solve(part=2)
     t_end = timer()
     print(f"Time elapsed (in seconds): {t_end - t_start}")
+    return res
 
 
 # Press the green button in the gutter to run the script.
@@ -109,19 +170,18 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
 
-    # puzzle1('../puzzles/2023/13/example.txt')  # result -> 405
-    # puzzle1('../puzzles/2023/13/example3.txt')  # result -> 709
-    # puzzle1('../puzzles/2023/13/input.txt')  # result -> 30802 correct
+    # assert puzzle1('../puzzles/2023/13/example.txt') == 405  # result -> 405
+    # assert puzzle1('../puzzles/2023/13/example3.txt') == 709  # result -> 709
+    # assert puzzle1('../puzzles/2023/13/input.txt') == 30802  # result -> 30802 correct
 
-    puzzle2('../puzzles/2023/13/example.txt')  # result -> should be 400
-    puzzle2('../puzzles/2023/13/example3.txt')  # result -> should be 1400
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 13882 That's not the right answer; your answer is too low
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 24900 wrong
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 25049 wrong
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 25079 wrong wrong wrong wrong
-    puzzle2('../puzzles/2023/13/input.txt')  # result ????
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 38500 That's not the right answer; your answer is too high
-    # puzzle2('../puzzles/2023/13/input.txt')  # result -> 38868 That's not the right answer; your answer is too high
+    assert puzzle2('../puzzles/2023/13/example.txt') == 400  # result -> should be 400
+    assert puzzle2('../puzzles/2023/13/example3.txt') == 1400  # result -> should be 1400
+
+    final_res = puzzle2('../puzzles/2023/13/input.txt')  # result ????
+    assert 13882 < final_res < 38500
+    assert final_res not in (13882, 24900, 25049, 25079, 38500, 38868)  # latest 25079 not working
+    assert final_res != 21647
+    assert final_res == 37876
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

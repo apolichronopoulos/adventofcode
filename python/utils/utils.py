@@ -24,12 +24,10 @@ def print_index(index=[], counts=[], results=[], ending=" ", color=Fore.RESET):
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
-            if [i, j] in counts:
+            if [i, j] in results:
+                print_color(c, color=Fore.MAGENTA, ending=ending)
+            elif [i, j] in counts:
                 print_color(c, color=Fore.RED, ending=ending)
-            elif [i, j] in results:
-                print_color('#', color=Fore.MAGENTA, ending=ending)
-            elif results:
-                print_color('.', color=color, ending=ending)
             else:
                 print_color(c, color=color, ending=ending)
         print(""),
