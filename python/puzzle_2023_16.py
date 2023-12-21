@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-from utils.utils import print_index, print_color
+from utils.utils import print_index, print_color, calculate_direction, add_direction
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -77,28 +77,6 @@ def move(i, j, i2, j2):
     directions = next_directions(i2, j2, direction)
     for d in directions:
         move(i2, j2, d[0], d[1])
-
-
-def calculate_direction(i, j, i2, j2):
-    if i2 - i > 0:
-        return "D"  # downwards
-    elif j2 - j > 0:
-        return "R"  # rightwards
-    elif i - i2 > 0:
-        return "U"  # upwards
-    elif j - j2 > 0:
-        return "L"  # rightwards
-
-
-def add_direction(i, j, direction):
-    if direction == 'R':
-        return [i, j + 1]
-    elif direction == 'D':
-        return [i + 1, j]
-    elif direction == 'L':
-        return [i, j - 1]
-    elif direction == 'U':
-        return [i - 1, j]
 
 
 #   Upon closer inspection, the contraption appears to be a flat, two-dimensional square grid

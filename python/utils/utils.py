@@ -100,3 +100,25 @@ def find_neighbors(x, y, tiles):
             continue
         cases.append(case)
     return cases
+
+
+def calculate_direction(i, j, i2, j2):
+    if i2 > i:
+        return "D"  # downwards
+    elif j2 > j:
+        return "R"  # rightwards
+    elif i > i2:
+        return "U"  # upwards
+    elif j > j2:
+        return "L"  # rightwards
+
+
+def add_direction(i, j, direction):
+    if direction == 'R':
+        return [i, j + 1]
+    elif direction == 'D':
+        return [i + 1, j]
+    elif direction == 'L':
+        return [i, j - 1]
+    elif direction == 'U':
+        return [i - 1, j]

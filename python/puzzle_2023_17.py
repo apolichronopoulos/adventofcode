@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-from utils.utils import print_index, print_color
+from utils.utils import print_index, print_color, calculate_direction
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -33,17 +33,11 @@ def solve(part=1):
     print_index(tiles, color=Fore.CYAN, ending="")
     rows, cols = len(tiles), len(tiles[0])
 
-    res = 0
     if part == 1:
         start = [0, 0]
         end = [rows - 1, cols - 1]
-        path = [start]
-        paths = [path]
+        paths = [[start]]
         final_paths = []
-
-        # move(start[0], start[1], end[0], end[1], path)
-
-        print(f"-------- part 1 solution --------")
 
         min_heat_loss = 9 * cols * rows
         print(f'min heat loss: {min_heat_loss}')
@@ -52,17 +46,16 @@ def solve(part=1):
             for i in range(len(paths) - 1, -1, -1):
                 path = paths[i]
                 heat_loss = calculate_heat_loss(path)
+                if heat_loss > min_heat_loss:
+                    continue
                 if len(path) > 1 and path[len(path) - 1] == end:
+                    if path in final_paths:
+                        print(f"wtf my friend")
+                        continue
                     final_paths.append(path)
                     if min_heat_loss > heat_loss:
                         min_heat_loss = heat_loss
                         print(f'min heat loss: {min_heat_loss}')
-
-                    # break and clear ?
-                    # paths.clear()
-                    # break
-                    continue
-                elif heat_loss > min_heat_loss:
                     continue
 
                 current_size = len(path)
@@ -85,28 +78,6 @@ def solve(part=1):
                     path2.append(case)
                     new_paths.append(path2)
             paths = new_paths
-
-        print(f"-------- part 1 solution --------")
-
-        # print(f"-------- part 1 with dijsktra --------")
-        # graph = Graph()
-        # edges = []
-        # for i, row in enumerate(tiles):
-        #     for j, col in enumerate(tiles[i]):
-        #         for case in find_cases(i, j, -1, -1):
-        #             c = int(tiles[case[0]][case[1]])
-        #             edges.append((f"{i},{j}", f"{case[0]},{case[1]}", c))
-        #             graph.add_edge(f"{i},{j}", f"{case[0]},{case[1]}", c)
-        # res = 0
-        # final_path = dijsktra(graph, f"{start[0]},{start[1]}", f"{end[0]},{end[1]}")
-        # print(final_path)
-        # for node in final_path:
-        #     i, j = node.split(",")
-        #     res += int(tiles[int(i)][int(j)])
-        #     TODO: won't work since we need max 3 same direction nodes.
-        # print(f"-------- part 1 with dijsktra --------")
-
-
     else:
         #  todo
         max_res = 0
@@ -179,28 +150,6 @@ def find_cases(x, y, previous_x, previous_y, path=[]):
         cases.append(case)
 
     return cases
-
-
-def calculate_direction(i, j, i2, j2):
-    if i2 > i:
-        return "D"  # downwards
-    elif j2 > j:
-        return "R"  # rightwards
-    elif i > i2:
-        return "U"  # upwards
-    elif j > j2:
-        return "L"  # rightwards
-
-
-def add_direction(i, j, direction):
-    if direction == 'R':
-        return [i, j + 1]
-    elif direction == 'D':
-        return [i + 1, j]
-    elif direction == 'L':
-        return [i, j - 1]
-    elif direction == 'U':
-        return [i - 1, j]
 
 
 def puzzle1(filename):

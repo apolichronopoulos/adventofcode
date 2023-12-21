@@ -6,57 +6,23 @@ from timeit import default_timer as timer
 from colorama import Fore, Back, init
 from shapely.geometry import Point, Polygon
 
-# from test4 import is_inside_postgis
-from utils.utils import print_color, replace_char, set_print_color, reset_print_color, calculate_direction, \
-    add_direction
+from utils.utils import print_color, replace_char, set_print_color, reset_print_color, add_direction
 
 
 def is_point_inside_cycle_path(point, cycle_path_coordinates):
     x, y = point
     cycle_path = cycle_path_coordinates
+
     # Check if the point is inside the cycle path using the ray casting algorithm
     inside = False
     for i in range(len(cycle_path)):
         x1, y1 = cycle_path[i]
         x2, y2 = cycle_path[(i + 1) % len(cycle_path)]
+
         if ((y1 <= y < y2) or (y2 <= y < y1)) and (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1):
             inside = not inside
+
     return inside
-
-
-def flood_fill(matrix, visited, row, col):
-    # Check if the current node is within the matrix and hasn't been visited
-    if 0 <= row < len(matrix) and 0 <= col < len(matrix[0]) and not visited[row][col] and matrix[row][col] == 1:
-        # Mark the current node as visited
-        visited[row][col] = True
-
-        # Recursively perform flood-fill in all four directions
-        flood_fill(matrix, visited, row + 1, col)
-        flood_fill(matrix, visited, row - 1, col)
-        flood_fill(matrix, visited, row, col + 1)
-        flood_fill(matrix, visited, row, col - 1)
-
-
-def count_enclosed_nodes(matrix, cycle_path_coordinates):
-    # Initialize a 2D array to keep track of visited nodes
-    visited = [[False for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
-
-    # Iterate through the cycle path coordinates and find a seed point inside the cyclic path
-    seed_point = None
-    for row, col in cycle_path_coordinates:
-        if matrix[row][col] == 1:
-            seed_point = (row, col)
-            break
-
-    # If a seed point is found, perform flood-fill starting from that point
-    if seed_point:
-        row, col = seed_point
-        flood_fill(matrix, visited, row, col)
-
-    # Count the number of visited nodes (enclosed nodes within the cyclic path)
-    enclosed_node_count = sum(row.count(True) for row in visited)
-
-    return enclosed_node_count
 
 
 def enclosed_nodes(matrix, cycle_path):
@@ -67,18 +33,17 @@ def enclosed_nodes(matrix, cycle_path):
     for row in range(len(matrix)):
         for col in range(len(matrix[0])):
             point = Point(row, col)
-
-            if cycle_polygon.contains(point):
-                enclosed_nodes_set.add((row, col))
-                continue
-
+            # if cycle_polygon.contains(point):
+            #     enclosed_nodes_set.add((row, col))
             if point.within(cycle_polygon):
                 enclosed_nodes_set.add((row, col))
-                continue
 
-            if is_point_inside_cycle_path((row, col), cycle_path):
-                enclosed_nodes_set.add((row, col))
-                continue
+    # for row in range(len(matrix)):
+    #     for col in range(len(matrix[0])):
+    #         point = (col, row)
+    #         if is_point_inside_cycle_path(point, cycle_path):
+    #             # nodes_in_cycle_path.append(point)
+    #             enclosed_nodes_set.add((row, col))
 
     return enclosed_nodes_set
 
@@ -134,12 +99,16 @@ def read_file(filename, part=1):
         steps.append(line)
 
 
-def fill_tiles(start=None):
-    if start is None:
-        start = [0, 0]
+def solve(part=1):
     global tiles
+
+    res = 0
+
+    start = [0, 0]
     tiles.append('.')
+
     current_point = start
+
     for step in steps:
         direction, number, color = step.split()
         print(f"{direction}, {number}, {color}")
@@ -163,47 +132,54 @@ def fill_tiles(start=None):
             elif j2 < 0:
                 for xi in range(len(tiles)):
                     tiles[xi] = '.' + tiles[xi]
+
     if len(tiles) < 100 and len(tiles[0]) < 100:
         print_index(tiles, color=Fore.CYAN, ending="")
 
+    # graph = nx.Graph()
+    # graph = nx.DiGraph()
+    # path.append('0,0')
 
-def solve(part=1, case=1, start=None):
-    if start is None:
-        start = [0, 0]
-    res = 0
-    fill_tiles()
-
-    #  fill matrix
     for i in range(len(tiles)):
         matrix.append([])
         for j in range(len(tiles[i])):
             matrix[i].append(tiles[i][j])
+            # for n in find_neighbors(i, j, tiles):
+            #     graph.add_edge(f'{i},{j}', f'{n[0]},{n[1]}', weight=0)
 
-    # path.append((0, 0))
-    case = 1  # use 1 for X corners or 2 for all path in polygon - 20949 with or without 0,0
-    # case = 2  # use 1 for X corners or 2 for all path in polygon - 20949 with or without 0,0
-    print(f'case: {case}')
-    if case == 1:
-        cycle_path = []
-        point = (start[0], start[1])
-        last_direction = ''
-        for p in path:
-            if point == p:
-                continue
-            direction = calculate_direction(point[0], point[1], p[0], p[1])
-            if direction != last_direction:
-                last_direction = direction
-                cycle_path.append(point)
-            point = p
-        for r in cycle_path:
-            tiles[r[0]] = replace_char(tiles[r[0]], 'x', r[1])
-    else:
-        cycle_path = []
-        cycle_path.extend(path)
-        # cycle_path.append((start[0], start[1]))
+    matrix2 = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
 
-    # res = count_enclosed_nodes(matrix, cycle_path)
-    # result = []
+    # for i in range(len(path) - 1):
+    # node1 = path[i]
+    # node2 = path[i + 1]
+    # graph.add_edge(node1, node2, weight=1, direction='right')
+
+    # r1 = nx.find_cycle(graph, '0,0', '0,0')
+    # r2 = nx.dag_longest_path(graph, )
+
+    # enclosed_nodes = nx.nodes_inside_cycle(graph, path)
+    # enclosed_nodes = nx.cycle_basis
+
+    # cycle_path = []
+    # point = (start[0], start[1])
+    # last_direction = ''
+    # for p in path:
+    #     if point == p:
+    #         continue
+    #     direction = calculate_direction(point[0], point[1], p[0], p[1])
+    #     if direction != last_direction:
+    #         last_direction = direction
+    #         cycle_path.append(point)
+    #     point = p
+
+    cycle_path = []
+    cycle_path.extend(path)
+    cycle_path.append((start[0], start[1]))
+
     result = enclosed_nodes(matrix, cycle_path)
 
     inside = {}
@@ -211,6 +187,9 @@ def solve(part=1, case=1, start=None):
         inside[f"{r[0]},{r[1]}"] = True
         if tiles[r[0]][r[1]] == '#': continue
         tiles[r[0]] = replace_char(tiles[r[0]], '*', r[1])
+    for r in cycle_path:
+        # inside[f"{r[0]},{r[1]}"] = True
+        tiles[r[0]] = replace_char(tiles[r[0]], 'x', r[1])
 
     for i in range(len(tiles)):
         for j in range(len(tiles[i])):
@@ -224,8 +203,6 @@ def solve(part=1, case=1, start=None):
     # print_color(f"---------> final result: {len(enclosed_nodes)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     # print_color(f"---------> final result: {len(result) + len(path)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     return res
-
-
 
 
 def puzzle1(filename):
@@ -254,15 +231,10 @@ if __name__ == '__main__':
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> ? too low ?
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 6008 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 17345 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 22346 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 20949 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21088 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21362 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21267 too low ?
-
+    # puzzle1('../puzzles/2023/18/input.txt')  # result -> ? too low ?
     # puzzle2('../puzzles/2023/18/example.txt')  # result ->
     # puzzle2('../puzzles/2023/18/input.txt')  # result ->
 
