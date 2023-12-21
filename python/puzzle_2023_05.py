@@ -19,7 +19,6 @@ def read_file(filename):
     key_list = []
     for line in f:
         line = line.strip()
-        # print(line)
         if line == "":
             continue
         if line.startswith("seeds:"):
@@ -82,7 +81,9 @@ def puzzle2(filename):
             print(f"seed_list: {seed_list}")
             print(f"i: {i} seed: {seed}, step: {step}")
             seed_list_step = []
-            for m in seed_list:
+            while seed_list:
+                m = seed_list[len(seed_list) - 1]
+                del seed_list[len(seed_list) - 1]
                 s1_min = m[0]
                 s1_max = m[1]
                 found = False
@@ -98,13 +99,16 @@ def puzzle2(filename):
 
                     overlap_min = max(s1_min, s2_min)
                     overlap_max = min(s1_max, s2_max)
-                    if overlap_min < overlap_max: # example has an issue with (46,56) that maps on humidity-to-location (60 56 37)
-                    # if overlap_min <= overlap_max:
+                    if overlap_min <= overlap_max:
                         dif_min = max(0, s1_min - s2_min)
                         dif_max = s2_max - s1_max
                         d_min = d2_min + dif_min
                         d_max = min(d2_max, d2_max - dif_max)
                         seed_list_step.append([d_min, d_max])
+                        if s1_min < s2_min:
+                            seed_list.append([s1_min, s2_min - 1])
+                        if s1_max > s2_max:
+                            seed_list.append([s2_max + 1, s1_max])
                         found = True
                         print(
                             f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})")
@@ -126,6 +130,6 @@ def puzzle2(filename):
 if __name__ == '__main__':
     # puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
     # puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
-    puzzle2('../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
+    # puzzle2('../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
     # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 63092906 too high
-    # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 60568880 correct
+    puzzle2('../puzzles/2023/05/input.txt')  # correct -> 60568880 correct
