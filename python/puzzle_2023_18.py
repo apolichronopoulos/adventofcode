@@ -4,7 +4,6 @@ from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-# from test4 import is_inside_postgis
 from utils.utils import print_color, replace_char, set_print_color, reset_print_color, add_direction
 
 print(sys.getrecursionlimit())
@@ -37,7 +36,6 @@ steps = []
 tiles = []
 matrix = []
 
-added_rows_before, added_columns_before = 0, 0
 total_nodes = 0
 
 
@@ -56,8 +54,6 @@ def fill_tiles(start=None):
     if start is None:
         start = (0, 0)
     global tiles
-    global added_rows_before
-    global added_columns_before
     tiles.append('.')
     current_point = start
 
@@ -86,7 +82,6 @@ def fill_tiles(start=None):
                 new_tiles = [len(tiles[0]) * '.']
                 new_tiles.extend(tiles)
                 tiles = new_tiles
-                added_rows_before += 1
                 for pi, p in enumerate(path):
                     path[pi] = (p[0] + 1, p[1])
                 current_point = [i2 + 1, j2]
@@ -96,7 +91,6 @@ def fill_tiles(start=None):
             elif j2 < 0:
                 for xi in range(len(tiles)):
                     tiles[xi] = '.' + tiles[xi]
-                added_columns_before += 1
                 for pi, p in enumerate(path):
                     path[pi] = (p[0], p[1] + 1)
                 current_point = [i2, j2 + 1]
@@ -106,97 +100,55 @@ def fill_tiles(start=None):
 
 
 def solve(part=1, case=1, start=None):
+    tiles.clear()
+    path.clear()
+    steps.clear()
+    matrix.clear()
+
     if start is None:
         start = [0, 0]
     res = 0
     fill_tiles(start)
-
-    # path = []
-    # for p in path:
-    #     path.append((p[0] + added_rows_before, p[1] + added_columns_before))
-    # path = path
-
-    min_j_per_i = {}
-    max_j_per_i = {}
-    min_i_per_j = {}
-    max_i_per_j = {}
 
     indict = {}
     nodes = []
     #  fill matrix
     for i in range(len(tiles)):
         matrix.append([])
-        min_j = len(tiles[0]) - 1
-        max_j = 0
         for j in range(len(tiles[i])):
             matrix[i].append(tiles[i][j])
             if tiles[i][j] == '#':
                 nodes.append((i, j))
                 indict[f'{i},{j}'] = True
-                if j > max_j:
-                    max_j = j
-                if j < min_j:
-                    min_j = j
-                min_i = min_i_per_j[j] if j in min_i_per_j else (len(tiles) - 1)
-                max_i = max_i_per_j[j] if j in max_i_per_j else 0
-                min_i_per_j[j] = min(min_i, i)
-                max_i_per_j[j] = max(max_i, i)
-        max_j_per_i[i] = max_j
-        min_j_per_i[i] = min_j
 
     for i in range(len(tiles)):
         open_row = False
         last_c_row = '.'
         startUp = False
         startDown = False
+
         for j in range(len(tiles[i])):
             c = tiles[i][j]
 
             path_current = path.index((i, j)) if (i, j) in path else -1
-            path_L = path.index((i, j - 1)) if (i, j - 1) in path else -1
-            path_R = path.index((i, j + 1)) if (i, j + 1) in path else -1
             path_U = path.index((i - 1, j)) if (i - 1, j) in path else -1
             path_D = path.index((i + 1, j)) if (i + 1, j) in path else -1
 
-            if c == '#' and not open_row:
+            if c == '#' and last_c_row != '#':  # open
                 tU = path_current != -1 and path_U != -1 and abs(path_current - path_U) == 1
                 tD = path_current != -1 and path_D != -1 and abs(path_current - path_D) == 1
                 startUp = tU and not tD
                 startDown = tD and not tU
                 open_row = not open_row
-                continue
-
-            if c == '#' and last_c_row != '#':
-                open_row = not open_row
-                last_c_row = c
-                continue
-
-            if c == '#':
-                last_c_row = c
-                if j == max_j_per_i[i]:
-                    open_row = False
-                    continue
-
+            elif c == '#':  # close
                 if (i, j + 1) not in path:
                     tU = path_current != -1 and path_U != -1 and abs(path_current - path_U) == 1
                     tD = path_current != -1 and path_D != -1 and abs(path_current - path_D) == 1
                     endUp = tU and not tD
                     endDown = tD and not tU
-                    if startUp and endDown:
-                        continue
-                    elif startDown and endUp:
-                        continue
-                    open_row = not open_row
-
-                if abs(path_current - path_L) == 1:
-                    continue
-                if path_current + path_L == len(path) - 1 and (path_current != 0 or path_L != 0):
-                    continue
-
-                open_row = not open_row
-                # open_row = not open_row
-
-            elif c != '#' and open_row:
+                    if not (startUp and endDown) and not (startDown and endUp):
+                        open_row = not open_row
+            elif c != '#' and open_row:  # inside
                 tiles[i] = replace_char(tiles[i], '*', j)
             last_c_row = c
 
@@ -205,12 +157,7 @@ def solve(part=1, case=1, start=None):
             if tiles[i][j] == '#' or tiles[i][j] == '*':
                 res += 1
 
-    if len(tiles) < 100 and len(tiles[0]) < 100:
-        # print_index(tiles, edges=indict, outside=outdict, color=Fore.CYAN, ending="")
-        print_index(tiles, edges=indict, color=Fore.CYAN, ending="")
-
     print_index(tiles, edges=indict, color=Fore.CYAN, ending="")
-
     print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     return res
 
@@ -240,22 +187,9 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
+    # puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
     # puzzle1('../puzzles/2023/18/example2.txt')  # result -> 62
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> ? too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 50281 too high
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 6008 too low
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 17345 too low
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 22346 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 20949 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21088 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21362 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21267 too low ?
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 26083 ???? not ??
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 104054 ? not
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 32822 ?
-
-    # print(path)
+    puzzle1('../puzzles/2023/18/input.txt')  # result -> 106459 >>> CORRECT <<<
 
     # puzzle2('../puzzles/2023/18/example.txt')  # result ->
     # puzzle2('../puzzles/2023/18/input.txt')  # result ->
