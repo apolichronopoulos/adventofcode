@@ -1,87 +1,11 @@
-import os
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
-from shapely.geometry import Point, Polygon
 
 # from test4 import is_inside_postgis
-from utils.utils import print_color, replace_char, set_print_color, reset_print_color, calculate_direction, \
-    add_direction
-
-
-def is_point_inside_cycle_path(point, cycle_path_coordinates):
-    x, y = point
-    cycle_path = cycle_path_coordinates
-    # Check if the point is inside the cycle path using the ray casting algorithm
-    inside = False
-    for i in range(len(cycle_path)):
-        x1, y1 = cycle_path[i]
-        x2, y2 = cycle_path[(i + 1) % len(cycle_path)]
-        if ((y1 <= y < y2) or (y2 <= y < y1)) and (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1):
-            inside = not inside
-    return inside
-
-
-def flood_fill(matrix, visited, row, col):
-    # Check if the current node is within the matrix and hasn't been visited
-    if 0 <= row < len(matrix) and 0 <= col < len(matrix[0]) and not visited[row][col] and matrix[row][col] == 1:
-        # Mark the current node as visited
-        visited[row][col] = True
-
-        # Recursively perform flood-fill in all four directions
-        flood_fill(matrix, visited, row + 1, col)
-        flood_fill(matrix, visited, row - 1, col)
-        flood_fill(matrix, visited, row, col + 1)
-        flood_fill(matrix, visited, row, col - 1)
-
-
-def count_enclosed_nodes(matrix, cycle_path_coordinates):
-    # Initialize a 2D array to keep track of visited nodes
-    visited = [[False for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
-
-    # Iterate through the cycle path coordinates and find a seed point inside the cyclic path
-    seed_point = None
-    for row, col in cycle_path_coordinates:
-        if matrix[row][col] == 1:
-            seed_point = (row, col)
-            break
-
-    # If a seed point is found, perform flood-fill starting from that point
-    if seed_point:
-        row, col = seed_point
-        flood_fill(matrix, visited, row, col)
-
-    # Count the number of visited nodes (enclosed nodes within the cyclic path)
-    enclosed_node_count = sum(row.count(True) for row in visited)
-
-    return enclosed_node_count
-
-
-def enclosed_nodes(matrix, cycle_path):
-    # Convert cycle_path to a Shapely Polygon
-    cycle_polygon = Polygon(cycle_path)
-    enclosed_nodes_set = set()
-    # Iterate through all matrix cells
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            point = Point(row, col)
-
-            if cycle_polygon.contains(point):
-                enclosed_nodes_set.add((row, col))
-                continue
-
-            if point.within(cycle_polygon):
-                enclosed_nodes_set.add((row, col))
-                continue
-
-            if is_point_inside_cycle_path((row, col), cycle_path):
-                enclosed_nodes_set.add((row, col))
-                continue
-
-    return enclosed_nodes_set
-
+from utils.utils import print_color, replace_char, set_print_color, reset_print_color, add_direction
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -108,19 +32,13 @@ def print_index(index=[], edges={}, inside={}, outside={}, ending=" ", color=For
     reset_print_color()
 
 
-def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
 path = []
 steps = []
 tiles = []
 matrix = []
-# inside = []
-# outside = []
 
-indict = {}
-outdict = {}
+added_rows_before, added_columns_before = 0, 0
+total_nodes = 0
 
 
 def read_file(filename, part=1):
@@ -136,33 +54,53 @@ def read_file(filename, part=1):
 
 def fill_tiles(start=None):
     if start is None:
-        start = [0, 0]
+        start = (0, 0)
     global tiles
+    global added_rows_before
+    global added_columns_before
     tiles.append('.')
     current_point = start
+
     for step in steps:
         direction, number, color = step.split()
         print(f"{direction}, {number}, {color}")
 
+        global total_nodes
+        total_nodes += int(number)
+
         for iter in range(int(number)):
+            # print_index(tiles, color=Fore.CYAN, ending="")
+
             i, j = current_point
             tiles[i] = replace_char(tiles[i], '#', j)
-            indict[f'{i},{j}'] = True
-            path.append((i, j))
             i2, j2 = add_direction(i, j, direction)
             current_point = [i2, j2]
+            i, j = current_point
+
+            # indict[f'{i},{j}'] = True
+            path.append((i, j))
+
             if i2 >= len(tiles):
                 tiles.append(len(tiles[0]) * '.')
             elif i2 < 0:
                 new_tiles = [len(tiles[0]) * '.']
                 new_tiles.extend(tiles)
                 tiles = new_tiles
+                added_rows_before += 1
+                for pi, p in enumerate(path):
+                    path[pi] = (p[0] + 1, p[1])
+                current_point = [i2 + 1, j2]
             elif j2 >= len(tiles[i]):
                 for xi in range(len(tiles)):
                     tiles[xi] += '.'
             elif j2 < 0:
                 for xi in range(len(tiles)):
                     tiles[xi] = '.' + tiles[xi]
+                added_columns_before += 1
+                for pi, p in enumerate(path):
+                    path[pi] = (p[0], p[1] + 1)
+                current_point = [i2, j2 + 1]
+
     if len(tiles) < 100 and len(tiles[0]) < 100:
         print_index(tiles, color=Fore.CYAN, ending="")
 
@@ -171,61 +109,110 @@ def solve(part=1, case=1, start=None):
     if start is None:
         start = [0, 0]
     res = 0
-    fill_tiles()
+    fill_tiles(start)
 
+    # path = []
+    # for p in path:
+    #     path.append((p[0] + added_rows_before, p[1] + added_columns_before))
+    # path = path
+
+    min_j_per_i = {}
+    max_j_per_i = {}
+    min_i_per_j = {}
+    max_i_per_j = {}
+
+    indict = {}
+    nodes = []
     #  fill matrix
     for i in range(len(tiles)):
         matrix.append([])
+        min_j = len(tiles[0]) - 1
+        max_j = 0
         for j in range(len(tiles[i])):
             matrix[i].append(tiles[i][j])
+            if tiles[i][j] == '#':
+                nodes.append((i, j))
+                indict[f'{i},{j}'] = True
+                if j > max_j:
+                    max_j = j
+                if j < min_j:
+                    min_j = j
+                min_i = min_i_per_j[j] if j in min_i_per_j else (len(tiles) - 1)
+                max_i = max_i_per_j[j] if j in max_i_per_j else 0
+                min_i_per_j[j] = min(min_i, i)
+                max_i_per_j[j] = max(max_i, i)
+        max_j_per_i[i] = max_j
+        min_j_per_i[i] = min_j
 
-    # path.append((0, 0))
-    case = 1  # use 1 for X corners or 2 for all path in polygon - 20949 with or without 0,0
-    # case = 2  # use 1 for X corners or 2 for all path in polygon - 20949 with or without 0,0
-    print(f'case: {case}')
-    if case == 1:
-        cycle_path = []
-        point = (start[0], start[1])
-        last_direction = ''
-        for p in path:
-            if point == p:
+    for i in range(len(tiles)):
+        open_row = False
+        last_c_row = '.'
+        startUp = False
+        startDown = False
+        for j in range(len(tiles[i])):
+            c = tiles[i][j]
+
+            path_current = path.index((i, j)) if (i, j) in path else -1
+            path_L = path.index((i, j - 1)) if (i, j - 1) in path else -1
+            path_R = path.index((i, j + 1)) if (i, j + 1) in path else -1
+            path_U = path.index((i - 1, j)) if (i - 1, j) in path else -1
+            path_D = path.index((i + 1, j)) if (i + 1, j) in path else -1
+
+            if c == '#' and not open_row:
+                tU = path_current != -1 and path_U != -1 and abs(path_current - path_U) == 1
+                tD = path_current != -1 and path_D != -1 and abs(path_current - path_D) == 1
+                startUp = tU and not tD
+                startDown = tD and not tU
+                open_row = not open_row
                 continue
-            direction = calculate_direction(point[0], point[1], p[0], p[1])
-            if direction != last_direction:
-                last_direction = direction
-                cycle_path.append(point)
-            point = p
-        for r in cycle_path:
-            tiles[r[0]] = replace_char(tiles[r[0]], 'x', r[1])
-    else:
-        cycle_path = []
-        cycle_path.extend(path)
-        # cycle_path.append((start[0], start[1]))
 
-    # res = count_enclosed_nodes(matrix, cycle_path)
-    # result = []
-    result = enclosed_nodes(matrix, cycle_path)
+            if c == '#' and last_c_row != '#':
+                open_row = not open_row
+                last_c_row = c
+                continue
 
-    inside = {}
-    for r in result:
-        inside[f"{r[0]},{r[1]}"] = True
-        if tiles[r[0]][r[1]] == '#': continue
-        tiles[r[0]] = replace_char(tiles[r[0]], '*', r[1])
+            if c == '#':
+                last_c_row = c
+                if j == max_j_per_i[i]:
+                    open_row = False
+                    continue
+
+                if (i, j + 1) not in path:
+                    tU = path_current != -1 and path_U != -1 and abs(path_current - path_U) == 1
+                    tD = path_current != -1 and path_D != -1 and abs(path_current - path_D) == 1
+                    endUp = tU and not tD
+                    endDown = tD and not tU
+                    if startUp and endDown:
+                        continue
+                    elif startDown and endUp:
+                        continue
+                    open_row = not open_row
+
+                if abs(path_current - path_L) == 1:
+                    continue
+                if path_current + path_L == len(path) - 1 and (path_current != 0 or path_L != 0):
+                    continue
+
+                open_row = not open_row
+                # open_row = not open_row
+
+            elif c != '#' and open_row:
+                tiles[i] = replace_char(tiles[i], '*', j)
+            last_c_row = c
 
     for i in range(len(tiles)):
         for j in range(len(tiles[i])):
-            if tiles[i][j] == '#' or tiles[i][j] == '*' or tiles[i][j] == 'x':
+            if tiles[i][j] == '#' or tiles[i][j] == '*':
                 res += 1
 
     if len(tiles) < 100 and len(tiles[0]) < 100:
-        print_index(tiles, edges=indict, inside=inside, outside=outdict, color=Fore.CYAN, ending="")
+        # print_index(tiles, edges=indict, outside=outdict, color=Fore.CYAN, ending="")
+        print_index(tiles, edges=indict, color=Fore.CYAN, ending="")
+
+    print_index(tiles, edges=indict, color=Fore.CYAN, ending="")
 
     print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
-    # print_color(f"---------> final result: {len(enclosed_nodes)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
-    # print_color(f"---------> final result: {len(result) + len(path)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     return res
-
-
 
 
 def puzzle1(filename):
@@ -254,7 +241,9 @@ if __name__ == '__main__':
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
+    # puzzle1('../puzzles/2023/18/example2.txt')  # result -> 62
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> ? too low ?
+    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 50281 too high
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 6008 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 17345 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 22346 too low ?
@@ -262,6 +251,11 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21088 too low ?
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21362 too low ?
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 21267 too low ?
+    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 26083 ???? not ??
+    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 104054 ? not
+    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 32822 ?
+
+    # print(path)
 
     # puzzle2('../puzzles/2023/18/example.txt')  # result ->
     # puzzle2('../puzzles/2023/18/input.txt')  # result ->
