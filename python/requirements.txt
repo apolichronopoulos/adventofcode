@@ -4,3 +4,8 @@ termcolor
 networkx
 shapely
 numba
+geopandas
+matplotlib
+momepy
+contextily
+libpysal

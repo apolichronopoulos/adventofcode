@@ -19,12 +19,14 @@ def read_file(filename, separator=""):
     return elements
 
 
-def print_index(index=[], counts=[], results=[], ending=" ", color=Fore.RESET):
+def print_index(index=[], counts=[], results=[], tuples=[], ending=" ", color=Fore.RESET):
     set_print_color(color=color)
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
-            if [i, j] in results:
+            if (i, j) in tuples:
+                print_color('O', color=Fore.RED, ending=ending)
+            elif [i, j] in results:
                 print_color(c, color=Fore.MAGENTA, ending=ending)
             elif [i, j] in counts:
                 print_color(c, color=Fore.RED, ending=ending)
@@ -113,12 +115,12 @@ def calculate_direction(i, j, i2, j2):
         return "L"  # rightwards
 
 
-def add_direction(i, j, direction):
+def add_direction(i, j, direction, amount=1):
     if direction == 'R':
-        return [i, j + 1]
+        return [i, j + amount]
     elif direction == 'D':
-        return [i + 1, j]
+        return [i + amount, j]
     elif direction == 'L':
-        return [i, j - 1]
+        return [i, j - amount]
     elif direction == 'U':
-        return [i - 1, j]
+        return [i - amount, j]
