@@ -12,7 +12,7 @@ sys.setrecursionlimit(10000)
 
 tiles = []
 matrix = []
-start = (-1, -1)
+start = (-1, -1, 0, 0)
 
 steps = []
 
@@ -30,40 +30,58 @@ def read_file(filename, part=1):
         for j, c in enumerate(line):
             if c == 'S':
                 global start
-                start = (i, j)
+                start = (i, j, 0, 0)
             matrix[i].append(c)
 
 
-def find_neighbors(x, y, matrix):
+def find_neighbors(x, y, matrix, loop_i=0, loop_j=0, part=1):
+
     all_cases = [(x, y + 1), (x - 1, y), (x + 1, y), (x, y - 1)]
     cases = []
     for i, j in all_cases:
-        if i < 0 or j < 0 or i >= len(matrix) or j >= len(matrix[0]):
+        li = loop_i
+        lj = loop_j
+        if part == 1 and (i < 0 or j < 0 or i >= len(matrix) or j >= len(matrix[0])):
             continue
-        elif matrix[i][j] == '#':
+        if part == 2:
+            if i < 0:
+                i = len(matrix) - 1
+                li -= 1
+            if j < 0:
+                j = len(matrix[0]) - 1
+                lj -= 1
+            if i >= len(matrix):
+                i = 0
+                li += 1
+            if j >= len(matrix[0]):
+                j = 0
+                lj += 1
+        if matrix[i][j] == '#':
             continue
-        cases.append((i, j))
+        cases.append((i, j, li, lj))
     return cases
 
 
-def navigate(matrix, nodes, steps):
+def navigate(matrix, nodes, steps, part=1):
     # print(f'--------- calculating step {steps} ---------')
     # print_index(matrix, tuples=nodes, color=Fore.CYAN, ending="")
     # print('---------')
     if steps == 0:
         return nodes
     new_nodes = set()
-    for i, j in nodes:
-        for case in find_neighbors(i, j, matrix):
+    for i, j, loop_i, loop_j in nodes:
+        for case in find_neighbors(i, j, matrix, loop_i, loop_j, part=part):
             new_nodes.add(case)
-    return navigate(matrix, new_nodes, steps - 1)
+    return navigate(matrix, new_nodes, steps - 1, part)
 
 
 def solve(part=1, steps=64):
     global start
     # print_index(matrix, color=Fore.CYAN, ending="")
     nodes = [start]
-    final_nodes = navigate(matrix, nodes, steps)
+    final_nodes = navigate(matrix, nodes, steps, part)
+    # print_index_dummy(final_nodes)
+
     # print_color(f"---------> final <---------", Fore.LIGHTRED_EX)
     # print_index(matrix, tuples=final_nodes, color=Fore.CYAN, ending="")
     res = len(final_nodes)
@@ -103,9 +121,9 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/21/input.txt', 64) == 3724
 
     assert puzzle2('../puzzles/2023/21/example.txt', 6) == 16
-    # assert puzzle2('../puzzles/2023/21/example.txt', 10) == 50
-    # assert puzzle2('../puzzles/2023/21/example.txt', 50) == 1594
-    # assert puzzle2('../puzzles/2023/21/example.txt', 100) == 6536
+    assert puzzle2('../puzzles/2023/21/example.txt', 10) == 50
+    assert puzzle2('../puzzles/2023/21/example.txt', 50) == 1594
+    assert puzzle2('../puzzles/2023/21/example.txt', 100) == 6536
     # assert puzzle2('../puzzles/2023/21/example.txt', 500) == 167004
     # assert puzzle2('../puzzles/2023/21/example.txt', 1000) == 668697
     # assert puzzle2('../puzzles/2023/21/example.txt', 5000) == 16733044

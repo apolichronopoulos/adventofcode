@@ -124,3 +124,10 @@ def add_direction(i, j, direction, amount=1):
         return [i, j - amount]
     elif direction == 'U':
         return [i - amount, j]
+
+
+def print_index_dummy(index=[]):
+    print('-------------------------')
+    for i in index:
+        print(i)
+    print('-------------------------')
