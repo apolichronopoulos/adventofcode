@@ -4,7 +4,7 @@ from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-from utils.utils import print_color, print_index_dummy, pos_to_char
+from utils.utils import print_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -14,6 +14,9 @@ bricks = []
 max_x = -1
 max_y = -1
 max_z = -1
+
+brick_blocks = {}
+space = {}
 
 
 def read_file(filename, part=1):
@@ -34,13 +37,9 @@ def read_file(filename, part=1):
             bricks[i].append((x, y, z))
 
 
-brick_blocks = {}
-space = {}
-
-
 def solve(part=1):
     global start
-    print_index_dummy(bricks)
+    # print_index_dummy(bricks)
 
     brick_blocks.clear()
     space.clear()
@@ -53,7 +52,10 @@ def solve(part=1):
                 space[z + 1][x].append('-')
 
     for id, brick in enumerate(bricks):
-        id = pos_to_char(id)
+
+        # id = pos_to_char(id)
+        id = str(id)
+
         x0, y0, z0 = brick[0]
         x1, y1, z1 = brick[1]
         blocks = []
@@ -69,15 +71,29 @@ def solve(part=1):
         has_changes = apply_gravity(brick_blocks, space)
 
     res = 0
-    for id, blocks in brick_blocks.items():
-        print(f'removing id {id} brick')
-        cp_space = space.copy()
-        for x, y, z in blocks:
-            cp_space[z][x][y] = '-'
-        cp_brick_blocks = brick_blocks.copy()
-        cp_brick_blocks.pop(id)
-        if apply_gravity(cp_brick_blocks, cp_space) == False:
-            res += 1
+    for uid, blocks in brick_blocks.items():
+        # print(f'removing id {id} brick')
+        cp_space = {}
+        for z in range(max_z):
+            cp_space[z + 1] = []
+            for x in range(max_x + 1):
+                cp_space[z + 1].append([])
+                for y in range(max_y + 1):
+                    cp_space[z + 1][x].append('-')
+
+        cp_brick_blocks = {}
+        for k, v in brick_blocks.items():
+            if k != uid:
+                cp_blocks = []
+                for x, y, z in v:
+                    cp_space[z][x][y] = k
+                    cp_blocks.append((x, y, z))
+                cp_brick_blocks[k] = cp_blocks
+
+        has_changes = apply_gravity(cp_brick_blocks, cp_space)
+        if not has_changes:
+            print(f'removing brick {uid} has changes = {has_changes} ')
+            res = res + 1
 
     # for z in range(1, max_z + 1):
     #     print(f'------ id: {z} ------')
@@ -95,36 +111,35 @@ def get_min_z(blocks):
     return min_z
 
 
-def apply_gravity(brick_blocks, space):
+def apply_gravity(brick_blocks2, space2):
     # for z in range(1, max_z + 1):
     # print(f'------ id: {z} ------')
-    # print_index_dummy(space[z])
+    # print_index_dummy(space2[z])
     has_changes = False
-    for id, blocks in brick_blocks.items():
+    for id, blocks in brick_blocks2.items():
         if get_min_z(blocks) == 1:
             continue
         is_stuck = False
         loop = 0
         while not is_stuck:
             loop += 1
-            print(f'id {id} loop {loop}')
+            # print(f'id {id} loop {loop}')
             new_blocks = []
             for x, y, z in blocks:
                 z = int(z)
                 new_blocks.append((x, y, z - 1))
-                if get_min_z(blocks) == 1 or (space[z - 1][x][y] != '-' and space[z - 1][x][y] != str(id)):
+                if get_min_z(blocks) == 1 or (space2[z - 1][x][y] != '-' and space2[z - 1][x][y] != str(id)):
                     is_stuck = True
                     new_blocks.clear()
                     break
             if not is_stuck:
                 has_changes = True
                 for x, y, z in blocks:
-                    space[z][x][y] = '-'
+                    space2[z][x][y] = '-'
                 for x, y, z in new_blocks:
-                    space[z][x][y] = str(id)
+                    space2[z][x][y] = str(id)
                 blocks = new_blocks
-                brick_blocks[id] = blocks
-    print(f'has changes = {has_changes} ')
+                brick_blocks2[id] = blocks
     return has_changes
 
 
@@ -155,8 +170,13 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../puzzles/2023/22/example.txt') == 1
-    # assert puzzle1('../puzzles/2023/22/input.txt') == -1
+    assert puzzle1('../puzzles/2023/22/example.txt') == 5
+    assert puzzle1('../puzzles/2023/22/example.txt') == 5
+
+    puzzle1_res = puzzle1('../puzzles/2023/22/input.txt')
+    assert puzzle1_res < 519  # your answer is too high
+    assert puzzle1_res == 448  # correct
+
     # assert puzzle2('../puzzles/2023/22/example.txt') == -1
     # assert puzzle2('../puzzles/2023/22/input.txt') == -1  # won't run
 
