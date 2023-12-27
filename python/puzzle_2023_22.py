@@ -66,9 +66,9 @@ def solve(part=1):
                     space[z][x][y] = str(id)
         brick_blocks[id] = blocks
 
-    has_changes = True
-    while has_changes:
-        has_changes = apply_gravity(brick_blocks, space)
+    has_changes = 1
+    while has_changes != 0:
+        has_changes = len(apply_gravity(brick_blocks, space))
 
     res = 0
     for uid, blocks in brick_blocks.items():
@@ -90,10 +90,17 @@ def solve(part=1):
                     cp_blocks.append((x, y, z))
                 cp_brick_blocks[k] = cp_blocks
 
-        has_changes = apply_gravity(cp_brick_blocks, cp_space)
-        if not has_changes:
-            print(f'removing brick {uid} has changes = {has_changes} ')
-            res = res + 1
+        bricks_changed = apply_gravity(cp_brick_blocks, cp_space)
+        if part == 1:
+            if not bricks_changed:
+                res = res + 1
+        else:
+            all_bricks_changed = set()
+            while bricks_changed:
+                for brick in bricks_changed:
+                    all_bricks_changed.add(brick)
+                bricks_changed = apply_gravity(cp_brick_blocks, cp_space)
+            res += len(all_bricks_changed)
 
     # for z in range(1, max_z + 1):
     #     print(f'------ id: {z} ------')
@@ -115,7 +122,7 @@ def apply_gravity(brick_blocks2, space2):
     # for z in range(1, max_z + 1):
     # print(f'------ id: {z} ------')
     # print_index_dummy(space2[z])
-    has_changes = False
+    bricks_changed = set()
     for id, blocks in brick_blocks2.items():
         if get_min_z(blocks) == 1:
             continue
@@ -133,14 +140,14 @@ def apply_gravity(brick_blocks2, space2):
                     new_blocks.clear()
                     break
             if not is_stuck:
-                has_changes = True
+                bricks_changed.add(id)
                 for x, y, z in blocks:
                     space2[z][x][y] = '-'
                 for x, y, z in new_blocks:
                     space2[z][x][y] = str(id)
                 blocks = new_blocks
                 brick_blocks2[id] = blocks
-    return has_changes
+    return bricks_changed
 
 
 def puzzle1(filename):
@@ -171,14 +178,15 @@ if __name__ == '__main__':
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     assert puzzle1('../puzzles/2023/22/example.txt') == 5
-    assert puzzle1('../puzzles/2023/22/example.txt') == 5
 
     puzzle1_res = puzzle1('../puzzles/2023/22/input.txt')
     assert puzzle1_res < 519  # your answer is too high
     assert puzzle1_res == 448  # correct
 
-    # assert puzzle2('../puzzles/2023/22/example.txt') == -1
-    # assert puzzle2('../puzzles/2023/22/input.txt') == -1  # won't run
+    assert puzzle2('../puzzles/2023/22/example.txt') == 7
+    puzzle2_res = puzzle2('../puzzles/2023/22/input.txt')
+    assert puzzle2_res > 1919  # your answer is too low
+    assert puzzle2_res == 57770  # correct
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
