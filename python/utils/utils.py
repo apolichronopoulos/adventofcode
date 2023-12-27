@@ -131,3 +131,7 @@ def print_index_dummy(index=[]):
     for i in index:
         print(i)
     print('-------------------------')
+
+
+def pos_to_char(pos):
+    return str(chr(pos + 97)).upper()
