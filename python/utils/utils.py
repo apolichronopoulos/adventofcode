@@ -1,3 +1,4 @@
+import numpy as np
 from colorama import Fore, Back
 
 
@@ -135,3 +136,26 @@ def print_index_dummy(index=[]):
 
 def pos_to_char(pos):
     return str(chr(pos + 97)).upper()
+
+
+# def compute_lcm(x, y):
+#     # choose the greater number
+#     if x > y:
+#         greater = x
+#     else:
+#         greater = y
+#
+#     while (True):
+#         if ((greater % x == 0) and (greater % y == 0)):
+#             lcm = greater
+#             break
+#         greater += 1
+#
+#     return lcm
+
+def compute_lcm(arr):
+    return np.lcm.reduce(arr)
+
+
+def compute_gcd(arr):
+    return np.gcd.reduce(arr)

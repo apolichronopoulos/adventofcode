@@ -1,5 +1,6 @@
-from timeit import default_timer as timer
 from datetime import datetime
+from timeit import default_timer as timer
+
 import numpy as np
 
 steps = []
@@ -71,21 +72,6 @@ def solve_brute_force(part=1):
     res = step_count
     print(f"res: {res}")
 
-
-def compute_lcm(x, y):
-    # choose the greater number
-    if x > y:
-        greater = x
-    else:
-        greater = y
-
-    while (True):
-        if ((greater % x == 0) and (greater % y == 0)):
-            lcm = greater
-            break
-        greater += 1
-
-    return lcm
 
 
 def solve_smart(part=1):
