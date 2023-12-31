@@ -9,3 +9,4 @@ matplotlib
 momepy
 contextily
 libpysal
+sympy
