@@ -1,4 +1,5 @@
 import sys
+import threading
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -11,14 +12,12 @@ print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 hails = {}
-hails_p = []
-hails_v = []
+min_x, min_y, min_z = sys.maxsize, sys.maxsize, sys.maxsize
+max_x, max_y, max_z = - sys.maxsize, - sys.maxsize, - sys.maxsize
 
 
 def read_file(filename, part=1):
     hails.clear()
-    hails_p.clear()
-    hails_v.clear()
     f = open(filename, "r")
     for i, line in enumerate(f):
         line = line.strip()
@@ -27,10 +26,16 @@ def read_file(filename, part=1):
         position, velocity = line.split('@')
         px, py, pz = position.strip().split(',')
         px, py, pz = int(px), int(py), int(pz)
-        hails_p.append((px, py, pz))
         vx, vy, vz = velocity.strip().split(',')
         vx, vy, vz = int(vx), int(vy), int(vz)
-        hails_v.append((vx, vy, vz))
+
+        global max_x, max_y, max_z
+        max_x = max(px, max_x)
+        max_y = max(py, max_y)
+        max_z = max(pz, max_z)
+        min_x = min(px, max_x)
+        min_y = min(py, max_y)
+        min_z = min(pz, max_z)
         hails[str(i)] = ([(px, py, pz), (vx, vy, vz)])
 
 
@@ -83,54 +88,107 @@ def solve(part=1, minP: int = 7, maxP: int = 24):
     return res
 
 
+def calc_possible_v0s(i, possible_v0s, max_v, max_n, all_v):
+    print_color(f'running for axis -> {i}', Fore.RED)
+    for v0 in range(-max_v, max_v + 1):
+        if v0 == 0:
+            continue
+        p0s = {}
+        for k, hail in hails.items():
+            pi = hail[0][i]
+            vi = hail[1][i]
+            p0s[k] = []
+            for n in range(1, max_n + 1):
+                p0 = (pi + vi * n) - (v0 * n)
+                p0s[k].append(p0)
+        com_el = None
+        for k, v in p0s.items():
+            if com_el is None:
+                com_el = set(v)
+            else:
+                com_el = common_elements(com_el, v)
+                if not com_el:
+                    break
+        if com_el:
+            possible_v0s[v0] = com_el
+
+    if not possible_v0s:
+        print_color(f'max_n={max_n} / max_v={max_v} is too low for axis {i}', Fore.RED)
+        return 0
+    print_color(f'found solution for axis {i} for max_n={max_n} / max_v={max_v}', Fore.YELLOW)
+
+    all_v[i] = possible_v0s
+
+
+# def worker():
+#     print("Worker thread running")
+
+
 def solve2(part=2, max_v: int = 5000, max_n: int = 5000):
     print_color(f'running for max_n={max_n} / max_v={max_v}', Fore.YELLOW)
 
+    # max_xyz = max(max_x, max_y, max_z)
+    # min_xyz = max(min_x, min_y, min_z)
+
     all_v = {}
 
-    for i in range(3):
-        possible_v0s = {}
-        print_color(f'running for axis -> {i}', Fore.RED)
-        for v0 in range(-max_v, max_v + 1):
-            if v0 == 0:
-                continue
-            p0s = {}
-            for k, hail in hails.items():
-                pi = hail[0][i]
-                vi = hail[1][i]
-                p0s[k] = []
-                for n in range(1, max_n + 1):
-                    p0 = (pi + vi * n) - (v0 * n)
-                    p0s[k].append(p0)
-            com_el = None
-            for k, v in p0s.items():
-                if com_el is None:
-                    com_el = set(v)
-                else:
-                    com_el = common_elements(com_el, v)
-                    if not com_el:
-                        break
-            if com_el:
-                possible_v0s[v0] = com_el
+    t1 = threading.Thread(target=calc_possible_v0s, args=(0, {}, max_v, max_n, all_v))
+    t2 = threading.Thread(target=calc_possible_v0s, args=(1, {}, max_v, max_n, all_v))
+    t3 = threading.Thread(target=calc_possible_v0s, args=(2, {}, max_v, max_n, all_v))
 
-        if not possible_v0s:
-            print_color(f'max_n={max_n} / max_v={max_v} is too low for axis {i}', Fore.RED)
-            exit(1)
-        all_v[i] = possible_v0s
+    t1.start()
+    t2.start()
+    t3.start()
+
+    t1.join()
+    t2.join()
+    t3.join()
+
+    if len(all_v) != 3:
+        print_color(f'max_n={max_n} / max_v={max_v} is too low', Fore.RED)
+        return 0
 
     print(f'found some solutions, calculating best case')
 
     start_p = [0, 0, 0]
-    start_v = [0, 0, 0]
-    for i, solutions in all_v.items():
-        v0 = sys.maxsize
-        p0 = sys.maxsize
+    # start_v = [0, 0, 0]
+
+    possible_v0s = []
+    for i in range(3):
+        solutions = all_v[i]
+        possible_v0s.append([])
         for v, p0s in solutions.items():
-            if len(solutions) == 1 or (0 < v < v0):
-                v0 = v
-                p0 = p0s[0]
-        start_v[i] = v0
-        start_p[i] = p0
+            possible_v0s[i].append(v)
+
+    found_solution = False
+    for vx0 in possible_v0s[0]:
+        for vy0 in possible_v0s[1]:
+            for vz0 in possible_v0s[2]:
+                # start_v = [vx0, vy0, vz0]
+                for px0 in all_v[0][vx0]:
+                    for py0 in all_v[1][vy0]:
+                        for pz0 in all_v[2][vz0]:
+                            if found_solution:
+                                break
+                            is_valid = True
+                            for k, hail in hails.items():
+                                px, py, pz = hail[0]
+                                vx, vy, vz = hail[1]
+                                nx = (px0 - px) / (vx - vx0) if vx != vx0 else (px0 - px)
+                                ny = (py0 - py) / (vy - vy0) if vy != vy0 else (py0 - py)
+                                nz = (pz0 - pz) / (vz - vz0) if vz != vz0 else (pz0 - pz)
+                                # p0 -> 24, 13, 10
+                                # v0 -> -3, 1, 2
+                                nx = max(nx, ny, nz) if nx == 0 else nx
+                                ny = max(nx, ny, nz) if ny == 0 else ny
+                                nz = max(nx, ny, nz) if nz == 0 else nz
+                                if not (nx == ny == nz):
+                                    is_valid = False
+                                    break
+                            if is_valid:
+                                found_solution = True
+                                start_p = [px0, py0, pz0]
+                                break
 
     start = (start_p[0], start_p[1], start_p[2])
 
@@ -173,12 +231,17 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/24/example.txt', minP=7, maxP=24) == 2
     # assert puzzle1('../puzzles/2023/24/input.txt', 200000000000000, 400000000000000) == 21843
 
-    assert puzzle2('../puzzles/2023/24/example.txt', 100, 100) == 47
+    # assert puzzle2('../puzzles/2023/24/example.txt', 100, 100) == 47
     # assert puzzle2('../puzzles/2023/24/example.txt', 500, 500) == 47
+    # assert puzzle2('../puzzles/2023/24/example.txt', 10000, 10000) == 47
 
-    # puzzle2_res = puzzle2('../puzzles/2023/24/input.txt', 5000, 5000)
-    # assert puzzle2_res != -1  # won't run
-    # assert puzzle2_res != 27670116110564327421  # won't run
+    # puzzle2_res = puzzle2('../puzzles/2023/24/input.txt', 100, 100)
+    puzzle2_res = puzzle2('../puzzles/2023/24/input.txt', 500, 500)
+    # puzzle2_res = puzzle2('../puzzles/2023/24/input.txt', 500, 5000)
+    # puzzle2_res = puzzle2('../puzzles/2023/24/input.txt', 10000, 10000)
+    # assert puzzle2_res != -1
+    # assert puzzle2_res != 0
+    # assert puzzle2_res != 27670116110564327421
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
