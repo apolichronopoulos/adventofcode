@@ -17,6 +17,7 @@ def cls():
 
 tiles = []
 visited = {}
+visited_len = {}
 
 
 def read_file(filename, part=1):
@@ -37,62 +38,79 @@ def solve(part=1):
         start = [0, 0]
         end = [rows - 1, cols - 1]
         paths = [[start]]
+        heats = [0]
+        final_path = []
         final_paths = []
 
-        min_heat_loss = 9 * cols * rows
+        # heat_loss = calculate_heat_loss(path)
+
+        min_heat_loss = sys.maxsize
         print(f'min heat loss: {min_heat_loss}')
         while paths:
             new_paths = []
-            for i in range(len(paths) - 1, -1, -1):
-                path = paths[i]
-                heat_loss = calculate_heat_loss(path)
-                if heat_loss > min_heat_loss:
-                    continue
-                if len(path) > 1 and path[len(path) - 1] == end:
-                    if path in final_paths:
-                        print(f"wtf my friend")
-                        continue
+
+            path = paths[-1]
+            del paths[-1]
+            heat_loss = heats[-1]
+            del heats[-1]
+
+            # heat_loss = calculate_heat_loss(path)
+
+            if heat_loss > min_heat_loss:
+                continue
+            if len(path) > 1 and path[len(path) - 1] == end:
+                if min_heat_loss > heat_loss:
+                    final_paths.clear()
                     final_paths.append(path)
-                    if min_heat_loss > heat_loss:
-                        min_heat_loss = heat_loss
-                        print(f'min heat loss: {min_heat_loss}')
+                    final_path = path
+                    min_heat_loss = heat_loss
+                    print(f'min heat loss: {min_heat_loss}')
+                elif min_heat_loss == heat_loss:
+                    final_paths.append(path)
+                continue
+
+            current_size = len(path)
+            x = path[current_size - 1][0]
+            y = path[current_size - 1][1]
+            p_x = path[current_size - 2][0] if current_size > 1 else -1
+            p_y = path[current_size - 2][1] if current_size > 1 else -1
+            cases = find_cases(x, y, p_x, p_y, path)
+
+            key = f"{x},{y}"
+            if key in visited:
+                last_heat_loss = visited[key]
+                # if last_heat_loss - heat_loss < -5:
+                #     continue
+                if last_heat_loss < heat_loss:
                     continue
+            visited[key] = heat_loss
 
-                current_size = len(path)
-                x = path[current_size - 1][0]
-                y = path[current_size - 1][1]
-                p_x = path[current_size - 2][0] if current_size > 1 else -1
-                p_y = path[current_size - 2][1] if current_size > 1 else -1
-                cases = find_cases(x, y, p_x, p_y, path)
-
-                key = f"{x},{y}"
-                if key in visited:
-                    last_heat_loss = visited[key]
-                    if last_heat_loss - heat_loss < -2:
-                        continue
-                visited[key] = heat_loss
-
-                for case in cases:
-                    path2 = []
-                    path2.extend(path)
-                    path2.append(case)
-                    new_paths.append(path2)
-            paths = new_paths
+            for case in cases:
+                path2 = []
+                path2.extend(path)
+                path2.append(case)
+                new_paths.append(path2)
+                heats.append(heat_loss + int(tiles[case[0]][case[1]]))
+            paths.extend(new_paths)
     else:
         #  todo
         max_res = 0
         res = max_res
 
-    final_path = final_paths[0]
-    res = calculate_heat_loss(final_paths[0])
+    # final_path = final_paths[0]
 
-    for i, fp in enumerate(final_paths):
-        r = calculate_heat_loss(fp)
-        print(f'final path {i}: {final_path}')
-        print(f'final heat {i}: {r}')
-        if r < res:
-            res = r
-            final_path = fp
+    res = min_heat_loss
+    # res = calculate_heat_loss(final_paths[0])
+    # for i, fp in enumerate(final_paths):
+    #     r = calculate_heat_loss(fp)
+    #     print(f'final path {i}: {final_path}')
+    #     print(f'final heat {i}: {r}')
+    #     if r < res:
+    #         res = r
+    #         final_path = fp
+    #     elif r == res and len(final_path) > len(fp):
+    #         res = r
+    #         final_path = fp
 
     print_index(tiles, final_path)
     print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
@@ -147,6 +165,8 @@ def find_cases(x, y, previous_x, previous_y, path=[]):
             continue
         elif case in path:
             continue
+        # else:
+        #     find_neighbors(case)
         cases.append(case)
 
     return cases
@@ -177,8 +197,8 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    puzzle1('../puzzles/2023/17/input.txt')  # result ->
+    puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
+    # puzzle1('../puzzles/2023/17/input.txt')  # result ->
     # puzzle2('../puzzles/2023/17/example.txt')  # result ->
     # puzzle2('../puzzles/2023/17/input.txt')  # result ->
 
