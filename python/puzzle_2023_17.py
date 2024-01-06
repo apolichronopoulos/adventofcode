@@ -1,11 +1,12 @@
 import os
 import sys
+from collections import deque
 from datetime import datetime
 from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-from utils.utils import print_index, print_color, calculate_direction
+from utils.utils import print_index, print_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -37,8 +38,27 @@ def solve(part=1):
     if part == 1:
         start = [0, 0]
         end = [rows - 1, cols - 1]
-        paths = [[start]]
-        heats = [0]
+
+        # paths = [[start]]
+        # heats = [0]
+
+        paths = deque()
+        heats = deque()
+        paths.append([start])
+        heats.append(0)
+
+        # q.append('a')
+        # q.append('b')
+        # q.append('c')
+        # print("Initial queue")
+        # print(q)
+        # print("\nElements dequeued from the queue")
+        # print(q.popleft())
+        # print(q.popleft())
+        # print(q.popleft())
+        # print("\nQueue after removing elements")
+        # print(q)
+
         final_path = []
         final_paths = []
 
@@ -46,18 +66,18 @@ def solve(part=1):
 
         min_heat_loss = sys.maxsize
         print(f'min heat loss: {min_heat_loss}')
-        while paths:
-            new_paths = []
+        while len(paths) >= 1:
 
-            path = paths[-1]
-            del paths[-1]
-            heat_loss = heats[-1]
-            del heats[-1]
+            path = paths.popleft()
+            heat_loss = heats.popleft()
 
-            # heat_loss = calculate_heat_loss(path)
+            # print(f'path {path}')
+            # print(f'len {len(path)} heat loss {heat_loss}')
 
-            if heat_loss > min_heat_loss:
-                continue
+            # if heat_loss > min_heat_loss:
+            #     continue
+
+            max_size = 35
             if len(path) > 1 and path[len(path) - 1] == end:
                 if min_heat_loss > heat_loss:
                     final_paths.clear()
@@ -68,30 +88,30 @@ def solve(part=1):
                 elif min_heat_loss == heat_loss:
                     final_paths.append(path)
                 continue
+            elif len(path) > max_size:
+                continue
 
-            current_size = len(path)
-            x = path[current_size - 1][0]
-            y = path[current_size - 1][1]
-            p_x = path[current_size - 2][0] if current_size > 1 else -1
-            p_y = path[current_size - 2][1] if current_size > 1 else -1
-            cases = find_cases(x, y, p_x, p_y, path)
-
-            key = f"{x},{y}"
+            cases = find_cases(path)
+            last_n = len(path) - 1
+            x = path[last_n][0]
+            y = path[last_n][1]
+            p_x = path[last_n - 1][0] if last_n > 0 else -1
+            p_y = path[last_n - 1][1] if last_n > 0 else -1
+            key = f"{x},{y},{p_x},{p_y}"
             if key in visited:
                 last_heat_loss = visited[key]
-                # if last_heat_loss - heat_loss < -5:
-                #     continue
-                if last_heat_loss < heat_loss:
+                if last_heat_loss - heat_loss < -2:
                     continue
+                # if last_heat_loss < heat_loss:
+                #     continue
             visited[key] = heat_loss
 
             for case in cases:
                 path2 = []
                 path2.extend(path)
                 path2.append(case)
-                new_paths.append(path2)
+                paths.append(path2)
                 heats.append(heat_loss + int(tiles[case[0]][case[1]]))
-            paths.extend(new_paths)
     else:
         #  todo
         max_res = 0
@@ -118,11 +138,6 @@ def solve(part=1):
     return res
 
 
-def move(i, j, i2, j2, path):
-    print("----------------")
-    print_index(tiles, counts=path, color=Fore.CYAN, ending="")
-
-
 def calculate_heat_loss(path):
     heat_loss = 0
     for i, p in enumerate(path):
@@ -132,41 +147,51 @@ def calculate_heat_loss(path):
     return heat_loss
 
 
-def find_cases(x, y, previous_x, previous_y, path=[]):
-    all_cases = []
-
-    direction_counters = {'R': 0, 'D': 0, 'L': 0, 'U': 0}
+def find_cases(path=[]):
     last_n = len(path) - 1
+    x = path[last_n][0]
+    y = path[last_n][1]
+    p_x = path[last_n - 1][0] if last_n > 0 else -1
+    p_y = path[last_n - 1][1] if last_n > 0 else -1
+    all_cases = []
     check_counter = 3
-    for n in range(last_n, last_n - check_counter, -1):
-        if n - 1 < 0:
-            continue
-        p1 = path[n - 1]
-        p2 = path[n]
-        d = calculate_direction(p1[0], p1[1], p2[0], p2[1])
-        direction_counters[d] = direction_counters[d] + 1
 
-    if direction_counters['R'] < check_counter:
-        all_cases.append([x, y + 1])  # go R
-    if direction_counters['U'] < check_counter:
+    counterx = 0
+    for i in range(x - check_counter, x + check_counter + 1):
+        if i < 0 or i > len(tiles) or [i, y] not in path:
+            counterx = 0
+            continue
+        counterx += 1
+        if counterx >= 4:
+            break
+
+    countery = 0
+    for j in range(y - check_counter, y + check_counter + 1):
+        if j < 0 or j > len(tiles[0]) or [x, j] not in path:
+            countery = 0
+            continue
+        countery += 1
+        if countery >= 4:
+            break
+
+    if counterx < 4:
         all_cases.append([x - 1, y])  # go U
-    if direction_counters['D'] < check_counter:
         all_cases.append([x + 1, y])  # go D
-    if direction_counters['L'] < check_counter:
+
+    if countery < 4:
+        all_cases.append([x, y + 1])  # go R
         all_cases.append([x, y - 1])  # go L
 
     cases = []
-    # print(f'case {x}, {y}, {previous_x}, {previous_y}')
+    # print(f'case {x}, {y}, {p_x}, {p_y}')
 
     for case in all_cases:
         if case[0] < 0 or case[1] < 0 or case[0] >= len(tiles) or case[1] >= len(tiles[0]):
             continue
-        elif case[0] == previous_x and case[1] == previous_y:
+        elif case[0] == p_x and case[1] == p_y:
             continue
         elif case in path:
             continue
-        # else:
-        #     find_neighbors(case)
         cases.append(case)
 
     return cases
@@ -197,8 +222,8 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    # puzzle1('../puzzles/2023/17/input.txt')  # result ->
+    # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
+    puzzle1('../puzzles/2023/17/input.txt')  # result ->
     # puzzle2('../puzzles/2023/17/example.txt')  # result ->
     # puzzle2('../puzzles/2023/17/input.txt')  # result ->
 
