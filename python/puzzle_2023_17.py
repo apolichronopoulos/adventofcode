@@ -39,30 +39,13 @@ def solve(part=1):
         start = [0, 0]
         end = [rows - 1, cols - 1]
 
-        # paths = [[start]]
-        # heats = [0]
-
         paths = deque()
         heats = deque()
         paths.append([start])
         heats.append(0)
 
-        # q.append('a')
-        # q.append('b')
-        # q.append('c')
-        # print("Initial queue")
-        # print(q)
-        # print("\nElements dequeued from the queue")
-        # print(q.popleft())
-        # print(q.popleft())
-        # print(q.popleft())
-        # print("\nQueue after removing elements")
-        # print(q)
-
         final_path = []
         final_paths = []
-
-        # heat_loss = calculate_heat_loss(path)
 
         min_heat_loss = sys.maxsize
         print(f'min heat loss: {min_heat_loss}')
@@ -70,14 +53,10 @@ def solve(part=1):
 
             path = paths.popleft()
             heat_loss = heats.popleft()
+            if heat_loss > min_heat_loss:
+                continue
 
-            # print(f'path {path}')
-            # print(f'len {len(path)} heat loss {heat_loss}')
-
-            # if heat_loss > min_heat_loss:
-            #     continue
-
-            max_size = 35
+            # max_size = 35
             if len(path) > 1 and path[len(path) - 1] == end:
                 if min_heat_loss > heat_loss:
                     final_paths.clear()
@@ -88,8 +67,8 @@ def solve(part=1):
                 elif min_heat_loss == heat_loss:
                     final_paths.append(path)
                 continue
-            elif len(path) > max_size:
-                continue
+            # elif len(path) > max_size:
+            #     continue
 
             cases = find_cases(path)
             last_n = len(path) - 1
@@ -100,10 +79,10 @@ def solve(part=1):
             key = f"{x},{y},{p_x},{p_y}"
             if key in visited:
                 last_heat_loss = visited[key]
-                if last_heat_loss - heat_loss < -2:
-                    continue
-                # if last_heat_loss < heat_loss:
+                # if last_heat_loss - heat_loss < -2:
                 #     continue
+                if last_heat_loss < heat_loss:
+                    continue
             visited[key] = heat_loss
 
             for case in cases:
@@ -117,21 +96,7 @@ def solve(part=1):
         max_res = 0
         res = max_res
 
-    # final_path = final_paths[0]
-
     res = min_heat_loss
-    # res = calculate_heat_loss(final_paths[0])
-    # for i, fp in enumerate(final_paths):
-    #     r = calculate_heat_loss(fp)
-    #     print(f'final path {i}: {final_path}')
-    #     print(f'final heat {i}: {r}')
-    #     if r < res:
-    #         res = r
-    #         final_path = fp
-    #     elif r == res and len(final_path) > len(fp):
-    #         res = r
-    #         final_path = fp
-
     print_index(tiles, final_path)
     print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     print_color(f"---------> final result: {final_path} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
@@ -223,7 +188,7 @@ if __name__ == '__main__':
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    puzzle1('../puzzles/2023/17/input.txt')  # result ->
+    puzzle1('../puzzles/2023/17/input.txt')  # result -> 884 too high
     # puzzle2('../puzzles/2023/17/example.txt')  # result ->
     # puzzle2('../puzzles/2023/17/input.txt')  # result ->
 
