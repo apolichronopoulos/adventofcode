@@ -1,10 +1,10 @@
 import sys
 from datetime import datetime
+from functools import lru_cache
 from timeit import default_timer as timer
 
 from colorama import Fore, Back, init
 
-# from test4 import is_inside_postgis
 from utils.utils import print_color
 
 print(sys.getrecursionlimit())
@@ -15,6 +15,7 @@ matrix = []
 start = (-1, -1, 0, 0)
 
 steps = []
+visited = {}
 
 
 def read_file(filename, part=1):
@@ -34,8 +35,10 @@ def read_file(filename, part=1):
             matrix[i].append(c)
 
 
-def find_neighbors(x, y, matrix, loop_i=0, loop_j=0, part=1):
-
+@lru_cache
+def find_neighbors(x, y, loop_i=0, loop_j=0, part=1):
+    if (x, y, loop_i, loop_j) in visited:
+        return visited[(x, y, loop_i, loop_j)]
     all_cases = [(x, y + 1), (x - 1, y), (x + 1, y), (x, y - 1)]
     cases = []
     for i, j in all_cases:
@@ -59,27 +62,30 @@ def find_neighbors(x, y, matrix, loop_i=0, loop_j=0, part=1):
         if matrix[i][j] == '#':
             continue
         cases.append((i, j, li, lj))
+
+    if (x, y, loop_i, loop_j) not in visited:
+        visited[(x, y, loop_i, loop_j)] = cases
     return cases
 
 
-def navigate(matrix, nodes, steps, part=1):
-    # print(f'--------- calculating step {steps} ---------')
-    # print_index(matrix, tuples=nodes, color=Fore.CYAN, ending="")
-    # print('---------')
+# @lru_cache
+def navigate(nodes, steps, part=1):
     if steps == 0:
         return nodes
     new_nodes = set()
     for i, j, loop_i, loop_j in nodes:
-        for case in find_neighbors(i, j, matrix, loop_i, loop_j, part=part):
+        for case in find_neighbors(i, j, loop_i, loop_j, part=part):
             new_nodes.add(case)
-    return navigate(matrix, new_nodes, steps - 1, part)
+    return navigate(new_nodes, steps - 1, part)
 
 
 def solve(part=1, steps=64):
     global start
     # print_index(matrix, color=Fore.CYAN, ending="")
+    if part == 1:
+        visited.clear()
     nodes = [start]
-    final_nodes = navigate(matrix, nodes, steps, part)
+    final_nodes = navigate(nodes, steps, part)
     # print_index_dummy(final_nodes)
 
     # print_color(f"---------> final <---------", Fore.LIGHTRED_EX)
@@ -124,10 +130,10 @@ if __name__ == '__main__':
     assert puzzle2('../puzzles/2023/21/example.txt', 10) == 50
     assert puzzle2('../puzzles/2023/21/example.txt', 50) == 1594
     assert puzzle2('../puzzles/2023/21/example.txt', 100) == 6536
-    # assert puzzle2('../puzzles/2023/21/example.txt', 500) == 167004
-    # assert puzzle2('../puzzles/2023/21/example.txt', 1000) == 668697
-    # assert puzzle2('../puzzles/2023/21/example.txt', 5000) == 16733044
-    # assert puzzle2('../puzzles/2023/21/input.txt', 26501365) == -1
+    assert puzzle2('../puzzles/2023/21/example.txt', 500) == 167004
+    # assert puzzle2('../puzzles/2023/21/example.txt', 1000) == 668697  # won't run
+    # assert puzzle2('../puzzles/2023/21/example.txt', 5000) == 16733044  # won't run
+    # assert puzzle2('../puzzles/2023/21/input.txt', 26501365) == -1  # won't run
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
