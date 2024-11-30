@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 hands = []  #
 bids = []  #
 cards = {
@@ -13,7 +14,7 @@ cards = {
     "5": 4,
     "4": 3,
     "3": 2,
-    "2": 1
+    "2": 1,
 }
 
 
@@ -22,7 +23,7 @@ def read_file(filename, part=1):
     bids.clear()
     f = open(filename, "r")
     if part == 2:
-        cards['J'] = 0
+        cards["J"] = 0
     for line in f:
         line = line.strip()
         if line == "":
@@ -52,9 +53,9 @@ def solve(part=1):
             counts[c] = count + 1
 
         j = 0
-        if part == 2 and 'J' in counts:
-            j = counts['J']
-            counts['J'] = 0
+        if part == 2 and "J" in counts:
+            j = counts["J"]
+            counts["J"] = 0
 
         vals = [0, 0, 0, 0, 0]
         for c in counts:
@@ -100,21 +101,22 @@ def solve(part=1):
         result = {"hand": hands[i], "bid": bids[i], "score": int(score)}
         results.append(result)
 
-    results = sorted(results, key=lambda x: x['score'])
+    results = sorted(results, key=lambda x: x["score"])
 
     res = 0
     scores = {}
     duplicates = 0
     for i in range(0, len(results)):
         r = results[i]
-        if r['score'] in scores:
+        if r["score"] in scores:
             duplicates += 1
             print(f"xxxxxxxxx we have a duplicate ranking for score {r['score']}")
         rank = i + 1 - duplicates
-        scores[r['score']] = r['score']
+        scores[r["score"]] = r["score"]
         print(
-            f"{rank} * {int(r['bid'])} // score = {str(r['score']).zfill(11)} // hand = {r['hand']}")
-        res += rank * int(r['bid'])
+            f"{rank} * {int(r['bid'])} // score = {str(r['score']).zfill(11)} // hand = {r['hand']}"
+        )
+        res += rank * int(r["bid"])
 
     print(f"res: {res}")
     print(f"duplicates: {duplicates}")
@@ -131,8 +133,8 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     # puzzle1('../puzzles/2023/07/example.txt')  # result -> 6440
     # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241344943
     # puzzle2('../puzzles/2023/07/example.txt')  # result -> 5905
-    puzzle2('../../puzzles/2023/07/input.txt')  # result -> 243101568
+    puzzle2("../../puzzles/2023/07/input.txt")  # result -> 243101568

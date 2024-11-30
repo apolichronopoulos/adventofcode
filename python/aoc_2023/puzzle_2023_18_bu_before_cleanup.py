@@ -1,12 +1,18 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
+from colorama import Back, Fore, init
 from shapely.geometry import Point, Polygon
-
-from utils.utils import print_color, replace_char, set_print_color, reset_print_color, add_direction
+from utils.utils import (
+    add_direction,
+    print_color,
+    replace_char,
+    reset_print_color,
+    set_print_color,
+)
 
 
 def is_point_inside_cycle_path(point, cycle_path_coordinates):
@@ -19,7 +25,9 @@ def is_point_inside_cycle_path(point, cycle_path_coordinates):
         x1, y1 = cycle_path[i]
         x2, y2 = cycle_path[(i + 1) % len(cycle_path)]
 
-        if ((y1 <= y < y2) or (y2 <= y < y1)) and (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1):
+        if ((y1 <= y < y2) or (y2 <= y < y1)) and (
+            x < (x2 - x1) * (y - y1) / (y2 - y1) + x1
+        ):
             inside = not inside
 
     return inside
@@ -52,12 +60,14 @@ print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 
-def print_index(index=[], edges={}, inside={}, outside={}, ending=" ", color=Fore.RESET):
+def print_index(
+    index=[], edges={}, inside={}, outside={}, ending=" ", color=Fore.RESET
+):
     set_print_color(color=color)
-    print('-------------------------')
+    print("-------------------------")
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
-            key = f'{i},{j}'
+            key = f"{i},{j}"
             c = index[i][j]
             if key in edges:
                 print_color(c, color=Fore.RED, ending=ending)
@@ -69,12 +79,12 @@ def print_index(index=[], edges={}, inside={}, outside={}, ending=" ", color=For
                 # print_color('.', color=color, ending=ending)
                 print_color(c, color=color, ending=ending)
         print(""),
-    print('-------------------------')
+    print("-------------------------")
     reset_print_color()
 
 
 def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 path = []
@@ -105,7 +115,7 @@ def solve(part=1):
     res = 0
 
     start = [0, 0]
-    tiles.append('.')
+    tiles.append(".")
 
     current_point = start
 
@@ -115,23 +125,23 @@ def solve(part=1):
 
         for iter in range(int(number)):
             i, j = current_point
-            tiles[i] = replace_char(tiles[i], '#', j)
-            indict[f'{i},{j}'] = True
+            tiles[i] = replace_char(tiles[i], "#", j)
+            indict[f"{i},{j}"] = True
             path.append((i, j))
             i2, j2 = add_direction(i, j, direction)
             current_point = [i2, j2]
             if i2 >= len(tiles):
-                tiles.append(len(tiles[0]) * '.')
+                tiles.append(len(tiles[0]) * ".")
             elif i2 < 0:
-                new_tiles = [len(tiles[0]) * '.']
+                new_tiles = [len(tiles[0]) * "."]
                 new_tiles.extend(tiles)
                 tiles = new_tiles
             elif j2 >= len(tiles[i]):
                 for xi in range(len(tiles)):
-                    tiles[xi] += '.'
+                    tiles[xi] += "."
             elif j2 < 0:
                 for xi in range(len(tiles)):
-                    tiles[xi] = '.' + tiles[xi]
+                    tiles[xi] = "." + tiles[xi]
 
     if len(tiles) < 100 and len(tiles[0]) < 100:
         print_index(tiles, color=Fore.CYAN, ending="")
@@ -147,11 +157,7 @@ def solve(part=1):
             # for n in find_neighbors(i, j, tiles):
             #     graph.add_edge(f'{i},{j}', f'{n[0]},{n[1]}', weight=0)
 
-    matrix2 = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
+    matrix2 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
     # for i in range(len(path) - 1):
     # node1 = path[i]
@@ -185,21 +191,33 @@ def solve(part=1):
     inside = {}
     for r in result:
         inside[f"{r[0]},{r[1]}"] = True
-        if tiles[r[0]][r[1]] == '#': continue
-        tiles[r[0]] = replace_char(tiles[r[0]], '*', r[1])
+        if tiles[r[0]][r[1]] == "#":
+            continue
+        tiles[r[0]] = replace_char(tiles[r[0]], "*", r[1])
     for r in cycle_path:
         # inside[f"{r[0]},{r[1]}"] = True
-        tiles[r[0]] = replace_char(tiles[r[0]], 'x', r[1])
+        tiles[r[0]] = replace_char(tiles[r[0]], "x", r[1])
 
     for i in range(len(tiles)):
         for j in range(len(tiles[i])):
-            if tiles[i][j] == '#' or tiles[i][j] == '*' or tiles[i][j] == 'x':
+            if tiles[i][j] == "#" or tiles[i][j] == "*" or tiles[i][j] == "x":
                 res += 1
 
     if len(tiles) < 100 and len(tiles[0]) < 100:
-        print_index(tiles, edges=indict, inside=inside, outside=outdict, color=Fore.CYAN, ending="")
+        print_index(
+            tiles,
+            edges=indict,
+            inside=inside,
+            outside=outdict,
+            color=Fore.CYAN,
+            ending="",
+        )
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     # print_color(f"---------> final result: {len(enclosed_nodes)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     # print_color(f"---------> final result: {len(result) + len(path)} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
     return res
@@ -224,13 +242,13 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    puzzle1('../../puzzles/2023/18/example.txt')  # result -> 62
+    puzzle1("../../puzzles/2023/18/example.txt")  # result -> 62
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 6008 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 17345 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 22346 too low ?

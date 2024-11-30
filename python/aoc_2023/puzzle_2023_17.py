@@ -1,19 +1,19 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 from collections import deque
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
-from utils.utils import print_index, print_color
+from colorama import Back, Fore, init
+from utils.utils import print_color, print_index
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 
 def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 tiles = []
@@ -48,7 +48,7 @@ def solve(part=1):
         final_paths = []
 
         min_heat_loss = sys.maxsize
-        print(f'min heat loss: {min_heat_loss}')
+        print(f"min heat loss: {min_heat_loss}")
         while len(paths) >= 1:
 
             path = paths.popleft()
@@ -63,7 +63,7 @@ def solve(part=1):
                     final_paths.append(path)
                     final_path = path
                     min_heat_loss = heat_loss
-                    print(f'min heat loss: {min_heat_loss}')
+                    print(f"min heat loss: {min_heat_loss}")
                 elif min_heat_loss == heat_loss:
                     final_paths.append(path)
                 continue
@@ -98,8 +98,16 @@ def solve(part=1):
 
     res = min_heat_loss
     print_index(tiles, final_path)
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
-    print_color(f"---------> final result: {final_path} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
+    print_color(
+        f"---------> final result: {final_path} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -151,7 +159,12 @@ def find_cases(path=[]):
     # print(f'case {x}, {y}, {p_x}, {p_y}')
 
     for case in all_cases:
-        if case[0] < 0 or case[1] < 0 or case[0] >= len(tiles) or case[1] >= len(tiles[0]):
+        if (
+            case[0] < 0
+            or case[1] < 0
+            or case[0] >= len(tiles)
+            or case[1] >= len(tiles[0])
+        ):
             continue
         elif case[0] == p_x and case[1] == p_y:
             continue
@@ -181,14 +194,14 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    puzzle1('../../puzzles/2023/17/input.txt')  # result -> 884 too high
+    puzzle1("../../puzzles/2023/17/input.txt")  # result -> 884 too high
     # puzzle2('../puzzles/2023/17/example.txt')  # result ->
     # puzzle2('../puzzles/2023/17/input.txt')  # result ->
 

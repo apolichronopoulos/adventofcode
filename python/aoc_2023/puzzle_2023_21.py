@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
+from colorama import Back, Fore, init
 from utils.utils import print_color
 
 print(sys.getrecursionlimit())
@@ -29,7 +29,7 @@ def read_file(filename, part=1):
         tiles.append(line)
         matrix.append([])
         for j, c in enumerate(line):
-            if c == 'S':
+            if c == "S":
                 global start
                 start = (i, j, 0, 0)
             matrix[i].append(c)
@@ -59,7 +59,7 @@ def find_neighbors(x, y, loop_i=0, loop_j=0, part=1):
             if j >= len(matrix[0]):
                 j = 0
                 lj += 1
-        if matrix[i][j] == '#':
+        if matrix[i][j] == "#":
             continue
         cases.append((i, j, li, lj))
 
@@ -91,7 +91,11 @@ def solve(part=1, steps=64):
     # print_color(f"---------> final <---------", Fore.LIGHTRED_EX)
     # print_index(matrix, tuples=final_nodes, color=Fore.CYAN, ending="")
     res = len(final_nodes)
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -116,7 +120,7 @@ def puzzle2(filename, steps=64):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -126,11 +130,11 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/21/example.txt', 64) == 42
     # assert puzzle1('../puzzles/2023/21/input.txt', 64) == 3724
 
-    assert puzzle2('../../puzzles/2023/21/example.txt', 6) == 16
-    assert puzzle2('../../puzzles/2023/21/example.txt', 10) == 50
-    assert puzzle2('../../puzzles/2023/21/example.txt', 50) == 1594
-    assert puzzle2('../../puzzles/2023/21/example.txt', 100) == 6536
-    assert puzzle2('../../puzzles/2023/21/example.txt', 500) == 167004
+    assert puzzle2("../../puzzles/2023/21/example.txt", 6) == 16
+    assert puzzle2("../../puzzles/2023/21/example.txt", 10) == 50
+    assert puzzle2("../../puzzles/2023/21/example.txt", 50) == 1594
+    assert puzzle2("../../puzzles/2023/21/example.txt", 100) == 6536
+    assert puzzle2("../../puzzles/2023/21/example.txt", 500) == 167004
     # assert puzzle2('../puzzles/2023/21/example.txt', 1000) == 668697  # won't run
     # assert puzzle2('../puzzles/2023/21/example.txt', 5000) == 16733044  # won't run
     # assert puzzle2('../puzzles/2023/21/input.txt', 26501365) == -1  # won't run

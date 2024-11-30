@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -80,14 +81,14 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
     # puzzle1('../puzzles/2023/09/example.txt')  # result -> 114
     # puzzle1('../puzzles/2023/09/input.txt')  # result -> 1584748274
     # puzzle2('../puzzles/2023/09/example.txt')  # result -> 2
-    puzzle2('../../puzzles/2023/09/input.txt')  # result -> 1026
+    puzzle2("../../puzzles/2023/09/input.txt")  # result -> 1026
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

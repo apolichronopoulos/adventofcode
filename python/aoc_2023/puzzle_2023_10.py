@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
 from colorama import Fore
-
 from utils.utils import print_color
 
 elements = []
@@ -29,20 +29,20 @@ min_i, min_j, max_i, max_j = -1, -1, -1, -1
 def touch_close(c1, c2, horizontally=True):
     if horizontally:
         return [c1, c2] in [
-            ['7', 'F'],
-            ['7', 'L'],
-            ['F', '7'],
+            ["7", "F"],
+            ["7", "L"],
+            ["F", "7"],
             # ['F', 'J'],  # not close
-            ['J', 'F'],
-            ['J', 'L'],
+            ["J", "F"],
+            ["J", "L"],
             # ['L', '7'],  # not close
-            ['L', 'J']
+            ["L", "J"],
         ]
     else:
         return [c1, c2] in [
             # ['7', 'L'],
-            ['7', 'J'],
-            ['F', 'L'],
+            ["7", "J"],
+            ["F", "L"],
             # ['F', 'J'],
         ]
 
@@ -126,27 +126,27 @@ def puzzle1(filename):
 def find_cases(x, y, previous_x, previous_y):
     c = elements[x][y]
     all_cases = []
-    if c == 'S':
+    if c == "S":
         all_cases.append([x - 1, y])
         all_cases.append([x + 1, y])
         all_cases.append([x, y - 1])
         all_cases.append([x, y + 1])
-    elif c == 'J':
+    elif c == "J":
         all_cases.append([x - 1, y])
         all_cases.append([x, y - 1])
-    elif c == 'L':
+    elif c == "L":
         all_cases.append([x - 1, y])
         all_cases.append([x, y + 1])
-    elif c == 'F':
+    elif c == "F":
         all_cases.append([x, y + 1])
         all_cases.append([x + 1, y])
-    elif c == '7':
+    elif c == "7":
         all_cases.append([x, y - 1])
         all_cases.append([x + 1, y])
-    elif c == '|':
+    elif c == "|":
         all_cases.append([x - 1, y])
         all_cases.append([x + 1, y])
-    elif c == '-':
+    elif c == "-":
         all_cases.append([x, y - 1])
         all_cases.append([x, y + 1])
 
@@ -157,7 +157,7 @@ def find_cases(x, y, previous_x, previous_y):
         elif case[0] == previous_x and case[1] == previous_y:
             continue
         c2 = elements[case[0]][case[1]]
-        if c2 == '.':
+        if c2 == ".":
             continue
         cases.append(case)
 
@@ -198,22 +198,22 @@ def count_inside_elements(path):
 
     for i in range(min_i, max_i + 1):
         open_row = False
-        last_c_row = '.'
+        last_c_row = "."
         for j in range(min_j, max_j + 1):
             c = elements[i][j]
             if (i, j) in touch_sides:
                 continue
             if [i, j] not in path:
-                last_c_row = '.'
+                last_c_row = "."
                 if open_row:
                     counts.append([i, j])
                 continue
-            elif c == '|' or last_c_row == '|':
+            elif c == "|" or last_c_row == "|":
                 open_row = not open_row
-            elif c == '-':
+            elif c == "-":
                 continue
-            elif c in ['7', 'L', 'F', 'J']:
-                if last_c_row == '.' or touch_close(last_c_row, c):
+            elif c in ["7", "L", "F", "J"]:
+                if last_c_row == "." or touch_close(last_c_row, c):
                     open_row = not open_row
             last_c_row = c
 
@@ -270,7 +270,7 @@ def print_index(path=[], counts=[]):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
@@ -279,11 +279,17 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
     # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
 
-    assert puzzle2('../../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
-    assert puzzle2('../../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
-    assert puzzle2('../../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
+    assert (
+        puzzle2("../../puzzles/2023/10/example_part2_small.txt") == 4
+    )  # result -> 4 should be 4
+    assert (
+        puzzle2("../../puzzles/2023/10/example_part2_large.txt") == 8
+    )  # result -> ? should be 8
+    assert (
+        puzzle2("../../puzzles/2023/10/example_part2_large2.txt") == 10
+    )  # result -> ? should be 10
 
-    final_res = puzzle2('../../puzzles/2023/10/input.txt')
+    final_res = puzzle2("../../puzzles/2023/10/input.txt")
     assert final_res > 244 and final_res != 68 and final_res != 227 and final_res != 481
     assert final_res == 471
 

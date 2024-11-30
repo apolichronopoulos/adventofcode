@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 seeds = []  #
 seed_mapping = {}  # key -> list (destination, source, range)
 mapping = {}  # key -> list (destination, source, range)
@@ -23,7 +24,7 @@ def read_file(filename):
             continue
         if line.startswith("seeds:"):
             x = line.split()
-            seeds.extend(x[1:len(x):1])
+            seeds.extend(x[1 : len(x) : 1])
             continue
         if "map:" in line:
             if map_key != "":
@@ -111,7 +112,8 @@ def puzzle2(filename):
                             seed_list.append([s2_max + 1, s1_max])
                         found = True
                         print(
-                            f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})")
+                            f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})"
+                        )
                 if not found:
                     print(f"not found {s1_min, s1_max}")
                     seed_list_step.append([s1_min, s1_max])
@@ -127,9 +129,9 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     # puzzle1('../puzzles/2023/05/example.txt')  # result -> 35
     # puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
     # puzzle2('../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
     # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 63092906 too high
-    puzzle2('../../puzzles/2023/05/input.txt')  # correct -> 60568880 correct
+    puzzle2("../../puzzles/2023/05/input.txt")  # correct -> 60568880 correct

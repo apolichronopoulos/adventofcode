@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
+from colorama import Back, Fore, init
 from utils.utils import print_color
 
 print(sys.getrecursionlimit())
@@ -27,8 +27,8 @@ def read_file(filename, part=1):
         if line == "":
             continue
         bricks.append([])
-        for brick in line.split('~'):
-            x, y, z = brick.split(',')
+        for brick in line.split("~"):
+            x, y, z = brick.split(",")
             x, y, z = int(x), int(y), int(z)
             global max_x, max_y, max_z
             max_x = max(max_x, x)
@@ -49,7 +49,7 @@ def solve(part=1):
         for x in range(max_x + 1):
             space[z + 1].append([])
             for y in range(max_y + 1):
-                space[z + 1][x].append('-')
+                space[z + 1][x].append("-")
 
     for id, brick in enumerate(bricks):
 
@@ -79,7 +79,7 @@ def solve(part=1):
             for x in range(max_x + 1):
                 cp_space[z + 1].append([])
                 for y in range(max_y + 1):
-                    cp_space[z + 1][x].append('-')
+                    cp_space[z + 1][x].append("-")
 
         cp_brick_blocks = {}
         for k, v in brick_blocks.items():
@@ -106,7 +106,11 @@ def solve(part=1):
     #     print(f'------ id: {z} ------')
     #     print_index_dummy(space[z])
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -135,14 +139,16 @@ def apply_gravity(brick_blocks2, space2):
             for x, y, z in blocks:
                 z = int(z)
                 new_blocks.append((x, y, z - 1))
-                if get_min_z(blocks) == 1 or (space2[z - 1][x][y] != '-' and space2[z - 1][x][y] != str(id)):
+                if get_min_z(blocks) == 1 or (
+                    space2[z - 1][x][y] != "-" and space2[z - 1][x][y] != str(id)
+                ):
                     is_stuck = True
                     new_blocks.clear()
                     break
             if not is_stuck:
                 bricks_changed.add(id)
                 for x, y, z in blocks:
-                    space2[z][x][y] = '-'
+                    space2[z][x][y] = "-"
                 for x, y, z in new_blocks:
                     space2[z][x][y] = str(id)
                 blocks = new_blocks
@@ -171,20 +177,20 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../../puzzles/2023/22/example.txt') == 5
+    assert puzzle1("../../puzzles/2023/22/example.txt") == 5
 
-    puzzle1_res = puzzle1('../../puzzles/2023/22/input.txt')
+    puzzle1_res = puzzle1("../../puzzles/2023/22/input.txt")
     assert puzzle1_res < 519  # your answer is too high
     assert puzzle1_res == 448  # correct
 
-    assert puzzle2('../../puzzles/2023/22/example.txt') == 7
-    puzzle2_res = puzzle2('../../puzzles/2023/22/input.txt')
+    assert puzzle2("../../puzzles/2023/22/example.txt") == 7
+    puzzle2_res = puzzle2("../../puzzles/2023/22/input.txt")
     assert puzzle2_res > 1919  # your answer is too low
     assert puzzle2_res == 57770  # correct
 

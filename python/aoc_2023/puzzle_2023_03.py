@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def check_adjustment_cells(grid, i, j, m, n, distance=1):
     i_from = min(max(0, i - distance), m)
     i_to = min(max(0, i + distance + 1), m)
@@ -26,7 +27,7 @@ def check_adjustment_gear(grid, i, j, m, n, distance=1):
 
 def puzzle1(filename):
     grid = []
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         for line in f.readlines():
             array_line = []
             for c in line.strip():
@@ -60,7 +61,7 @@ def puzzle1(filename):
 
 def puzzle2(filename):
     grid = []
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         for line in f.readlines():
             array_line = []
             for c in line.strip():
@@ -96,14 +97,14 @@ def puzzle2(filename):
         i += 1
     for g in gears:
         if len(gears[g]) == 2:
-            sum += (gears[g][0] * gears[g][1])
+            sum += gears[g][0] * gears[g][1]
     print(f"result: {sum}")
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     # puzzle1('../puzzles/2023/03/example.txt')  # 4361 correct
     # puzzle1('../puzzles/2023/03/input.txt')  # 524899 too low
-    puzzle1('../../puzzles/2023/03/input.txt')  # 526404 correct
+    puzzle1("../../puzzles/2023/03/input.txt")  # 526404 correct
     # puzzle2('../puzzles/2023/03/example.txt')  # should be 467835 (16345 + 451490)
-    puzzle2('../../puzzles/2023/03/input.txt')  # 84399773 correct
+    puzzle2("../../puzzles/2023/03/input.txt")  # 84399773 correct

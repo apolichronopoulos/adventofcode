@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 import sys
 from datetime import datetime
@@ -5,8 +6,7 @@ from itertools import combinations
 from timeit import default_timer as timer
 
 import networkx as nx
-from colorama import Fore, Back, init
-
+from colorama import Back, Fore, init
 from utils.utils import print_color
 
 print(sys.getrecursionlimit())
@@ -25,13 +25,17 @@ def read_file(filename, part=1):
         line = line.strip()
         if line == "":
             continue
-        first, connected = line.split(':')
+        first, connected = line.split(":")
         connected = connected.strip().split()
         components.add(first)
         for c in connected:
             components.add(c)
-            components_gravity[first] = components_gravity[first] + 1 if first in components_gravity else 1
-            components_gravity[c] = components_gravity[c] + 1 if c in components_gravity else 1
+            components_gravity[first] = (
+                components_gravity[first] + 1 if first in components_gravity else 1
+            )
+            components_gravity[c] = (
+                components_gravity[c] + 1 if c in components_gravity else 1
+            )
             connections.add(tuple(sorted([first, c])))
 
 
@@ -50,7 +54,9 @@ def solve(part=1, way=1):
     G = create_graph(components, connections)
 
     if way == 1:
-        combinations_of_three = list(combinations(connections, 3))  # Generate combinations of three elements
+        combinations_of_three = list(
+            combinations(connections, 3)
+        )  # Generate combinations of three elements
         removed = []
         for combination in combinations_of_three:
             G.remove_edges_from(combination)
@@ -60,7 +66,11 @@ def solve(part=1, way=1):
                 res = sub_graphs[0].number_of_nodes() * sub_graphs[1].number_of_nodes()
                 break
             G.add_edges_from(combination)
-        print_color(f"---------> removed: {removed} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+        print_color(
+            f"---------> removed: {removed} <---------",
+            Fore.LIGHTRED_EX,
+            Back.LIGHTYELLOW_EX,
+        )
     else:
         for node1, node2 in combinations(G.nodes, 2):
             cuts, partitions = nx.minimum_cut(G, node1, node2)
@@ -68,7 +78,11 @@ def solve(part=1, way=1):
                 break
         res = math.prod(map(len, partitions))
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -93,7 +107,7 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -104,7 +118,7 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/25/input.txt', way=1) == -1 # way 1, brute force won't run
     # assert puzzle1('../puzzles/2023/25/input.txt', way=2) == 555702
 
-    assert puzzle2('../../puzzles/2023/25/example.txt') == -1
+    assert puzzle2("../../puzzles/2023/25/example.txt") == -1
     # assert puzzle2('../puzzles/2023/25/input.txt') == -1  # won't run
 
     now = datetime.now()

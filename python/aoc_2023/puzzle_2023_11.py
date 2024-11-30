@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -26,7 +27,7 @@ def read_file(filename, part=1):
         empty_row = True
         for j in range(0, len(universe[0])):
             c = universe[i][j]
-            if c != '.':
+            if c != ".":
                 empty_row = False
         if empty_row:
             expand_rows.append(i)
@@ -36,7 +37,7 @@ def read_file(filename, part=1):
         empty_col = True
         for i in range(0, len(universe)):
             c = universe[i][j]
-            if c != '.':
+            if c != ".":
                 empty_col = False
         if empty_col:
             expand_cols.append(j)
@@ -81,7 +82,7 @@ def solve(part=1):
     for i in range(0, len(universe)):
         for j in range(0, len(universe[i])):
             c = universe[i][j]
-            if c == '#':
+            if c == "#":
                 galaxies.append([i, j])
 
     all_combinations = get_combinations(galaxies)  # method call
@@ -140,7 +141,7 @@ def puzzle2(filename, expand_number=1):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
@@ -148,7 +149,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/11/input.txt')  # result -> 9957702
     # puzzle2('../puzzles/2023/11/example.txt', 1)  # result -> should be 374
     # puzzle2('../puzzles/2023/11/example.txt', 10)  # result -> should be 1030
-    puzzle2('../../puzzles/2023/11/input.txt', 1000000)  # result -> 512240933238
+    puzzle2("../../puzzles/2023/11/input.txt", 1000000)  # result -> 512240933238
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("End Time =", current_time)

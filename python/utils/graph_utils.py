@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from collections import defaultdict
 
 
-class Graph():
+class Graph:
     def __init__(self):
         """
         self.edges is a dict of all possible next nodes
@@ -42,7 +43,9 @@ def dijsktra(graph, initial, end):
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, weight)
 
-        next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+        next_destinations = {
+            node: shortest_paths[node] for node in shortest_paths if node not in visited
+        }
         if not next_destinations:
             return "Route Not Possible"
         # next node is the destination with the lowest weight
@@ -62,29 +65,29 @@ def dijsktra(graph, initial, end):
 def test_dijsktra():
     graph = Graph()
     edges = [
-        ('X', 'A', 7),
-        ('X', 'B', 2),
-        ('X', 'C', 3),
-        ('X', 'E', 4),
-        ('A', 'B', 3),
-        ('A', 'D', 4),
-        ('B', 'D', 4),
-        ('B', 'H', 5),
-        ('C', 'L', 2),
-        ('D', 'F', 1),
-        ('F', 'H', 3),
-        ('G', 'H', 2),
-        ('G', 'Y', 2),
-        ('I', 'J', 6),
-        ('I', 'K', 4),
-        ('I', 'L', 4),
-        ('J', 'L', 1),
-        ('K', 'Y', 5),
+        ("X", "A", 7),
+        ("X", "B", 2),
+        ("X", "C", 3),
+        ("X", "E", 4),
+        ("A", "B", 3),
+        ("A", "D", 4),
+        ("B", "D", 4),
+        ("B", "H", 5),
+        ("C", "L", 2),
+        ("D", "F", 1),
+        ("F", "H", 3),
+        ("G", "H", 2),
+        ("G", "Y", 2),
+        ("I", "J", 6),
+        ("I", "K", 4),
+        ("I", "L", 4),
+        ("J", "L", 1),
+        ("K", "Y", 5),
     ]
     for edge in edges:
         graph.add_edge(*edge)
 
-    result = dijsktra(graph, 'X', 'Y')
+    result = dijsktra(graph, "X", "Y")
     print(result)
 
 

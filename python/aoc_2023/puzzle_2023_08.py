@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -27,7 +28,7 @@ def read_file(filename, part=1):
             x = line.split("=")
             key = x[0].strip()
             value = x[1].strip()
-            value = value[1:len(value) - 1].split(",")
+            value = value[1 : len(value) - 1].split(",")
             l = value[0].strip()
             r = value[1].strip()
             nodes[key] = [l, r]
@@ -41,11 +42,11 @@ def solve_brute_force(part=1):
 
     positions = [start]
     if part == 2:
-        start = 'A'
-        end = 'Z'
+        start = "A"
+        end = "Z"
         positions.clear()
         for node in nodes:
-            if node.endswith('A'):
+            if node.endswith("A"):
                 positions.append(node)
 
     iterations = 0
@@ -73,18 +74,17 @@ def solve_brute_force(part=1):
     print(f"res: {res}")
 
 
-
 def solve_smart(part=1):
     start = "AAA"
     end = "ZZZ"
 
     positions = [start]
     if part == 2:
-        start = 'A'
-        end = 'Z'
+        start = "A"
+        end = "Z"
         positions.clear()
         for node in nodes:
-            if node.endswith('A'):
+            if node.endswith("A"):
                 positions.append(node)
 
     final_nodes_all = []
@@ -132,7 +132,6 @@ def solve_smart(part=1):
     print(x)
 
 
-
 def puzzle1(filename):
     start = timer()
     print(f"\n\npuzzle1: {filename}")
@@ -155,7 +154,7 @@ def puzzle2(filename, brute=True):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
@@ -163,7 +162,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/08/input.txt')  # result -> 19637
     # puzzle2('../puzzles/2023/08/example2.txt')  # result -> 6
     # puzzle2('../puzzles/2023/08/example2.txt', False)  # result -> 6
-    puzzle2('../../puzzles/2023/08/input.txt', False)  # result -> 8811050362409
+    puzzle2("../../puzzles/2023/08/input.txt", False)  # result -> 8811050362409
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

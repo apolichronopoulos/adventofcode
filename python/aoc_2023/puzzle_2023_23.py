@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
+from colorama import Back, Fore, init
 from utils.utils import print_color, print_index
 
 print(sys.getrecursionlimit())
@@ -24,7 +24,7 @@ def read_file(filename, part=1):
         tiles.append(line)
         matrix.append([])
         for j, c in enumerate(line):
-            if c == 'S':
+            if c == "S":
                 global start
                 start = (i, j, 0, 0)
             matrix[i].append(c)
@@ -38,7 +38,11 @@ def solve(part=1, steps=64):
     # print_color(f"---------> final <---------", Fore.LIGHTRED_EX)
     # print_index(matrix, tuples=final_nodes, color=Fore.CYAN, ending="")
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -63,16 +67,16 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../../puzzles/2023/23/example.txt') == -1
-    assert puzzle1('../../puzzles/2023/23/input.txt') == -1
-    assert puzzle2('../../puzzles/2023/23/example.txt') == -1
-    assert puzzle2('../../puzzles/2023/23/input.txt') == -1  # won't run
+    assert puzzle1("../../puzzles/2023/23/example.txt") == -1
+    assert puzzle1("../../puzzles/2023/23/input.txt") == -1
+    assert puzzle2("../../puzzles/2023/23/example.txt") == -1
+    assert puzzle2("../../puzzles/2023/23/input.txt") == -1  # won't run
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

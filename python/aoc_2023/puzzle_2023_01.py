@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def puzzle1(filename):
     f = open(filename, "r")
     sum = 0
@@ -45,7 +46,7 @@ def puzzle2(filename):
             else:
                 for number in numbers:
                     n = len(number)
-                    if line[i:min(i + n, s)] == number:
+                    if line[i : min(i + n, s)] == number:
                         t2 = numbers[number]
                         if t1 == "":
                             t1 = numbers[number]
@@ -56,9 +57,9 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    puzzle1('../../puzzles/2023/01/example.txt')
-    puzzle1('../../puzzles/2023/01/input.txt')
-    puzzle2('../../puzzles/2023/01/example2.txt')
-    puzzle2('../../puzzles/2023/01/input.txt')  # wrong 54886 too low
-    puzzle2('../../puzzles/2023/01/input.txt')  # will 56324 do? yeeey
+if __name__ == "__main__":
+    puzzle1("../../puzzles/2023/01/example.txt")
+    puzzle1("../../puzzles/2023/01/input.txt")
+    puzzle2("../../puzzles/2023/01/example2.txt")
+    puzzle2("../../puzzles/2023/01/input.txt")  # wrong 54886 too low
+    puzzle2("../../puzzles/2023/01/input.txt")  # will 56324 do? yeeey

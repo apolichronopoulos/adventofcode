@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 times = []  #
 distances = []
 
@@ -11,7 +12,7 @@ def read_file(filename, part=1):
             continue
 
         x = line.split()
-        x = x[1:len(x):1]
+        x = x[1 : len(x) : 1]
         if part == 2:
             x = "".join(x)
             if line.startswith("Time:"):
@@ -61,8 +62,8 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     # puzzle1('../puzzles/2023/06/example.txt')  # result -> 288
     # puzzle1('../puzzles/2023/06/input.txt')  # result -> 608902
     # puzzle2('../puzzles/2023/06/example.txt')  # result -> 71503
-    puzzle2('../../puzzles/2023/06/input.txt')  # correct -> 46173809
+    puzzle2("../../puzzles/2023/06/input.txt")  # correct -> 46173809

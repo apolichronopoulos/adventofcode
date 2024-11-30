@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 import numpy as np
-from colorama import Fore, Back
+from colorama import Back, Fore
 
 
 def read_file(filename, separator=""):
@@ -20,13 +21,15 @@ def read_file(filename, separator=""):
     return elements
 
 
-def print_index(index=[], counts=[], results=[], tuples=[], ending=" ", color=Fore.RESET):
+def print_index(
+    index=[], counts=[], results=[], tuples=[], ending=" ", color=Fore.RESET
+):
     set_print_color(color=color)
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
             if (i, j) in tuples:
-                print_color('O', color=Fore.RED, ending=ending)
+                print_color("O", color=Fore.RED, ending=ending)
             elif [i, j] in results:
                 print_color(c, color=Fore.MAGENTA, ending=ending)
             elif [i, j] in counts:
@@ -47,11 +50,11 @@ def get_combinations(my_list):  # creating a user-defined method
 
 
 def split_into_tokens(s, token_size):
-    return [s[i:i + token_size] for i in range(0, len(s), token_size)]
+    return [s[i : i + token_size] for i in range(0, len(s), token_size)]
 
 
 def replace_char(s, c, i):
-    return s[:i] + c + s[i + 1:]
+    return s[:i] + c + s[i + 1 :]
 
 
 def print_color(s, color=Fore.RED, background=Back.RESET, ending="\n"):
@@ -68,7 +71,7 @@ def reset_print_color():
 
 def flip_and_rotate_grid(grid, index=1):
     num_cols = len(grid[0])
-    rotated = num_cols * ['']
+    rotated = num_cols * [""]
     for i, row in enumerate(grid):
         for j, c in enumerate(row):
             rotated[j] += c
@@ -83,7 +86,7 @@ def flip_and_rotate_grid(grid, index=1):
 # Clockwise rotation
 def rotate_grid(grid, index=1):
     num_cols = len(grid[0])
-    rotated = num_cols * ['']
+    rotated = num_cols * [""]
     for i, row in enumerate(grid):
         for j, c in enumerate(row):
             rotated[j] = c + rotated[j]
@@ -99,7 +102,12 @@ def find_neighbors(x, y, tiles):
     all_cases = [[x, y + 1], [x - 1, y], [x + 1, y], [x, y - 1]]
     cases = []
     for case in all_cases:
-        if case[0] < 0 or case[1] < 0 or case[0] >= len(tiles) or case[1] >= len(tiles[0]):
+        if (
+            case[0] < 0
+            or case[1] < 0
+            or case[0] >= len(tiles)
+            or case[1] >= len(tiles[0])
+        ):
             continue
         cases.append(case)
     return cases
@@ -117,21 +125,21 @@ def calculate_direction(i, j, i2, j2):
 
 
 def add_direction(i, j, direction, amount=1):
-    if direction == 'R':
+    if direction == "R":
         return [i, j + amount]
-    elif direction == 'D':
+    elif direction == "D":
         return [i + amount, j]
-    elif direction == 'L':
+    elif direction == "L":
         return [i, j - amount]
-    elif direction == 'U':
+    elif direction == "U":
         return [i - amount, j]
 
 
 def print_index_dummy(index=[]):
-    print('-------------------------')
+    print("-------------------------")
     for i in index:
         print(i)
-    print('-------------------------')
+    print("-------------------------")
 
 
 def pos_to_char(pos):
@@ -152,6 +160,7 @@ def pos_to_char(pos):
 #         greater += 1
 #
 #     return lcm
+
 
 def compute_lcm(arr):
     return np.lcm.reduce(arr)

@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 import re
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
-from utils.utils import print_index, print_color
+from colorama import Back, Fore, init
+from utils.utils import print_color, print_index
 
 steps = []
 
@@ -44,21 +44,21 @@ def solve(part=1):
             parts = re.split("[-=]", step)
             label = parts[0]
             box_number = get_ascii_hash(label)
-            focal_length = parts[1] if '=' in step else 0
+            focal_length = parts[1] if "=" in step else 0
             if focal_length != 0:
                 new_lens = f"{label} {focal_length}"
                 found = False
                 for i, lens in enumerate(boxes[box_number]):
-                    if lens.startswith(f'{label} '):
+                    if lens.startswith(f"{label} "):
                         boxes[box_number][i] = new_lens
                         found = True
                         break
                 if not found:
                     boxes[box_number].append(new_lens)
             else:
-                remove = - 1
+                remove = -1
                 for i, lens in enumerate(boxes[box_number]):
-                    if lens.startswith(f'{label} '):
+                    if lens.startswith(f"{label} "):
                         remove = i
                         break
                 if remove != -1:
@@ -70,9 +70,15 @@ def solve(part=1):
             for count, lens in enumerate(box):
                 parts = lens.split()
                 power = (i + 1) * (count + 1) * int(parts[1])
-                print(f"box {i + 1} * slot {count + 1} * focal length {parts[1]} --> {power}")
+                print(
+                    f"box {i + 1} * slot {count + 1} * focal length {parts[1]} --> {power}"
+                )
                 res += power
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -95,7 +101,7 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -104,7 +110,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/15/example.txt')  # result -> 1320
     # puzzle1('../puzzles/2023/15/input.txt')  # result -> 513643
     # puzzle2('../puzzles/2023/15/example.txt')  # result -> 145
-    puzzle2('../../puzzles/2023/15/input.txt')  # result -> 265345
+    puzzle2("../../puzzles/2023/15/input.txt")  # result -> 265345
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

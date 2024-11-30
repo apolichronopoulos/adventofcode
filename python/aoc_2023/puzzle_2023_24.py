@@ -1,12 +1,12 @@
+# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
 import sympy as sp
-from colorama import Fore, Back, init
+from colorama import Back, Fore, init
 from shapely.geometry import LineString
-
 from utils.utils import print_color
 
 print(sys.getrecursionlimit())
@@ -25,17 +25,17 @@ def read_file(filename, part=1):
         line = line.strip()
         if line == "":
             continue
-        position, velocity = line.split('@')
-        px, py, pz = position.strip().split(',')
+        position, velocity = line.split("@")
+        px, py, pz = position.strip().split(",")
         px, py, pz = int(px), int(py), int(pz)
-        vx, vy, vz = velocity.strip().split(',')
+        vx, vy, vz = velocity.strip().split(",")
         vx, vy, vz = int(vx), int(vy), int(vz)
 
         if i < 3:
-            nums = line.replace('@', ',').split(',')
+            nums = line.replace("@", ",").split(",")
             first_three_hailstones.append(tuple(map(int, nums)))
 
-        hails[str(i)] = ([(px, py, pz), (vx, vy, vz)])
+        hails[str(i)] = [(px, py, pz), (vx, vy, vz)]
 
 
 @lru_cache
@@ -54,8 +54,8 @@ def solve(part=1, minP: int = 7, maxP: int = 24):
     for k, hail in hails.items():
         px, py, pz = hail[0]
         vx, vy, vz = hail[1]
-        p1 = (calculate_pos(px, py, vx, vy, 0))
-        p2 = (calculate_pos(px, py, vx, vy, maxP))
+        p1 = calculate_pos(px, py, vx, vy, 0)
+        p2 = calculate_pos(px, py, vx, vy, maxP)
         points.append([p1, p2])
 
     checked = {}
@@ -85,12 +85,16 @@ def solve(part=1, minP: int = 7, maxP: int = 24):
             else:
                 checked[key] = False
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
 def solve2(part=2):
-    unknowns = sp.symbols('x0 y0 z0 vx vy vz t1 t2 t3')
+    unknowns = sp.symbols("x0 y0 z0 vx vy vz t1 t2 t3")
     x0, y0, z0, vx, vy, vz, *time = unknowns
     equations = []  # build system of 9 equations with 9 unknowns
     for t, hail in zip(time, first_three_hailstones):
@@ -100,7 +104,11 @@ def solve2(part=2):
 
     solution = sp.solve(equations, unknowns).pop()
     res = sum(solution[:3])
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -129,18 +137,21 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../../puzzles/2023/24/example.txt', minP=7, maxP=24) == 2
-    assert puzzle1('../../puzzles/2023/24/input.txt', 200000000000000, 400000000000000) == 21843
+    assert puzzle1("../../puzzles/2023/24/example.txt", minP=7, maxP=24) == 2
+    assert (
+        puzzle1("../../puzzles/2023/24/input.txt", 200000000000000, 400000000000000)
+        == 21843
+    )
 
-    assert puzzle2('../../puzzles/2023/24/example.txt') == 47
+    assert puzzle2("../../puzzles/2023/24/example.txt") == 47
 
-    puzzle2_res = puzzle2('../../puzzles/2023/24/input.txt')
+    puzzle2_res = puzzle2("../../puzzles/2023/24/input.txt")
     assert puzzle2_res != -1
     assert puzzle2_res != 0
     assert puzzle2_res != 27670116110564327421

@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
+from colorama import Back, Fore, init
 from shapely.geometry import Point, Polygon
 
 # from test4 import is_inside_postgis
-from utils.utils import print_color, replace_char, add_direction, print_index
+from utils.utils import add_direction, print_color, print_index, replace_char
 
 
 def is_point_inside_cycle_path(point, cycle_path_coordinates):
@@ -17,14 +18,21 @@ def is_point_inside_cycle_path(point, cycle_path_coordinates):
     for i in range(len(cycle_path)):
         x1, y1 = cycle_path[i]
         x2, y2 = cycle_path[(i + 1) % len(cycle_path)]
-        if ((y1 <= y < y2) or (y2 <= y < y1)) and (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1):
+        if ((y1 <= y < y2) or (y2 <= y < y1)) and (
+            x < (x2 - x1) * (y - y1) / (y2 - y1) + x1
+        ):
             inside = not inside
     return inside
 
 
 def flood_fill(matrix, visited, row, col):
     # Check if the current node is within the matrix and hasn't been visited
-    if 0 <= row < len(matrix) and 0 <= col < len(matrix[0]) and not visited[row][col] and matrix[row][col] == 1:
+    if (
+        0 <= row < len(matrix)
+        and 0 <= col < len(matrix[0])
+        and not visited[row][col]
+        and matrix[row][col] == 1
+    ):
         # Mark the current node as visited
         visited[row][col] = True
 
@@ -110,7 +118,7 @@ def fill_tiles(start=None):
     if start is None:
         start = [0, 0]
     global tiles
-    tiles.append('.')
+    tiles.append(".")
     current_point = start
     for step in steps:
         direction, number, color = step.split()
@@ -118,23 +126,23 @@ def fill_tiles(start=None):
 
         for iter in range(int(number)):
             i, j = current_point
-            tiles[i] = replace_char(tiles[i], '#', j)
-            indict[f'{i},{j}'] = True
+            tiles[i] = replace_char(tiles[i], "#", j)
+            indict[f"{i},{j}"] = True
             path.append((i, j))
             i2, j2 = add_direction(i, j, direction)
             current_point = [i2, j2]
             if i2 >= len(tiles):
-                tiles.append(len(tiles[0]) * '.')
+                tiles.append(len(tiles[0]) * ".")
             elif i2 < 0:
-                new_tiles = [len(tiles[0]) * '.']
+                new_tiles = [len(tiles[0]) * "."]
                 new_tiles.extend(tiles)
                 tiles = new_tiles
             elif j2 >= len(tiles[i]):
                 for xi in range(len(tiles)):
-                    tiles[xi] += '.'
+                    tiles[xi] += "."
             elif j2 < 0:
                 for xi in range(len(tiles)):
-                    tiles[xi] = '.' + tiles[xi]
+                    tiles[xi] = "." + tiles[xi]
     if len(tiles) < 100 and len(tiles[0]) < 100:
         print_index(tiles, color=Fore.CYAN, ending="")
 
@@ -153,24 +161,28 @@ def solve(part=1, case=1, start=None):
 
     for i in range(len(tiles)):
         open_row = False
-        last_c_row = '.'
+        last_c_row = "."
         for j in range(len(tiles[i])):
             c = tiles[i][j]
-            if c == '#' and last_c_row != '#':
+            if c == "#" and last_c_row != "#":
                 open_row = not open_row
-            elif c != '#' and open_row:
-                tiles[i] = replace_char(tiles[i], '*', j)
+            elif c != "#" and open_row:
+                tiles[i] = replace_char(tiles[i], "*", j)
             last_c_row = c
 
     for i in range(len(tiles)):
         for j in range(len(tiles[i])):
-            if tiles[i][j] == '#' or tiles[i][j] == '*':
+            if tiles[i][j] == "#" or tiles[i][j] == "*":
                 res += 1
 
     # if len(tiles) < 100 and len(tiles[0]) < 100:
     print_index(tiles, edges=indict, outside=outdict, color=Fore.CYAN, ending="")
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -193,13 +205,13 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    puzzle1('../../puzzles/2023/19/example.txt')  # result -> 62
+    puzzle1("../../puzzles/2023/19/example.txt")  # result -> 62
     # puzzle1('../puzzles/2023/19/input.txt')  # result -> ? too low ?
     # puzzle2('../puzzles/2023/19/example.txt')  # result ->
     # puzzle2('../puzzles/2023/19/input.txt')  # result ->

@@ -1,18 +1,18 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
-from utils.utils import print_index, print_color, calculate_direction, add_direction
+from colorama import Back, Fore, init
+from utils.utils import add_direction, calculate_direction, print_color, print_index
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 
 def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 tiles = []
@@ -50,7 +50,12 @@ def solve(part=1):
             for j in range(len(tiles[0])):
                 if i != 0 and i != len(tiles) - 1 and j != 0 and j != len(tiles[0]) - 1:
                     continue
-                for case in [[i, j + 1], [i, j - 1], [i - 1, j], [i + 1, j], ]:
+                for case in [
+                    [i, j + 1],
+                    [i, j - 1],
+                    [i - 1, j],
+                    [i + 1, j],
+                ]:
                     illuminated.clear()
                     move(i, j, case[0], case[1])
                     r = len({x[:-2] for x in illuminated})
@@ -59,7 +64,11 @@ def solve(part=1):
                         max_res = r
         res = max_res
 
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -68,7 +77,7 @@ def move(i, j, i2, j2):
     # print_index(tiles, counts=[[i, j], [i2, j2]], color=Fore.CYAN, ending="")
 
     direction = calculate_direction(i, j, i2, j2)
-    start = ','.join([str(i), str(j), direction])
+    start = ",".join([str(i), str(j), direction])
     if start in illuminated:
         return
     illuminated[start] = 1
@@ -86,36 +95,36 @@ def next_directions(i, j, direction):
     c = tiles[i][j]
 
     d = add_direction(i, j, direction)
-    if c == '.':
+    if c == ".":
         directions.append(d)
-    elif c == '-' and direction in ['L', 'R']:
+    elif c == "-" and direction in ["L", "R"]:
         directions.append(d)
-    elif c == '-' and direction == 'U':
+    elif c == "-" and direction == "U":
         directions.append([i, j - 1])
         directions.append([i, j + 1])
-    elif c == '-' and direction == 'D':
+    elif c == "-" and direction == "D":
         directions.append([i, j - 1])
         directions.append([i, j + 1])
-    elif c == '|' and direction in ['U', 'D']:
+    elif c == "|" and direction in ["U", "D"]:
         directions.append(d)
-    elif c == '|' and direction in ['L', 'R']:
+    elif c == "|" and direction in ["L", "R"]:
         directions.append([i - 1, j])
         directions.append([i + 1, j])
-    elif c == '/' and direction == 'L':
+    elif c == "/" and direction == "L":
         directions.append([i + 1, j])
-    elif c == '/' and direction == 'R':
+    elif c == "/" and direction == "R":
         directions.append([i - 1, j])
-    elif c == '/' and direction == 'D':
+    elif c == "/" and direction == "D":
         directions.append([i, j - 1])
-    elif c == '/' and direction == 'U':
+    elif c == "/" and direction == "U":
         directions.append([i, j + 1])
-    elif c == '\\' and direction == 'L':
+    elif c == "\\" and direction == "L":
         directions.append([i - 1, j])
-    elif c == '\\' and direction == 'R':
+    elif c == "\\" and direction == "R":
         directions.append([i + 1, j])
-    elif c == '\\' and direction == 'D':
+    elif c == "\\" and direction == "D":
         directions.append([i, j + 1])
-    elif c == '\\' and direction == 'U':
+    elif c == "\\" and direction == "U":
         directions.append([i, j - 1])
 
     return directions
@@ -140,7 +149,7 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -149,7 +158,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/16/example.txt')  # result -> 46
     # puzzle1('../puzzles/2023/16/input.txt')  # result -> 7046
     # puzzle2('../puzzles/2023/16/example.txt')  # result -> 51
-    puzzle2('../../puzzles/2023/16/input.txt')  # result -> 7313
+    puzzle2("../../puzzles/2023/16/input.txt")  # result -> 7313
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

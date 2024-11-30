@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def puzzle1(filename):
     f = open(filename, "r")
     sum = 0
@@ -57,8 +58,8 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     # puzzle1('../puzzles/2023/04/example.txt')  # result -> 13
     # puzzle1('../puzzles/2023/04/input.txt')  # result -> 2169
     # puzzle2('../puzzles/2023/04/example.txt')  # result -> 30
-    puzzle2('../../puzzles/2023/04/input.txt')  # correct -> 5744979
+    puzzle2("../../puzzles/2023/04/input.txt")  # correct -> 5744979

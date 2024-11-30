@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back
+from colorama import Back, Fore
 from numpy import *
-
-from utils.utils import print_index, replace_char, print_color
+from utils.utils import print_color, print_index, replace_char
 
 gears = []
 
@@ -34,13 +34,13 @@ def printx(case, res_rows, res_cols, changed=[]):
         for j in range(len(case[0])):
             counts.append([res_rows - 1, j])
             counts.append([res_rows, j])
-        print(f'-------------- index: res_rows {res_rows}')
+        print(f"-------------- index: res_rows {res_rows}")
         print_index(case, counts=counts, results=results)
     if res_cols:
         for i in range(len(case)):
             counts.append([i, res_cols - 1])
             counts.append([i, res_cols])
-        print(f'-------------- index: res_cols {res_cols}')
+        print(f"-------------- index: res_cols {res_cols}")
         print_index(case, counts=counts, results=results)
 
 
@@ -58,7 +58,9 @@ def solve(part=1):
             indexes_rows0 = find_all_indexes(case)
             indexes_cols0 = find_all_indexes(rotate_case(case))
             found_different = False
-            if not indexes_rows0 and not indexes_cols0:  # TODO: not sure if this is needed
+            if (
+                not indexes_rows0 and not indexes_cols0
+            ):  # TODO: not sure if this is needed
                 continue
             for i in range(0, len(case)):
                 if found_different:
@@ -67,7 +69,7 @@ def solve(part=1):
                     if found_different:
                         break
                     case2 = case.copy()
-                    new_c = '#' if case2[i][j] == '.' else '.'
+                    new_c = "#" if case2[i][j] == "." else "."
                     case2[i] = replace_char(case2[i], new_c, j)
                     indexes_rows = find_all_indexes(case2)
                     indexes_cols = find_all_indexes(rotate_case(case2))
@@ -98,8 +100,12 @@ def solve(part=1):
             if not found_different:
                 res_rows = 0
                 res_cols = 0
-        res += ((res_rows * 100) + res_cols)
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+        res += (res_rows * 100) + res_cols
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -128,7 +134,7 @@ def check_symmetric_in_rows(rows, index=1):
 
 def check_symmetric_in_cols(rows, index=1):
     num_cols = len(rows[0])
-    cols = num_cols * ['']
+    cols = num_cols * [""]
     for i, row in enumerate(rows):
         for j, c in enumerate(row):
             cols[j] += c
@@ -137,7 +143,7 @@ def check_symmetric_in_cols(rows, index=1):
 
 def rotate_case(rows):
     num_cols = len(rows[0])
-    cols = num_cols * ['']
+    cols = num_cols * [""]
     for i, row in enumerate(rows):
         for j, c in enumerate(row):
             cols[j] += c
@@ -165,7 +171,7 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
@@ -174,12 +180,23 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/13/example3.txt') == 709  # result -> 709
     # assert puzzle1('../puzzles/2023/13/input.txt') == 30802  # result -> 30802 correct
 
-    assert puzzle2('../../puzzles/2023/13/example.txt') == 400  # result -> should be 400
-    assert puzzle2('../../puzzles/2023/13/example3.txt') == 1400  # result -> should be 1400
+    assert (
+        puzzle2("../../puzzles/2023/13/example.txt") == 400
+    )  # result -> should be 400
+    assert (
+        puzzle2("../../puzzles/2023/13/example3.txt") == 1400
+    )  # result -> should be 1400
 
-    final_res = puzzle2('../../puzzles/2023/13/input.txt')  # result ????
+    final_res = puzzle2("../../puzzles/2023/13/input.txt")  # result ????
     assert 13882 < final_res < 38500
-    assert final_res not in (13882, 24900, 25049, 25079, 38500, 38868)  # latest 25079 not working
+    assert final_res not in (
+        13882,
+        24900,
+        25049,
+        25079,
+        38500,
+        38868,
+    )  # latest 25079 not working
     assert final_res != 21647
     assert final_res == 37876
 

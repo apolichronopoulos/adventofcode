@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from timeit import default_timer as timer
 
-from colorama import Fore, Back, init
-
-from utils.utils import print_index, replace_char, print_color
+from colorama import Back, Fore, init
+from utils.utils import print_color, print_index, replace_char
 
 platform = []
 
@@ -70,13 +70,17 @@ def solve(part=1):
             if found_cycle:
                 print(f"found_cycle: {cycle_numbers}")
                 repeating.extend(cycle_numbers)
-                prefix_numbers = results[:-4 * len(cycle_numbers)]
+                prefix_numbers = results[: -4 * len(cycle_numbers)]
                 break
         if repeating:
             required = cycles - len(prefix_numbers)
             target = required % len(repeating)
             res = repeating[target - 1]
-    print_color(f"---------> final result: {res} <---------", Fore.LIGHTRED_EX, Back.LIGHTYELLOW_EX)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
@@ -89,10 +93,10 @@ def move_north(platform, index=0):
             continue
         for j, column in enumerate(platform[i]):
             stone = platform[i][j]
-            if stone == 'O':
-                if platform[i - 1][j] == '.':
+            if stone == "O":
+                if platform[i - 1][j] == ".":
                     platform[i - 1] = replace_char(platform[i - 1], stone, j)
-                    platform[i] = replace_char(platform[i], '.', j)
+                    platform[i] = replace_char(platform[i], ".", j)
     return move_north(platform, index + 1)
 
 
@@ -106,10 +110,10 @@ def move_west(platform, index=0):
         next_j = j - 1
         for i, row in enumerate(platform):
             stone = platform[i][j]
-            if stone == 'O':
-                if platform[i][next_j] == '.':
+            if stone == "O":
+                if platform[i][next_j] == ".":
                     platform[i] = replace_char(platform[i], stone, next_j)
-                    platform[i] = replace_char(platform[i], '.', j)
+                    platform[i] = replace_char(platform[i], ".", j)
     return move_west(platform, index + 1)
 
 
@@ -121,10 +125,10 @@ def move_south(platform, index=0):
         next_i = i + 1
         for j, column in enumerate(platform[i]):
             stone = platform[i][j]
-            if stone == 'O':
-                if platform[next_i][j] == '.':
+            if stone == "O":
+                if platform[next_i][j] == ".":
                     platform[next_i] = replace_char(platform[next_i], stone, j)
-                    platform[i] = replace_char(platform[i], '.', j)
+                    platform[i] = replace_char(platform[i], ".", j)
     return move_south(platform, index + 1)
 
 
@@ -136,10 +140,10 @@ def move_east(platform, index=0):
         next_j = j + 1
         for i, row in enumerate(platform):
             stone = platform[i][j]
-            if stone == 'O':
-                if platform[i][next_j] == '.':
+            if stone == "O":
+                if platform[i][next_j] == ".":
                     platform[i] = replace_char(platform[i], stone, next_j)
-                    platform[i] = replace_char(platform[i], '.', j)
+                    platform[i] = replace_char(platform[i], ".", j)
     return move_east(platform, index + 1)
 
 
@@ -148,7 +152,7 @@ def calculate_damage(platform):
     for i, row in enumerate(platform):
         for j, column in enumerate(platform[i]):
             stone = platform[i][j]
-            if stone == 'O':
+            if stone == "O":
                 damage += len(platform) - i
     return damage
 
@@ -172,7 +176,7 @@ def puzzle2(filename):
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -181,7 +185,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/14/example.txt')  # result -> 136
     # puzzle1('../puzzles/2023/14/input.txt')  # result -> 108955
     # puzzle2('../puzzles/2023/14/example.txt')  # result -> 64 ? 1000000000 cycles
-    puzzle2('../../puzzles/2023/14/input.txt')  # result -> 106689 ? 1000000000 cycles
+    puzzle2("../../puzzles/2023/14/input.txt")  # result -> 106689 ? 1000000000 cycles
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
