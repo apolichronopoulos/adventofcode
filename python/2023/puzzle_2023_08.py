@@ -3,6 +3,7 @@ from datetime import datetime
 from timeit import default_timer as timer
 
 import numpy as np
+from utils.utils import time_and_color
 
 steps = []
 nodes = {}
@@ -155,15 +156,12 @@ def puzzle2(filename, brute=True):
 
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Start Time =", current_time)
-    # puzzle1('../puzzles/2023/08/example.txt')  # result -> 6
-    # puzzle1('../puzzles/2023/08/input.txt')  # result -> 19637
-    # puzzle2('../puzzles/2023/08/example2.txt')  # result -> 6
-    # puzzle2('../puzzles/2023/08/example2.txt', False)  # result -> 6
+    time_and_color(start=True)
+
+    # puzzle1('../../puzzles/2023/08/example.txt')  # result -> 6
+    # puzzle1('../../puzzles/2023/08/input.txt')  # result -> 19637
+    # puzzle2('../../puzzles/2023/08/example2.txt')  # result -> 6
+    # puzzle2('../../puzzles/2023/08/example2.txt', False)  # result -> 6
     puzzle2("../../puzzles/2023/08/input.txt", False)  # result -> 8811050362409
 
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("End Time =", current_time)
+    time_and_color(start=False)

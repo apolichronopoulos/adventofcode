@@ -176,9 +176,9 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
 
-    # assert puzzle1('../puzzles/2023/13/example.txt') == 405  # result -> 405
-    # assert puzzle1('../puzzles/2023/13/example3.txt') == 709  # result -> 709
-    # assert puzzle1('../puzzles/2023/13/input.txt') == 30802  # result -> 30802 correct
+    # assert puzzle1('../../puzzles/2023/13/example.txt') == 405  # result -> 405
+    # assert puzzle1('../../puzzles/2023/13/example3.txt') == 709  # result -> 709
+    # assert puzzle1('../../puzzles/2023/13/input.txt') == 30802  # result -> 30802 correct
 
     assert (
         puzzle2("../../puzzles/2023/13/example.txt") == 400

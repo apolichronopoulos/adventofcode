@@ -212,9 +212,9 @@ if __name__ == "__main__":
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     puzzle1("../../puzzles/2023/19/example.txt")  # result -> 62
-    # puzzle1('../puzzles/2023/19/input.txt')  # result -> ? too low ?
-    # puzzle2('../puzzles/2023/19/example.txt')  # result ->
-    # puzzle2('../puzzles/2023/19/input.txt')  # result ->
+    # puzzle1('../../puzzles/2023/19/input.txt')  # result -> ? too low ?
+    # puzzle2('../../puzzles/2023/19/example.txt')  # result ->
+    # puzzle2('../../puzzles/2023/19/input.txt')  # result ->
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

@@ -350,15 +350,15 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    # puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
-    # puzzle1('../puzzles/2023/18/example2.txt')  # result -> 62
-    # puzzle1('../puzzles/2023/18/input.txt')  # result -> 106459 >>> CORRECT <<<
+    # puzzle1('../../puzzles/2023/18/example.txt')  # result -> 62
+    # puzzle1('../../puzzles/2023/18/example2.txt')  # result -> 62
+    # puzzle1('../../puzzles/2023/18/input.txt')  # result -> 106459 >>> CORRECT <<<
 
     assert (
         puzzle2("../../puzzles/2023/18/example.txt") != 1407376496241
     )  # result -> 952408144115 ???
-    # assert puzzle2('../puzzles/2023/18/example.txt') ==  952408144115  # result -> 952408144115 ???
-    # puzzle2('../puzzles/2023/18/input.txt')  # result ->
+    # assert puzzle2('../../puzzles/2023/18/example.txt') ==  952408144115  # result -> 952408144115 ???
+    # puzzle2('../../puzzles/2023/18/input.txt')  # result ->
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

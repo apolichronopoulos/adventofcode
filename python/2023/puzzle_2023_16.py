@@ -155,9 +155,9 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    # puzzle1('../puzzles/2023/16/example.txt')  # result -> 46
-    # puzzle1('../puzzles/2023/16/input.txt')  # result -> 7046
-    # puzzle2('../puzzles/2023/16/example.txt')  # result -> 51
+    # puzzle1('../../puzzles/2023/16/example.txt')  # result -> 46
+    # puzzle1('../../puzzles/2023/16/input.txt')  # result -> 7046
+    # puzzle2('../../puzzles/2023/16/example.txt')  # result -> 51
     puzzle2("../../puzzles/2023/16/input.txt")  # result -> 7313
 
     now = datetime.now()

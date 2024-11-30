@@ -153,13 +153,13 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
 
-    # puzzle1('../puzzles/2023/12/example.txt')  # result -> 6
-    # puzzle1('../puzzles/2023/12/example2.txt')  # result -> 21
+    # puzzle1('../../puzzles/2023/12/example.txt')  # result -> 6
+    # puzzle1('../../puzzles/2023/12/example2.txt')  # result -> 21
     puzzle1("../../puzzles/2023/12/input.txt")  # result -> 6981
 
-    # puzzle2('../puzzles/2023/12/example.txt')  # result -> result 6
-    # puzzle2('../puzzles/2023/12/example2.txt')  # result -> should be 525152 ??? won't run // sigkill error
-    # puzzle2('../puzzles/2023/12/input.txt')  # result -> 4546215031609 but won't run // sigkill error
+    # puzzle2('../../puzzles/2023/12/example.txt')  # result -> result 6
+    # puzzle2('../../puzzles/2023/12/example2.txt')  # result -> should be 525152 ??? won't run // sigkill error
+    # puzzle2('../../puzzles/2023/12/input.txt')  # result -> 4546215031609 but won't run // sigkill error
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

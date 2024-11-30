@@ -145,10 +145,10 @@ if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
-    # puzzle1('../puzzles/2023/11/example.txt')  # result -> 374
-    # puzzle1('../puzzles/2023/11/input.txt')  # result -> 9957702
-    # puzzle2('../puzzles/2023/11/example.txt', 1)  # result -> should be 374
-    # puzzle2('../puzzles/2023/11/example.txt', 10)  # result -> should be 1030
+    # puzzle1('../../puzzles/2023/11/example.txt')  # result -> 374
+    # puzzle1('../../puzzles/2023/11/input.txt')  # result -> 9957702
+    # puzzle2('../../puzzles/2023/11/example.txt', 1)  # result -> should be 374
+    # puzzle2('../../puzzles/2023/11/example.txt', 10)  # result -> should be 1030
     puzzle2("../../puzzles/2023/11/input.txt", 1000000)  # result -> 512240933238
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

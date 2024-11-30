@@ -182,9 +182,9 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    # puzzle1('../puzzles/2023/14/example.txt')  # result -> 136
-    # puzzle1('../puzzles/2023/14/input.txt')  # result -> 108955
-    # puzzle2('../puzzles/2023/14/example.txt')  # result -> 64 ? 1000000000 cycles
+    # puzzle1('../../puzzles/2023/14/example.txt')  # result -> 136
+    # puzzle1('../../puzzles/2023/14/input.txt')  # result -> 108955
+    # puzzle2('../../puzzles/2023/14/example.txt')  # result -> 64 ? 1000000000 cycles
     puzzle2("../../puzzles/2023/14/input.txt")  # result -> 106689 ? 1000000000 cycles
 
     now = datetime.now()

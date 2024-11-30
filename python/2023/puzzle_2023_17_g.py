@@ -239,14 +239,14 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    # assert puzzle1('../puzzles/2023/17/example.txt') == 102  # result -> 102
-    # puzzle1('../puzzles/2023/17/input.txt')  # result -> 884 too high
-    # puzzle1('../puzzles/2023/17/input.txt')  # result -> 637 too high ?
-    # puzzle1('../puzzles/2023/17/input.txt')  # result -> 636 too high ?
-    # assert puzzle1('../puzzles/2023/17/input.txt') == 635  # result -> 635 correct
+    # assert puzzle1('../../puzzles/2023/17/example.txt') == 102  # result -> 102
+    # puzzle1('../../puzzles/2023/17/input.txt')  # result -> 884 too high
+    # puzzle1('../../puzzles/2023/17/input.txt')  # result -> 637 too high ?
+    # puzzle1('../../puzzles/2023/17/input.txt')  # result -> 636 too high ?
+    # assert puzzle1('../../puzzles/2023/17/input.txt') == 635  # result -> 635 correct
 
-    # assert puzzle2('../puzzles/2023/17/example.txt') == 94
-    # assert puzzle2('../puzzles/2023/17/example2.txt') == 71
+    # assert puzzle2('../../puzzles/2023/17/example.txt') == 94
+    # assert puzzle2('../../puzzles/2023/17/example2.txt') == 71
     puzzle2("../../puzzles/2023/17/input.txt")  # result -> 1104 too high
 
     now = datetime.now()

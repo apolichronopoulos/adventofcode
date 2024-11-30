@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 import numpy as np
-from colorama import Back, Fore
+from colorama import Back, Fore, init
 
 
 def read_file(filename, separator=""):
@@ -168,3 +170,14 @@ def compute_lcm(arr):
 
 def compute_gcd(arr):
     return np.gcd.reduce(arr)
+
+
+def time_and_color(start=True):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    if start:
+        init()
+        print_color(f"Start Time = {current_time}", Fore.YELLOW)
+    else:
+        print_color(f"End Time = {current_time}", Fore.YELLOW)
+    return current_time

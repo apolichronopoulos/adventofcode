@@ -6,7 +6,7 @@ from datetime import datetime
 from timeit import default_timer as timer
 
 from colorama import Back, Fore, init
-from utils.utils import print_color, print_index
+from utils.utils import print_color, print_index, time_and_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -195,16 +195,11 @@ def puzzle2(filename):
 
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
-    init()
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print_color(f"Start Time = {current_time}", Fore.YELLOW)
+    time_and_color(start=True)
 
-    # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    puzzle1("../../puzzles/2023/17/input.txt")  # result -> 884 too high
-    # puzzle2('../puzzles/2023/17/example.txt')  # result ->
-    # puzzle2('../puzzles/2023/17/input.txt')  # result ->
+    assert puzzle1("../../puzzles/2023/17/example.txt") == 102  # result -> 102
+    # puzzle1("../../puzzles/2023/17/input.txt")  # result -> 884 too high
+    # puzzle2('../../puzzles/2023/17/example.txt')  # result ->
+    # puzzle2('../../puzzles/2023/17/input.txt')  # result ->
 
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print_color(f"End Time = {current_time}", Fore.YELLOW)
+    time_and_color(start=False)

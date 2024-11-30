@@ -275,9 +275,9 @@ if __name__ == "__main__":
     current_time = now.strftime("%H:%M:%S")
     print("Start Time =", current_time)
 
-    # puzzle1('../puzzles/2023/10/example.txt')  # result -> 4
-    # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
-    # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
+    # puzzle1('../../puzzles/2023/10/example.txt')  # result -> 4
+    # puzzle1('../../puzzles/2023/10/example2.txt')  # result -> 8
+    # puzzle1('../../puzzles/2023/10/input.txt')  # result -> 6875 correct
 
     assert (
         puzzle2("../../puzzles/2023/10/example_part2_small.txt") == 4
