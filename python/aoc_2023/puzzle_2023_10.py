@@ -279,11 +279,11 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/10/example2.txt')  # result -> 8
     # puzzle1('../puzzles/2023/10/input.txt')  # result -> 6875 correct
 
-    assert puzzle2('../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
-    assert puzzle2('../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
-    assert puzzle2('../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
+    assert puzzle2('../../puzzles/2023/10/example_part2_small.txt') == 4  # result -> 4 should be 4
+    assert puzzle2('../../puzzles/2023/10/example_part2_large.txt') == 8  # result -> ? should be 8
+    assert puzzle2('../../puzzles/2023/10/example_part2_large2.txt') == 10  # result -> ? should be 10
 
-    final_res = puzzle2('../puzzles/2023/10/input.txt')
+    final_res = puzzle2('../../puzzles/2023/10/input.txt')
     assert final_res > 244 and final_res != 68 and final_res != 227 and final_res != 481
     assert final_res == 471
 

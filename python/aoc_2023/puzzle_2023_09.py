@@ -1,5 +1,5 @@
-from timeit import default_timer as timer
 from datetime import datetime
+from timeit import default_timer as timer
 
 elements = []
 max_size = 0
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/09/example.txt')  # result -> 114
     # puzzle1('../puzzles/2023/09/input.txt')  # result -> 1584748274
     # puzzle2('../puzzles/2023/09/example.txt')  # result -> 2
-    puzzle2('../puzzles/2023/09/input.txt')  # result -> 1026
+    puzzle2('../../puzzles/2023/09/input.txt')  # result -> 1026
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

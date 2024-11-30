@@ -41,7 +41,7 @@ def puzzle2(filename):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    puzzle1('../puzzles/2023/02/example.txt', {'r': 12, 'g': 13, 'b': 14})  # result -> 8
-    puzzle1('../puzzles/2023/02/input.txt', {'r': 12, 'g': 13, 'b': 14})  # result -> 2169
-    puzzle2('../puzzles/2023/02/example.txt')  # result -> 2286
-    puzzle2('../puzzles/2023/02/input.txt')  # correct -> 60948
+    puzzle1('../../puzzles/2023/02/example.txt', {'r': 12, 'g': 13, 'b': 14})  # result -> 8
+    puzzle1('../../puzzles/2023/02/input.txt', {'r': 12, 'g': 13, 'b': 14})  # result -> 2169
+    puzzle2('../../puzzles/2023/02/example.txt')  # result -> 2286
+    puzzle2('../../puzzles/2023/02/input.txt')  # correct -> 60948

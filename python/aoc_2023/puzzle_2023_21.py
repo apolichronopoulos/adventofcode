@@ -126,11 +126,11 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/21/example.txt', 64) == 42
     # assert puzzle1('../puzzles/2023/21/input.txt', 64) == 3724
 
-    assert puzzle2('../puzzles/2023/21/example.txt', 6) == 16
-    assert puzzle2('../puzzles/2023/21/example.txt', 10) == 50
-    assert puzzle2('../puzzles/2023/21/example.txt', 50) == 1594
-    assert puzzle2('../puzzles/2023/21/example.txt', 100) == 6536
-    assert puzzle2('../puzzles/2023/21/example.txt', 500) == 167004
+    assert puzzle2('../../puzzles/2023/21/example.txt', 6) == 16
+    assert puzzle2('../../puzzles/2023/21/example.txt', 10) == 50
+    assert puzzle2('../../puzzles/2023/21/example.txt', 50) == 1594
+    assert puzzle2('../../puzzles/2023/21/example.txt', 100) == 6536
+    assert puzzle2('../../puzzles/2023/21/example.txt', 500) == 167004
     # assert puzzle2('../puzzles/2023/21/example.txt', 1000) == 668697  # won't run
     # assert puzzle2('../puzzles/2023/21/example.txt', 5000) == 16733044  # won't run
     # assert puzzle2('../puzzles/2023/21/input.txt', 26501365) == -1  # won't run

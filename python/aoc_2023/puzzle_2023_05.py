@@ -132,4 +132,4 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/05/input.txt')  # result -> 289863851
     # puzzle2('../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
     # puzzle2('../puzzles/2023/05/input.txt')  # correct -> 63092906 too high
-    puzzle2('../puzzles/2023/05/input.txt')  # correct -> 60568880 correct
+    puzzle2('../../puzzles/2023/05/input.txt')  # correct -> 60568880 correct

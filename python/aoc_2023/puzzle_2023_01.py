@@ -57,8 +57,8 @@ def puzzle2(filename):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    puzzle1('../puzzles/2023/01/example.txt')
-    puzzle1('../puzzles/2023/01/input.txt')
-    puzzle2('../puzzles/2023/01/example2.txt')
-    puzzle2('../puzzles/2023/01/input.txt')  # wrong 54886 too low
-    puzzle2('../puzzles/2023/01/input.txt')  # will 56324 do? yeeey
+    puzzle1('../../puzzles/2023/01/example.txt')
+    puzzle1('../../puzzles/2023/01/input.txt')
+    puzzle2('../../puzzles/2023/01/example2.txt')
+    puzzle2('../../puzzles/2023/01/input.txt')  # wrong 54886 too low
+    puzzle2('../../puzzles/2023/01/input.txt')  # will 56324 do? yeeey

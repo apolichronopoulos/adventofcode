@@ -174,10 +174,10 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/13/example3.txt') == 709  # result -> 709
     # assert puzzle1('../puzzles/2023/13/input.txt') == 30802  # result -> 30802 correct
 
-    assert puzzle2('../puzzles/2023/13/example.txt') == 400  # result -> should be 400
-    assert puzzle2('../puzzles/2023/13/example3.txt') == 1400  # result -> should be 1400
+    assert puzzle2('../../puzzles/2023/13/example.txt') == 400  # result -> should be 400
+    assert puzzle2('../../puzzles/2023/13/example3.txt') == 1400  # result -> should be 1400
 
-    final_res = puzzle2('../puzzles/2023/13/input.txt')  # result ????
+    final_res = puzzle2('../../puzzles/2023/13/input.txt')  # result ????
     assert 13882 < final_res < 38500
     assert final_res not in (13882, 24900, 25049, 25079, 38500, 38868)  # latest 25079 not working
     assert final_res != 21647

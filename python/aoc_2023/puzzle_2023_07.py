@@ -135,4 +135,4 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/07/example.txt')  # result -> 6440
     # puzzle1('../puzzles/2023/07/input.txt')  # result -> 241344943
     # puzzle2('../puzzles/2023/07/example.txt')  # result -> 5905
-    puzzle2('../puzzles/2023/07/input.txt')  # result -> 243101568
+    puzzle2('../../puzzles/2023/07/input.txt')  # result -> 243101568

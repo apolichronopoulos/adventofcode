@@ -177,14 +177,14 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../puzzles/2023/22/example.txt') == 5
+    assert puzzle1('../../puzzles/2023/22/example.txt') == 5
 
-    puzzle1_res = puzzle1('../puzzles/2023/22/input.txt')
+    puzzle1_res = puzzle1('../../puzzles/2023/22/input.txt')
     assert puzzle1_res < 519  # your answer is too high
     assert puzzle1_res == 448  # correct
 
-    assert puzzle2('../puzzles/2023/22/example.txt') == 7
-    puzzle2_res = puzzle2('../puzzles/2023/22/input.txt')
+    assert puzzle2('../../puzzles/2023/22/example.txt') == 7
+    puzzle2_res = puzzle2('../../puzzles/2023/22/input.txt')
     assert puzzle2_res > 1919  # your answer is too low
     assert puzzle2_res == 57770  # correct
 

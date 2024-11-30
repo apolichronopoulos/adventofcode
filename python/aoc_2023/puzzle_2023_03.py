@@ -104,6 +104,6 @@ def puzzle2(filename):
 if __name__ == '__main__':
     # puzzle1('../puzzles/2023/03/example.txt')  # 4361 correct
     # puzzle1('../puzzles/2023/03/input.txt')  # 524899 too low
-    puzzle1('../puzzles/2023/03/input.txt')  # 526404 correct
+    puzzle1('../../puzzles/2023/03/input.txt')  # 526404 correct
     # puzzle2('../puzzles/2023/03/example.txt')  # should be 467835 (16345 + 451490)
-    puzzle2('../puzzles/2023/03/input.txt')  # 84399773 correct
+    puzzle2('../../puzzles/2023/03/input.txt')  # 84399773 correct

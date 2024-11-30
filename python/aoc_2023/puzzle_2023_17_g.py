@@ -235,7 +235,7 @@ if __name__ == '__main__':
 
     # assert puzzle2('../puzzles/2023/17/example.txt') == 94
     # assert puzzle2('../puzzles/2023/17/example2.txt') == 71
-    puzzle2('../puzzles/2023/17/input.txt')  # result -> 1104 too high
+    puzzle2('../../puzzles/2023/17/input.txt')  # result -> 1104 too high
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

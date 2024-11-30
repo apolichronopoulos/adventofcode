@@ -69,10 +69,10 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../puzzles/2023/23/example.txt') == -1
-    assert puzzle1('../puzzles/2023/23/input.txt') == -1
-    assert puzzle2('../puzzles/2023/23/example.txt') == -1
-    assert puzzle2('../puzzles/2023/23/input.txt') == -1  # won't run
+    assert puzzle1('../../puzzles/2023/23/example.txt') == -1
+    assert puzzle1('../../puzzles/2023/23/input.txt') == -1
+    assert puzzle2('../../puzzles/2023/23/example.txt') == -1
+    assert puzzle2('../../puzzles/2023/23/input.txt') == -1  # won't run
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

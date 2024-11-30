@@ -1,7 +1,5 @@
-import numpy as np
-import itertools
-from timeit import default_timer as timer
 from datetime import datetime
+from timeit import default_timer as timer
 
 from utils.utils import get_combinations, print_index
 
@@ -150,7 +148,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/11/input.txt')  # result -> 9957702
     # puzzle2('../puzzles/2023/11/example.txt', 1)  # result -> should be 374
     # puzzle2('../puzzles/2023/11/example.txt', 10)  # result -> should be 1030
-    puzzle2('../puzzles/2023/11/input.txt', 1000000)  # result -> 512240933238
+    puzzle2('../../puzzles/2023/11/input.txt', 1000000)  # result -> 512240933238
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("End Time =", current_time)

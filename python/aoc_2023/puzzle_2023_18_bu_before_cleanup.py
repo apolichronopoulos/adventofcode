@@ -230,7 +230,7 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    puzzle1('../puzzles/2023/18/example.txt')  # result -> 62
+    puzzle1('../../puzzles/2023/18/example.txt')  # result -> 62
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 6008 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 17345 too low
     # puzzle1('../puzzles/2023/18/input.txt')  # result -> 22346 too low ?

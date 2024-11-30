@@ -135,12 +135,12 @@ if __name__ == '__main__':
     current_time = now.strftime("%H:%M:%S")
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
-    assert puzzle1('../puzzles/2023/24/example.txt', minP=7, maxP=24) == 2
-    assert puzzle1('../puzzles/2023/24/input.txt', 200000000000000, 400000000000000) == 21843
+    assert puzzle1('../../puzzles/2023/24/example.txt', minP=7, maxP=24) == 2
+    assert puzzle1('../../puzzles/2023/24/input.txt', 200000000000000, 400000000000000) == 21843
 
-    assert puzzle2('../puzzles/2023/24/example.txt') == 47
+    assert puzzle2('../../puzzles/2023/24/example.txt') == 47
 
-    puzzle2_res = puzzle2('../puzzles/2023/24/input.txt')
+    puzzle2_res = puzzle2('../../puzzles/2023/24/input.txt')
     assert puzzle2_res != -1
     assert puzzle2_res != 0
     assert puzzle2_res != 27670116110564327421

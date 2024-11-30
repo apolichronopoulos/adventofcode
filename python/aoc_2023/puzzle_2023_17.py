@@ -188,7 +188,7 @@ if __name__ == '__main__':
     print_color(f"Start Time = {current_time}", Fore.YELLOW)
 
     # puzzle1('../puzzles/2023/17/example.txt')  # result -> 102
-    puzzle1('../puzzles/2023/17/input.txt')  # result -> 884 too high
+    puzzle1('../../puzzles/2023/17/input.txt')  # result -> 884 too high
     # puzzle2('../puzzles/2023/17/example.txt')  # result ->
     # puzzle2('../puzzles/2023/17/input.txt')  # result ->
 

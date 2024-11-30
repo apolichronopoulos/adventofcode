@@ -1,12 +1,12 @@
 numpy==1.23.5
-colorama
-termcolor
-networkx
-shapely
-numba
-geopandas
-matplotlib
-momepy
-contextily
-libpysal
-sympy
+colorama==0.4.6 # pip link https://pypi.org/project/colorama/
+termcolor==2.5.0 # pip link https://pypi.org/project/termcolor/
+networkx==3.4.2 # pip link https://pypi.org/project/networkx/
+shapely==2.0.6 # pip link https://pypi.org/project/shapely/
+numba==0.60.0 # pip link https://pypi.org/project/numba/
+geopandas==1.0.1 # pip link https://pypi.org/project/geopandas/
+matplotlib==3.9.2 # pip link https://pypi.org/project/matplotlib/
+momepy==0.8.1 # pip link https://pypi.org/project/momepy/
+contextily==1.6.2 # pip link https://pypi.org/project/contextily/
+libpysal==4.12.1 # pip link https://pypi.org/project/libpysal/
+sympy==1.13.3 # pip link https://pypi.org/project/sympy/

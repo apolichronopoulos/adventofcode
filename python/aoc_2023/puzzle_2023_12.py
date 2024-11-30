@@ -2,7 +2,7 @@ from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
-from utils.utils import print_index, split_into_tokens, replace_char
+from utils.utils import replace_char
 
 gears = []
 gears_numbers = []
@@ -150,7 +150,7 @@ if __name__ == '__main__':
 
     # puzzle1('../puzzles/2023/12/example.txt')  # result -> 6
     # puzzle1('../puzzles/2023/12/example2.txt')  # result -> 21
-    puzzle1('../puzzles/2023/12/input.txt')  # result -> 6981
+    puzzle1('../../puzzles/2023/12/input.txt')  # result -> 6981
 
     # puzzle2('../puzzles/2023/12/example.txt')  # result -> result 6
     # puzzle2('../puzzles/2023/12/example2.txt')  # result -> should be 525152 ??? won't run // sigkill error

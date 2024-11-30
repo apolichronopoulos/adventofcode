@@ -149,7 +149,7 @@ if __name__ == '__main__':
     # puzzle1('../puzzles/2023/16/example.txt')  # result -> 46
     # puzzle1('../puzzles/2023/16/input.txt')  # result -> 7046
     # puzzle2('../puzzles/2023/16/example.txt')  # result -> 51
-    puzzle2('../puzzles/2023/16/input.txt')  # result -> 7313
+    puzzle2('../../puzzles/2023/16/input.txt')  # result -> 7313
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

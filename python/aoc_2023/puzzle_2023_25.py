@@ -104,7 +104,7 @@ if __name__ == '__main__':
     # assert puzzle1('../puzzles/2023/25/input.txt', way=1) == -1 # way 1, brute force won't run
     # assert puzzle1('../puzzles/2023/25/input.txt', way=2) == 555702
 
-    assert puzzle2('../puzzles/2023/25/example.txt') == -1
+    assert puzzle2('../../puzzles/2023/25/example.txt') == -1
     # assert puzzle2('../puzzles/2023/25/input.txt') == -1  # won't run
 
     now = datetime.now()
