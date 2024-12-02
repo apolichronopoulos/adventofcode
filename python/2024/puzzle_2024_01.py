@@ -1,82 +1,42 @@
 # -*- coding: utf-8 -*-
-import math
 import sys
-from datetime import datetime
-from itertools import combinations
 from timeit import default_timer as timer
 
-import networkx as nx
-from colorama import Back, Fore, init
-from utils.utils import print_color
+from colorama import Back, Fore
+from utils.utils import print_color, time_and_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
-components = set()
-components_gravity = {}
-connections = set()
-
 
 def read_file(filename, part=1):
-    components.clear()
-    connections.clear()
     f = open(filename, "r")
+    list_a = []
+    list_b = []
     for i, line in enumerate(f):
         line = line.strip()
         if line == "":
             continue
-        first, connected = line.split(":")
-        connected = connected.strip().split()
-        components.add(first)
-        for c in connected:
-            components.add(c)
-            components_gravity[first] = (
-                components_gravity[first] + 1 if first in components_gravity else 1
-            )
-            components_gravity[c] = (
-                components_gravity[c] + 1 if c in components_gravity else 1
-            )
-            connections.add(tuple(sorted([first, c])))
+        first, second = line.split("   ")
+        list_a.append(int(first))
+        list_b.append(int(second))
+
+    return list_a, list_b
 
 
-def create_graph(components, connections):
-    g = nx.Graph()
-    for c in components:
-        g.add_node(c)
-    for c in connections:
-        g.add_edge(c[0], c[1], capacity=1)
-    g = g.to_undirected()
-    return g
-
-
-def solve(part=1, way=1):
+def solve(list_a, list_b, part2=False):
     res = 0
-    G = create_graph(components, connections)
 
-    if way == 1:
-        combinations_of_three = list(
-            combinations(connections, 3)
-        )  # Generate combinations of three elements
-        removed = []
-        for combination in combinations_of_three:
-            G.remove_edges_from(combination)
-            sub_graphs = list(G.subgraph(c) for c in nx.connected_components(G))
-            if len(sub_graphs) == 2:
-                removed = combination
-                res = sub_graphs[0].number_of_nodes() * sub_graphs[1].number_of_nodes()
-                break
-            G.add_edges_from(combination)
-        print_color(
-            f"---------> removed: {removed} <---------",
-            Fore.LIGHTRED_EX,
-            Back.LIGHTYELLOW_EX,
-        )
+    if not part2:
+        list_a = sorted(list_a)
+        list_b = sorted(list_b)
+        for i in range(len(list_a)):
+            res += abs(list_a[i] - list_b[i])
     else:
-        for node1, node2 in combinations(G.nodes, 2):
-            cuts, partitions = nx.minimum_cut(G, node1, node2)
-            if cuts == 3:
-                break
-        res = math.prod(map(len, partitions))
+        for i in list_a:
+            c = list_b.count(i)
+            # print(f"{i} - {c}")
+            res += c * i
 
     print_color(
         f"---------> final result: {res} <---------",
@@ -86,11 +46,11 @@ def solve(part=1, way=1):
     return res
 
 
-def puzzle1(filename, way=1):
+def puzzle1(filename):
     t_start = timer()
     print_color(f"puzzle1: {filename}", Fore.MAGENTA)
-    read_file(filename)
-    res = solve(part=1, way=way)
+    list_a, list_b = read_file(filename)
+    res = solve(list_a, list_b)
     t_end = timer()
     print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
     return res
@@ -98,29 +58,22 @@ def puzzle1(filename, way=1):
 
 def puzzle2(filename):
     t_start = timer()
-    print_color(f"puzzle2: {filename}", Fore.MAGENTA)
-    read_file(filename, part=2)
-    res = solve(part=2)
+    print_color(f"puzzle1: {filename}", Fore.MAGENTA)
+    list_a, list_b = read_file(filename)
+    res = solve(list_a, list_b, part2=True)
     t_end = timer()
-    print(f"Time elapsed (in seconds): {t_end - t_start}")
+    print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
     return res
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == "__main__":
-    init()
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print_color(f"Start Time = {current_time}", Fore.YELLOW)
+    time_and_color(start=True)
 
-    assert puzzle1("../../puzzles/2024/01/example.txt", way=1) == 54
-    # assert puzzle1('../../puzzles/2024/01/example.txt', way=2) == 54
-    # assert puzzle1('../../puzzles/2024/01/input.txt', way=1) == -1 # way 1, brute force won't run
-    # assert puzzle1('../../puzzles/2024/01/input.txt', way=2) == 555702
+    assert puzzle1("../../puzzles/2024/01/example.txt") == 11
+    assert puzzle1("../../puzzles/2024/01/input.txt") == 2580760
 
-    # assert puzzle2("../../puzzles/2024/01/example.txt") == -1
-    # assert puzzle2('../../puzzles/2024/01/input.txt') == -1  # won't run
+    assert puzzle2("../../puzzles/2024/01/example.txt") == 31
+    assert puzzle2("../../puzzles/2024/01/input.txt") == 25358365
 
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print_color(f"End Time = {current_time}", Fore.YELLOW)
+    time_and_color(start=False)
