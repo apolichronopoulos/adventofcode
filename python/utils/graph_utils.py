@@ -22,7 +22,7 @@ class Graph:
         self.weights[(to_node, from_node)] = weight
 
 
-def dijsktra(graph, initial, end):
+def dijkstra(graph, initial, end):
     # shortest paths is a dict of nodes
     # whose value is a tuple of (previous node, weight)
     shortest_paths = {initial: (None, 0)}
@@ -62,7 +62,7 @@ def dijsktra(graph, initial, end):
     return path
 
 
-def test_dijsktra():
+def test_dijkstra():
     graph = Graph()
     edges = [
         ("X", "A", 7),
@@ -87,8 +87,8 @@ def test_dijsktra():
     for edge in edges:
         graph.add_edge(*edge)
 
-    result = dijsktra(graph, "X", "Y")
+    result = dijkstra(graph, "X", "Y")
     print(result)
 
 
-test_dijsktra()
+test_dijkstra()
