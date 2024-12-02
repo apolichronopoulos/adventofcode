@@ -51,12 +51,6 @@ def solve(part=1):
         if safe:
             res += 1
 
-    print_color(
-        f"---------> final result: {res} <---------",
-        Fore.LIGHTRED_EX,
-        Back.LIGHTYELLOW_EX,
-    )
-
     return res
 
 

@@ -31,6 +31,11 @@ def puzzle(filename, read, solve, part=1):
     res = solve(part)
     t_end = timer()
     print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
+    print_color(
+        f"---------> final result: {res} <---------",
+        Fore.LIGHTRED_EX,
+        Back.LIGHTYELLOW_EX,
+    )
     return res
 
 
