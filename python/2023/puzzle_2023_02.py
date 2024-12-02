@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 def puzzle1(filename, max_colors):
     f = open(filename, "r")
-    sum = 0
+    res = 0
     for line in f:
         print(line)
         x = line.split(":")
@@ -14,14 +14,15 @@ def puzzle1(filename, max_colors):
                 if max_colors[c] < n:
                     possible = False
         if possible:
-            sum += game
+            res += game
 
-    print(f"result: {sum}")
+    print(f"result: {res}")
+    return res
 
 
 def puzzle2(filename):
     f = open(filename, "r")
-    sum = 0
+    res = 0
     for line in f:
         print(line)
         x = line.split(":")
@@ -37,17 +38,15 @@ def puzzle2(filename):
         )
         print(f"max_colors {max_colors}\n")
         print(f"power {power}\n")
-        sum += power
+        res += power
 
-    print(f"result: {sum}")
+    print(f"result: {res}")
+    return res
 
 
 if __name__ == "__main__":
-    puzzle1(
-        "../../puzzles/2023/02/example.txt", {"r": 12, "g": 13, "b": 14}
-    )  # result -> 8
-    puzzle1(
-        "../../puzzles/2023/02/input.txt", {"r": 12, "g": 13, "b": 14}
-    )  # result -> 2169
-    puzzle2("../../puzzles/2023/02/example.txt")  # result -> 2286
-    puzzle2("../../puzzles/2023/02/input.txt")  # correct -> 60948
+    max_colors = {"r": 12, "g": 13, "b": 14}
+    assert puzzle1("../../puzzles/2023/02/example.txt", max_colors) == 8
+    assert puzzle1("../../puzzles/2023/02/input.txt", max_colors) == 2169
+    assert puzzle2("../../puzzles/2023/02/example.txt") == 2286
+    assert puzzle2("../../puzzles/2023/02/input.txt") == 60948
