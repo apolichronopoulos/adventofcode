@@ -269,7 +269,6 @@ def print_index(path=[], counts=[]):
 # print(np.matrix(path))
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

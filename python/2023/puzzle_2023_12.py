@@ -147,7 +147,6 @@ def puzzle2(filename):
     print(f"Time elapsed (in seconds): {t_end - t_start}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

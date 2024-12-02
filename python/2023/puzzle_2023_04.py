@@ -57,7 +57,6 @@ def puzzle2(filename):
     print(f"result: {len(cards)}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     # puzzle1('../../puzzles/2023/04/example.txt')  # result -> 13
     # puzzle1('../../puzzles/2023/04/input.txt')  # result -> 2169

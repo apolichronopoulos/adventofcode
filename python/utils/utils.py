@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from timeit import default_timer as timer
 
 import numpy as np
 from colorama import Back, Fore, init
@@ -21,6 +22,16 @@ def read_file(filename, separator=""):
         elements.append(elements_i)
 
     return elements
+
+
+def puzzle(filename, read, solve, part=1):
+    t_start = timer()
+    print_color(f"puzzle{part}: {filename}", Fore.MAGENTA)
+    read(filename)
+    res = solve(part)
+    t_end = timer()
+    print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
+    return res
 
 
 def print_index(

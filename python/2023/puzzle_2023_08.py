@@ -154,7 +154,6 @@ def puzzle2(filename, brute=True):
     print(f"Time elapsed (in seconds): {end - start}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     time_and_color(start=True)
 

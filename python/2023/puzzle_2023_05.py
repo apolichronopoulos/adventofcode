@@ -128,7 +128,6 @@ def puzzle2(filename):
     print(f"min seed: {min_res}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     # puzzle1('../../puzzles/2023/05/example.txt')  # result -> 35
     # puzzle1('../../puzzles/2023/05/input.txt')  # result -> 289863851

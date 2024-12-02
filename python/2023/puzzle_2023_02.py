@@ -42,7 +42,6 @@ def puzzle2(filename):
     print(f"result: {sum}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     puzzle1(
         "../../puzzles/2023/02/example.txt", {"r": 12, "g": 13, "b": 14}

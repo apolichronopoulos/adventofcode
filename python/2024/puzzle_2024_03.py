@@ -97,7 +97,6 @@ def puzzle2(filename):
     return res
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     time_and_color(start=True)
 

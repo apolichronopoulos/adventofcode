@@ -132,7 +132,6 @@ def puzzle2(filename):
     solve(2)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     # puzzle1('../../puzzles/2023/07/example.txt')  # result -> 6440
     # puzzle1('../../puzzles/2023/07/input.txt')  # result -> 241344943

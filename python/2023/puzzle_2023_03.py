@@ -101,7 +101,6 @@ def puzzle2(filename):
     print(f"result: {sum}")
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
     # puzzle1('../../puzzles/2023/03/example.txt')  # 4361 correct
     # puzzle1('../../puzzles/2023/03/input.txt')  # 524899 too low
