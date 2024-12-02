@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from colorama import Back, Fore
-from utils.utils import print_color, puzzle, time_and_color
+from utils.utils import puzzle, time_and_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
