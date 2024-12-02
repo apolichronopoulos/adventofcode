@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 def puzzle1(filename):
     f = open(filename, "r")
-    sum = 0
+    res = 0
     for line in f:
-        print(line)
+        if debug:
+            print(line)
         x = line.split(":")
         card = int(x[0].strip().split()[1])
         parts = x[1].strip().split("|")
@@ -14,8 +15,9 @@ def puzzle1(filename):
             if number in winning:
                 power += 1
         if power >= 0:
-            sum += pow(2, power)
-    print(f"result: {sum}")
+            res += pow(2, power)
+    print(f"result: {res}")
+    return res
 
 
 def puzzle2(filename):
@@ -24,7 +26,8 @@ def puzzle2(filename):
     cards = []
     cards_to_check = []
     for line in f:
-        print(line)
+        if debug:
+            print(line)
         x = line.split(":")
         card = x[0].strip().split()[1]
         parts = x[1].strip().split("|")
@@ -53,12 +56,16 @@ def puzzle2(filename):
                 if card2add <= len(data):
                     cards_to_check.append(str(card2add))
 
-    print(f"result: {sorted(cards)}")
+    if debug:
+        print(f"cards: {sorted(cards)}")
     print(f"result: {len(cards)}")
+    res = len(cards)
+    return res
 
 
 if __name__ == "__main__":
-    # puzzle1('../../puzzles/2023/04/example.txt')  # result -> 13
-    # puzzle1('../../puzzles/2023/04/input.txt')  # result -> 2169
-    # puzzle2('../../puzzles/2023/04/example.txt')  # result -> 30
-    puzzle2("../../puzzles/2023/04/input.txt")  # correct -> 5744979
+    debug = False
+    assert puzzle1("../../puzzles/2023/04/example.txt") == 13
+    assert puzzle1("../../puzzles/2023/04/input.txt") == 27059
+    assert puzzle2("../../puzzles/2023/04/example.txt") == 30
+    assert puzzle2("../../puzzles/2023/04/input.txt") == 5744979

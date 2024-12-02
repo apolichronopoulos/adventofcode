@@ -33,7 +33,7 @@ def puzzle1(filename):
             for c in line.strip():
                 array_line.append(c)
             grid.append(array_line)
-    sum = 0
+    res = 0
     m = len(grid)
     n = len(grid[0])
     i = 0
@@ -51,12 +51,13 @@ def puzzle1(filename):
             if check_number:
                 for x in range(j - len(number), j):
                     if check_adjustment_cells(grid, i, x, m, n):
-                        sum += int(number)
+                        res += int(number)
                         break
                 number = ""
             j += 1
         i += 1
-    print(f"result: {sum}")
+    print(f"result: {res}")
+    return res
 
 
 def puzzle2(filename):
@@ -67,7 +68,7 @@ def puzzle2(filename):
             for c in line.strip():
                 array_line.append(c)
             grid.append(array_line)
-    sum = 0
+    res = 0
     gears = {}
     m = len(grid)
     n = len(grid[0])
@@ -97,13 +98,13 @@ def puzzle2(filename):
         i += 1
     for g in gears:
         if len(gears[g]) == 2:
-            sum += gears[g][0] * gears[g][1]
-    print(f"result: {sum}")
+            res += gears[g][0] * gears[g][1]
+    print(f"result: {res}")
+    return res
 
 
 if __name__ == "__main__":
-    # puzzle1('../../puzzles/2023/03/example.txt')  # 4361 correct
-    # puzzle1('../../puzzles/2023/03/input.txt')  # 524899 too low
-    puzzle1("../../puzzles/2023/03/input.txt")  # 526404 correct
-    # puzzle2('../../puzzles/2023/03/example.txt')  # should be 467835 (16345 + 451490)
-    puzzle2("../../puzzles/2023/03/input.txt")  # 84399773 correct
+    assert puzzle1("../../puzzles/2023/03/example.txt") == 4361
+    assert puzzle1("../../puzzles/2023/03/input.txt") == 526404
+    assert puzzle2("../../puzzles/2023/03/example.txt") == 467835
+    assert puzzle2("../../puzzles/2023/03/input.txt") == 84399773

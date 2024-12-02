@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from utils.utils import time_and_color
+
 seeds = []  #
 seed_mapping = {}  # key -> list (destination, source, range)
 mapping = {}  # key -> list (destination, source, range)
@@ -18,6 +20,9 @@ def read_file(filename):
     f = open(filename, "r")
     map_key = ""
     key_list = []
+    seeds.clear()
+    seed_mapping.clear()
+    mapping.clear()
     for line in f:
         line = line.strip()
         if line == "":
@@ -43,14 +48,16 @@ def read_file(filename):
 
 def puzzle1(filename):
     read_file(filename)
-    print(f"{seeds}")
-    print(f"{seed_mapping}")
+    if debug:
+        print(f"{seeds}")
+        print(f"{seed_mapping}")
 
     res = []
     for seed in seeds:
         k = int(seed)
         error = False
-        print(f"seed: {seed}")
+        if debug:
+            print(f"seed: {seed}")
         for step in steps:
             for record in seed_mapping[step]:
                 d = int(record[0])
@@ -63,9 +70,12 @@ def puzzle1(filename):
         if not error:
             res.append(int(k))
 
-        print(f"{step}: {k}")
+        if debug:
+            print(f"{step}: {k}")
 
     print(f"min seed: {min(res)}")
+    res = min(res)
+    return res
 
 
 def puzzle2(filename):
@@ -79,8 +89,9 @@ def puzzle2(filename):
         s_max = s_min + int(seeds[i + 1]) - 1
         seed_list = [[s_min, s_max]]
         for step in steps:
-            print(f"seed_list: {seed_list}")
-            print(f"i: {i} seed: {seed}, step: {step}")
+            if debug:
+                print(f"seed_list: {seed_list}")
+                print(f"i: {i} seed: {seed}, step: {step}")
             seed_list_step = []
             while seed_list:
                 m = seed_list[len(seed_list) - 1]
@@ -111,26 +122,35 @@ def puzzle2(filename):
                         if s1_max > s2_max:
                             seed_list.append([s2_max + 1, s1_max])
                         found = True
-                        print(
-                            f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})"
-                        )
+                        if debug:
+                            print(
+                                f"s1 ({s1_min}, {s1_max}) with s2 ({s2_min}, {s2_max}) with dest ({d},{d + r - 1}) -> ({d_min}, {d_max})"
+                            )
                 if not found:
-                    print(f"not found {s1_min, s1_max}")
+                    if debug:
+                        print(f"not found {s1_min, s1_max}")
                     seed_list_step.append([s1_min, s1_max])
 
             seed_list = seed_list_step
 
-        print(f"seed_list: {seed_list}")
+        if debug:
+            print(f"seed_list: {seed_list}")
         for item in seed_list:
             if min_res == 0 or min_res > item[0]:
                 min_res = item[0]
 
     print(f"min seed: {min_res}")
+    res = min_res
+    return res
 
 
 if __name__ == "__main__":
-    # puzzle1('../../puzzles/2023/05/example.txt')  # result -> 35
-    # puzzle1('../../puzzles/2023/05/input.txt')  # result -> 289863851
-    # puzzle2('../../puzzles/2023/05/example.txt')  # result -> 46 # same brute force works, not for input.txt though
-    # puzzle2('../../puzzles/2023/05/input.txt')  # correct -> 63092906 too high
-    puzzle2("../../puzzles/2023/05/input.txt")  # correct -> 60568880 correct
+    debug = False
+    time_and_color(start=True)
+
+    # assert puzzle1('../../puzzles/2023/05/example.txt') == 35
+    # assert puzzle1('../../puzzles/2023/05/input.txt') == 289863851
+    # assert puzzle2('../../puzzles/2023/05/example.txt') == 46
+    assert puzzle2("../../puzzles/2023/05/input.txt") == 60568880
+
+    time_and_color(start=False)

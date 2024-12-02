@@ -43,3 +43,11 @@ python3.11 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Leaderboard 2024 (total)
+
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR7TcqoQfLxMD6pAswDva8B_swxLMP4BaKfMNIrBWNh_b2sRsAbwDobIjuZ-oUrBbspypTCktzZvk60/pubhtml?gid=892576549&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+
+## Leaderboard 2024 (details)
+
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR7TcqoQfLxMD6pAswDva8B_swxLMP4BaKfMNIrBWNh_b2sRsAbwDobIjuZ-oUrBbspypTCktzZvk60/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
