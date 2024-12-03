@@ -1,6 +1,3 @@
-# fdh_apo_playground
-
-fdh_apo_playground
 
 ```zsh
 pre-commit install
