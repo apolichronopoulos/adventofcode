@@ -15,30 +15,7 @@ def read_file(filename):
         line = line.strip()
         if line == "":
             continue
-        # levels = line.split(" ")
-        # levels = [int(i) for i in levels]
-        # lines.append(levels)
         lines.append(line)
-
-
-def check_report(report, ignore_errors=True):
-    safe = True
-    last = report[0]
-    asc = report[0] < report[1]
-    for i in range(1, len(report)):
-        level = report[i]
-        asc2 = last < level
-        if abs(level - last) not in [1, 2, 3] or asc != asc2:
-            safe = False
-            if ignore_errors:
-                for x in range(len(report)):
-                    report2 = report.copy()
-                    del report2[x]
-                    safe2 = check_report(report2, False)
-                    if safe2:
-                        return safe2
-        last = level
-    return safe
 
 
 def solve(part=1):
