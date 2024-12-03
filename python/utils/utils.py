@@ -4,6 +4,7 @@ from timeit import default_timer as timer
 
 import numpy as np
 from colorama import Back, Fore, init
+from sympy import false
 
 
 def read_file(filename, separator=""):
@@ -197,3 +198,11 @@ def time_and_color(start=True):
     else:
         print_color(f"End Time = {current_time}", Fore.YELLOW)
     return current_time
+
+
+def contains_only_digits(str):
+    digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    for c in str:
+        if c not in digits:
+            return False
+    return True

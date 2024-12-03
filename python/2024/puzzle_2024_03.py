@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
 import sys
-from timeit import default_timer as timer
 
-from colorama import Back, Fore
-from utils.utils import print_color, time_and_color
+from utils.utils import contains_only_digits, puzzle, time_and_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
-reports = []
+lines = []
 
 
-def read_file(filename, part=1):
+def read_file(filename):
     f = open(filename, "r")
-    reports.clear()
+    lines.clear()
     for i, line in enumerate(f):
         line = line.strip()
         if line == "":
             continue
-        levels = line.split(" ")
-        levels = [int(i) for i in levels]
-        reports.append(levels)
+        # levels = line.split(" ")
+        # levels = [int(i) for i in levels]
+        # lines.append(levels)
+        lines.append(line)
 
 
-def check_report(report, errors=0):
+def check_report(report, ignore_errors=True):
     safe = True
     last = report[0]
     asc = report[0] < report[1]
@@ -32,77 +31,46 @@ def check_report(report, errors=0):
         asc2 = last < level
         if abs(level - last) not in [1, 2, 3] or asc != asc2:
             safe = False
-            if errors == 0:
+            if ignore_errors:
                 for x in range(len(report)):
                     report2 = report.copy()
                     del report2[x]
-                    safe2 = check_report(report2, 1)
+                    safe2 = check_report(report2, False)
                     if safe2:
                         return safe2
         last = level
     return safe
 
 
-def solve(part2=False):
+def solve(part=1):
     res = 0
 
-    if not part2:
-        for report in reports:
-            safe = True
-            last = report[0]
-            asc = report[0] < report[1]
-            for i in range(1, len(report)):
-                level = report[i]
-                asc2 = last < level
-                if abs(level - last) not in [1, 2, 3] or asc != asc2:
-                    safe = False
-                    break
-                last = level
+    for line in lines:
+        items = line.split("mul")
+        for item in items:
+            if item and item[0] == "(":
+                x2 = item.find(")")
+                subtext = item[1:x2]
+                numbers = subtext.split(",")
+                if len(numbers) != 2:
+                    continue
+                n1 = numbers[0]
+                n2 = numbers[1]
+                if contains_only_digits(n1) and contains_only_digits(n2):
+                    print(f"'{subtext}'")
+                    original = f"mul({subtext})"
+                    if original in line:
+                        res += int(n1) * int(n2)
 
-            if safe:
-                res += 1
-
-    else:
-
-        for report in reports:
-            safe = check_report(report)
-            if safe:
-                res += 1
-
-    print_color(
-        f"---------> final result: {res} <---------",
-        Fore.LIGHTRED_EX,
-        Back.LIGHTYELLOW_EX,
-    )
-    return res
-
-
-def puzzle1(filename):
-    t_start = timer()
-    print_color(f"puzzle1: {filename}", Fore.MAGENTA)
-    read_file(filename)
-    res = solve()
-    t_end = timer()
-    print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
-    return res
-
-
-def puzzle2(filename):
-    t_start = timer()
-    print_color(f"puzzle1: {filename}", Fore.MAGENTA)
-    read_file(filename)
-    res = solve(part2=True)
-    t_end = timer()
-    print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
     return res
 
 
 if __name__ == "__main__":
     time_and_color(start=True)
 
-    assert puzzle1("../../puzzles/2024/02/example.txt") == 2
-    assert puzzle1("../../puzzles/2024/02/input.txt") == 299
-    assert puzzle2("../../puzzles/2024/02/example.txt") == 4
-    assert puzzle2("../../puzzles/2024/02/input.txt") == 364
+    # assert puzzle("../../puzzles/2024/03/example.txt", read_file, solve, 1) == 161
+    assert puzzle("../../puzzles/2024/03/input.txt", read_file, solve, 1) < 166914319
+    # assert puzzle("../../puzzles/2024/03/example.txt", read_file, solve, 2) == 0
+    # assert puzzle("../../puzzles/2024/03/input.txt", read_file, solve, 2) == 0
 
     time_and_color(start=False)
