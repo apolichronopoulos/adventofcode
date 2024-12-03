@@ -4,7 +4,6 @@ from timeit import default_timer as timer
 
 import numpy as np
 from colorama import Back, Fore, init
-from sympy import false
 
 
 def read_file(filename, separator=""):
@@ -206,3 +205,21 @@ def contains_only_digits(str):
         if c not in digits:
             return False
     return True
+
+
+def split_lines_in_items(lines, token):
+    items = []
+    for line in lines:
+        if token in line:
+            temp_items = line.split(token)
+            if line.startswith(token):
+                items.append(token)
+            for i in temp_items:
+                items.append(i)
+                items.append(token)
+            items.pop()
+        else:
+            items.append(line)
+    if items[-1] == token:
+        items.pop()
+    return items
