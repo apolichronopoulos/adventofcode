@@ -33,7 +33,8 @@ def solve(part=1, elements=None):
             line += elements[i][j]
         res += check_sequence(line)
 
-    for i in range(0, j):
+    # Check diagonals part 1
+    for i in range(0, h):
         for j in range(0, l):
             if j != 0 and i != 0:
                 continue
@@ -59,7 +60,7 @@ def solve(part=1, elements=None):
 
             res += check_sequence(line2)
 
-    for j in range(0, l):
+    for j in range(1, l):
         i3, j3 = h - 1, j
         line3 = elements[i3][j3]
         while 1 == 1:
