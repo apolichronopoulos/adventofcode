@@ -27,8 +27,8 @@ def read_file(filename, separator=""):
 def puzzle(filename, read, solve, part=1):
     t_start = timer()
     print_color(f"puzzle{part}: {filename}", Fore.MAGENTA)
-    read(filename)
-    res = solve(part)
+    elements = read(filename)
+    res = solve(part, elements)
     t_end = timer()
     print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
     print_color(
