@@ -1,4 +1,4 @@
-numpy==2.1.3 # pip link https://pypi.org/project/numpy/
+numpy==2.0.2 # pip link https://pypi.org/project/numpy/
 colorama==0.4.6 # pip link https://pypi.org/project/colorama/
 termcolor==2.5.0 # pip link https://pypi.org/project/termcolor/
 networkx==3.4.2 # pip link https://pypi.org/project/networkx/

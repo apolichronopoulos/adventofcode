@@ -20,4 +20,34 @@ rm -rf venv
 python3.11 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
+pip install --upgrade pip
+```
+
+## Run puzzles
+
+Use venv (or any other python env you want)
+
+```bash
+. ./python/venv/bin/activate
+```
+
+Run as module
+
+```bash
+cd ./python
+python -m 2024.puzzle_2024_01 ../puzzles
+python -m 2024.puzzle_2024_02 ../puzzles
+python -m 2024.puzzle_2024_03 ../puzzles
+python -m 2024.puzzle_2024_04 ../puzzles
+```
+
+or include path, to use utils
+
+```bash
+cd ./python
+export PYTHONPATH=$(pwd)
+python ./2024/puzzle_2024_01.py ../puzzles
+python ./2024/puzzle_2024_02.py ../puzzles
+python ./2024/puzzle_2024_03.py ../puzzles
+python ./2024/puzzle_2024_04.py ../puzzles
 ```

@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
+import sys
 from datetime import datetime
 from timeit import default_timer as timer
 
 import numpy as np
 from colorama import Back, Fore, init
+
+
+def file(filename):
+    puzzle_folder = sys.argv[1] if len(sys.argv) > 1 else "../../puzzles"
+    return f"{puzzle_folder}/{filename}"
 
 
 def read_file(filename, separator=""):
@@ -28,7 +34,10 @@ def puzzle(filename, read, solve, part=1):
     t_start = timer()
     print_color(f"puzzle{part}: {filename}", Fore.MAGENTA)
     elements = read(filename)
-    res = solve(part, elements)
+    if elements:
+        res = solve(part, elements)
+    else:
+        res = solve(part)
     t_end = timer()
     print_color(f"Time elapsed (in seconds): {t_end - t_start}", Fore.MAGENTA)
     print_color(

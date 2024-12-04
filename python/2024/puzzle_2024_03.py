@@ -3,6 +3,7 @@ import sys
 
 from utils.utils import (
     contains_only_digits,
+    file,
     puzzle,
     split_lines_in_items,
     time_and_color,
@@ -75,9 +76,10 @@ if __name__ == "__main__":
     time_and_color(start=True)
     debug = False
 
-    assert puzzle("../../puzzles/2024/03/example.txt", read_file, solve, 1) == 161
-    assert puzzle("../../puzzles/2024/03/input.txt", read_file, solve, 1) == 166630675
-    assert puzzle("../../puzzles/2024/03/example2.txt", read_file, solve, 2) == 48
-    assert puzzle("../../puzzles/2024/03/input.txt", read_file, solve, 2) == 93465710
+    assert puzzle(file("/2024/03/example.txt"), read_file, solve, 1) == 161
+    assert puzzle(file("/2024/03/input.txt"), read_file, solve, 1) == 166630675
+
+    assert puzzle(file("/2024/03/example2.txt"), read_file, solve, 2) == 48
+    assert puzzle(file("/2024/03/input.txt"), read_file, solve, 2) == 93465710
 
     time_and_color(start=False)

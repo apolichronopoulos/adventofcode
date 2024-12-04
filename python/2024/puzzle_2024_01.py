@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from utils.utils import puzzle, time_and_color
+from utils.utils import file, puzzle, time_and_color
 
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
@@ -42,10 +42,10 @@ def solve(part=1):
 if __name__ == "__main__":
     time_and_color(start=True)
 
-    assert puzzle("../../puzzles/2024/01/example.txt", read_file, solve, 1) == 11
-    assert puzzle("../../puzzles/2024/01/input.txt", read_file, solve, 1) == 2580760
+    assert puzzle(file("/2024/01/example.txt"), read_file, solve, 1) == 11
+    assert puzzle(file("/2024/01/input.txt"), read_file, solve, 1) == 2580760
 
-    assert puzzle("../../puzzles/2024/01/example.txt", read_file, solve, 2) == 31
-    assert puzzle("../../puzzles/2024/01/input.txt", read_file, solve, 2) == 25358365
+    assert puzzle(file("/2024/01/example.txt"), read_file, solve, 2) == 31
+    assert puzzle(file("/2024/01/input.txt"), read_file, solve, 2) == 25358365
 
     time_and_color(start=False)
