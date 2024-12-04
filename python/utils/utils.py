@@ -9,7 +9,7 @@ from colorama import Back, Fore, init
 
 def file(filename):
     puzzle_folder = sys.argv[1] if len(sys.argv) > 1 else "../../puzzles"
-    return f"{puzzle_folder}/{filename}"
+    return f"{puzzle_folder}/{filename}".replace("//", "/")
 
 
 def read_file(filename, separator=""):
