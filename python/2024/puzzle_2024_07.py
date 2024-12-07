@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import itertools
 import sys
 
-from utils.utils import file, print_index, puzzle, time_and_color
+from utils.utils import file, puzzle, time_and_color
 
 sys.setrecursionlimit(10000)
 
@@ -14,24 +13,22 @@ def read_file(filename):
         line = line.strip()
         if line == "":
             continue
-
         total, amounts = line.split(":")
         amounts = [int(amount.strip()) for amount in amounts.split()]
-
         elements.append((int(total), amounts))
-
     return elements
 
 
-operators = ["+", "*"]
+operators = {"+", "*"}
 
 
 def operation(a, b, operator):
-    # print(f"operation: {a} {operator} {b}")
     if operator == "+":
         return a + b
     elif operator == "*":
         return a * b
+    elif operator == "||":
+        return int(f"{a}{b}")
     else:
         raise f"operator {operator} not supported"
 
@@ -53,33 +50,24 @@ def calculate_total(total, amounts, current=0):
 
 def solve(part=1, elements=None):
     res = 0
-
-    matrix = elements
-    h, l = len(matrix), len(matrix[0])
-    print(f"h: {h}, l: {l}")
-
     if debug:
         for e in elements:
             print(f"{e[0]} : {e[1]}")
         print("-------------------")
-
+    if part == 2:
+        operators.add("||")
     for total, amounts in elements:
-        ct = calculate_total(total, amounts)
-        if ct != 0:
-            print(f"{total} : {amounts}")
-
-        res += ct
-
+        res += calculate_total(total, amounts)
     return res
 
 
 if __name__ == "__main__":
     time_and_color(start=True)
-    debug = True
+    debug = False
 
     assert puzzle(file("/2024/07/example.txt"), read_file, solve, 1) == 3749
     assert puzzle(file("/2024/07/input.txt"), read_file, solve, 1) == 4998764814652
-    # assert puzzle(file("/2024/07/example.txt"), read_file, solve, 2) == 0
-    # assert puzzle(file("/2024/07/input.txt"), read_file, solve, 2) == 0
+    assert puzzle(file("/2024/07/example.txt"), read_file, solve, 2) == 11387
+    assert puzzle(file("/2024/07/input.txt"), read_file, solve, 2) == 37598910447546
 
     time_and_color(start=False)
