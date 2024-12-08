@@ -49,14 +49,20 @@ def puzzle(filename, read, solve, part=1):
 
 
 def print_index(
-    index=[], counts=[], results=[], tuples=[], ending=" ", color=Fore.RESET
+    index=[],
+    counts=[],
+    results=[],
+    tuples=[],
+    ending=" ",
+    color=Fore.RESET,
+    tuple_char="0",
 ):
     set_print_color(color=color)
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
             if (i, j) in tuples:
-                print_color("O", color=Fore.RED, ending=ending)
+                print_color(tuple_char, color=Fore.RED, ending=ending)
             elif [i, j] in results:
                 print_color(c, color=Fore.MAGENTA, ending=ending)
             elif [i, j] in counts:
