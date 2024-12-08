@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
+from functools import lru_cache
 from timeit import default_timer as timer
 
 import numpy as np
@@ -238,3 +239,8 @@ def split_lines_in_items(lines, token):
     if items[-1] == token:
         items.pop()
     return items
+
+
+@lru_cache
+def valid_loc(i, j, h, l):
+    return 0 <= i < h and 0 <= j < l
