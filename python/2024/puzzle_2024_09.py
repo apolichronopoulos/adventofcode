@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
+import math
 import sys
-from functools import lru_cache
-from itertools import combinations
-from math import dist, hypot
 
 import numpy as np
-from utils.utils import file, print_index, puzzle, read_file, time_and_color, valid_loc
+from utils.utils import file, print_index, puzzle, read_file, time_and_color
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(20000)
 
 
 def shift_block(storage):
     stop = False
     while not stop:
-        # if debug:
-        #     print("".join(storage))
         first_free_space = storage.index(".")
         for j in range(len(storage) - 1, 0, -1):
             n = storage[j]
@@ -26,6 +22,36 @@ def shift_block(storage):
                 else:
                     stop = True
     return storage
+
+
+def shift_file(storage, max_id):
+    if max_id < 0:
+        return storage
+
+    id = str(max_id)
+    file_index = storage.index(id)
+    c = 0
+    for j in range(file_index, len(storage)):
+        if storage[j] == id:
+            c += 1
+        else:
+            break
+
+    spaces = 0
+    for j in range(0, file_index + 1):
+        if storage[j] == ".":
+            spaces += 1
+        else:
+            if spaces > 0:
+                space_index = j - spaces
+                if c <= spaces:
+                    for x in range(c):
+                        storage[file_index + x] = "."
+                        storage[space_index + x] = id
+                    return shift_file(storage, max_id - 1)
+            spaces = 0
+
+    return shift_file(storage, max_id - 1)
 
 
 def solve(part=1, elements=None):
@@ -50,22 +76,15 @@ def solve(part=1, elements=None):
             if files:
                 id += 1
             files = not files
-
         storages.append(storage)
-        if debug:
-            print("".join(storage))
 
-    if part == 1:
-        print(f"part: {part}")
-        for storage in storages:
+    for i, storage in enumerate(storages):
+        if part == 1:
             storage = shift_block(storage)
-            checksum = 0
-            for i, n in enumerate(storage):
-                if n != ".":
-                    checksum += i * int(n)
-            res += checksum
-    else:
-        print(f"part: {part}")
+        else:
+            max_id = math.ceil(len(elements[i]) / 2) - 1
+            storage = shift_file(storage, max_id)
+        res += sum(i * int(n) for i, n in enumerate(storage) if n != ".")
 
     return res
 
@@ -76,7 +95,7 @@ if __name__ == "__main__":
 
     assert puzzle(file("/2024/09/example.txt"), read_file, solve, 1) == 1928
     assert puzzle(file("/2024/09/input.txt"), read_file, solve, 1) == 6519155389266
-    # assert puzzle(file("/2024/09/example.txt"), read_file, solve, 2) == 0
-    # assert puzzle(file("/2024/09/input.txt"), read_file, solve, 2) == 0
+    assert puzzle(file("/2024/09/example.txt"), read_file, solve, 2) == 2858
+    assert puzzle(file("/2024/09/input.txt"), read_file, solve, 2) == 6547228115826
 
     time_and_color(start=False)
