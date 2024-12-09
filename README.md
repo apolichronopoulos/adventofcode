@@ -39,6 +39,10 @@ python -m 2024.puzzle_2024_01 ../puzzles
 python -m 2024.puzzle_2024_02 ../puzzles
 python -m 2024.puzzle_2024_03 ../puzzles
 python -m 2024.puzzle_2024_04 ../puzzles
+python -m 2024.puzzle_2024_05 ../puzzles
+python -m 2024.puzzle_2024_06 ../puzzles
+python -m 2024.puzzle_2024_07 ../puzzles
+python -m 2024.puzzle_2024_08 ../puzzles
 ```
 
 or include path, to use utils
