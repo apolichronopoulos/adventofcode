@@ -92,7 +92,7 @@ def replace_char(s, c, i):
 
 
 def print_color(s, color=Fore.RED, background=Back.RESET, ending="\n"):
-    print(color + background + s + Fore.RESET + Back.RESET, end=ending)
+    print(color + background + str(s) + Fore.RESET + Back.RESET, end=ending)
 
 
 def set_print_color(color=Fore.RED, background=Back.RESET):
