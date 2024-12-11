@@ -55,3 +55,16 @@ python ./2024/puzzle_2024_02.py ../puzzles
 python ./2024/puzzle_2024_03.py ../puzzles
 python ./2024/puzzle_2024_04.py ../puzzles
 ```
+
+# aoc-cli
+
+Download puzzle description using [aoc-cli](https://github.com/scarvalhojr/aoc-cli)
+
+```bash
+current_year=$(date +%Y)
+for day in {01..25}
+do
+  mkdir ./puzzles/$current_year/$day/
+  aoc -y $current_year -d $day > ./puzzles/$current_year/$day/puzzle.md
+done
+```
