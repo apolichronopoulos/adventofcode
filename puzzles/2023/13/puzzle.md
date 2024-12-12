@@ -38,7 +38,7 @@ In the first pattern, the reflection is across a vertical line between two colum
 
 ```
 123456789
-    ><   
+    ><
 #.##..##.
 ..#.##.#.
 ##......#
@@ -46,7 +46,7 @@ In the first pattern, the reflection is across a vertical line between two colum
 ..#.##.#.
 ..##..##.
 #.#.##.#.
-    ><   
+    ><
 123456789
 
 ```

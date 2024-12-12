@@ -68,4 +68,5 @@ do
   aoc download -y $current_year -d $day -o -P -p ./puzzles/$current_year/$day/puzzle.md
   aoc download -y $current_year -d $day -o -I -i ./puzzles/$current_year/$day/input.txt
 done
+pre-commit run --files ./puzzles/**/*
 ```
