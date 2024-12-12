@@ -2,7 +2,15 @@
 import sys
 from functools import cache
 
-from utils.utils import file, print_index, puzzle, read_file, time_and_color, valid_loc
+from utils.utils import (
+    aoc_submit,
+    file,
+    print_index,
+    puzzle,
+    read_file,
+    time_and_color,
+    valid_loc,
+)
 
 sys.setrecursionlimit(20000)
 
@@ -132,10 +140,14 @@ if __name__ == "__main__":
 
     assert puzzle(file("/2024/12/example.txt"), read_file, solve, 1) == 140
     assert puzzle(file("/2024/12/example2.txt"), read_file, solve, 1) == 1930
-    assert puzzle(file("/2024/12/input.txt"), read_file, solve, 1) == 1437300
+    answer1 = puzzle(file("/2024/12/input.txt"), read_file, solve, 1)
+    assert answer1 == 1437300
+    aoc_submit("2024", "12", 1, answer1)
 
     assert puzzle(file("/2024/12/example.txt"), read_file, solve, 2) == 80
     assert puzzle(file("/2024/12/example2.txt"), read_file, solve, 2) == 1206
-    assert puzzle(file("/2024/12/input.txt"), read_file, solve, 2) == 849332
+    answer2 = puzzle(file("/2024/12/input.txt"), read_file, solve, 2)
+    assert answer2 == 849332
+    aoc_submit("2024", "12", 2, answer2)
 
     time_and_color(start=False)

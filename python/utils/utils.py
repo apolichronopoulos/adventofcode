@@ -244,3 +244,14 @@ def split_lines_in_items(lines, token):
 @lru_cache
 def valid_loc(i, j, h, l):
     return 0 <= i < h and 0 <= j < l
+
+
+def aoc_submit(year, day, part, answer):
+    import subprocess
+
+    command = ["aoc", "submit", "-y", str(year), "-d", str(day), str(part), str(answer)]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode == 0:
+        print(f"Command ran successfully:\n{result.stdout}")
+    else:
+        print(f"Error: {result.stderr}")
