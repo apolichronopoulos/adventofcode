@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys
-from collections import Counter, defaultdict
 from functools import cache
 
 from utils.utils import file, print_index, puzzle, read_file, time_and_color, valid_loc
@@ -41,16 +40,30 @@ def solve(part=1, elements=None):
             region.clear()
 
     for region in regions:
+        plot = grid[region[0][0]][region[0][1]]
         area = len(region)
         if debug:
             print("-----------")
             print_index(
                 grid, tuples=region, tuple_char=grid[region[0][0]][region[0][1]]
             )
-        perimeter = calc_perimeter(region)
-        score = area * perimeter
-        if debug:
-            print(f"{area} * {perimeter} = {score}")
+            print("-----------")
+
+        if part == 1:
+            perimeter = calc_perimeter(region)
+            score = area * perimeter
+            if debug:
+                print(
+                    f"A region of {plot} plants with price {area} * {perimeter} = {score}"
+                )
+        else:
+            sides = calc_sides(region)
+            score = area * sides
+            if debug:
+                print(
+                    f"A region of {plot} plants with price {area} * {sides} = {score}"
+                )
+
         res += score
 
     return res
@@ -63,6 +76,40 @@ def calc_perimeter(region):
             x2, y2 = x + i, y + j
             if (x2, y2) not in region:
                 count += 1
+    return count
+
+
+def calc_sides(region):
+    count = 0
+    borders = []
+    counts = []
+
+    for x, y in sorted(region):
+        for i, j in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            x2, y2 = x + i, y + j
+            if (x2, y2) not in region:
+                is_horizontal = i != 0
+                borders.append((x2, y2, is_horizontal, i if is_horizontal else j))
+                if i != 0:
+                    if (x2, y2 - 1, True, i) in borders or (
+                        x2,
+                        y2 + 1,
+                        True,
+                        i,
+                    ) in borders:
+                        continue
+                if j != 0:
+                    if (x2 - 1, y2, False, j) in borders or (
+                        x2 + 1,
+                        y2,
+                        False,
+                        j,
+                    ) in borders:
+                        continue
+
+                counts.append((x2, y2, is_horizontal, i if is_horizontal else j))
+                count += 1
+
     return count
 
 
@@ -86,7 +133,9 @@ if __name__ == "__main__":
     assert puzzle(file("/2024/12/example.txt"), read_file, solve, 1) == 140
     assert puzzle(file("/2024/12/example2.txt"), read_file, solve, 1) == 1930
     assert puzzle(file("/2024/12/input.txt"), read_file, solve, 1) == 1437300
-    # assert puzzle(file("/2024/12/example.txt"), read_file, solve, 2) == 0
-    # assert puzzle(file("/2024/12/input.txt"), read_file, solve, 2) == 0
+
+    assert puzzle(file("/2024/12/example.txt"), read_file, solve, 2) == 80
+    assert puzzle(file("/2024/12/example2.txt"), read_file, solve, 2) == 1206
+    assert puzzle(file("/2024/12/input.txt"), read_file, solve, 2) == 849332
 
     time_and_color(start=False)
