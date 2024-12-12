@@ -64,7 +64,8 @@ Download puzzle description using [aoc-cli](https://github.com/scarvalhojr/aoc-c
 current_year=$(date +%Y)
 for day in {01..25}
 do
-  mkdir ./puzzles/$current_year/$day/
-  aoc -y $current_year -d $day > ./puzzles/$current_year/$day/puzzle.md
+  mkdir -p ./puzzles/$current_year/$day/
+  aoc download -y $current_year -d $day -o -P -p ./puzzles/$current_year/$day/puzzle.md
+  aoc download -y $current_year -d $day -o -I -i ./puzzles/$current_year/$day/input.txt
 done
 ```
