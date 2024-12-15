@@ -64,7 +64,8 @@ def print_index(
         for j in range(0, len(index[i])):
             c = index[i][j]
             if (i, j) in tuples:
-                print_color(tuple_char, color=Fore.RED, ending=ending)
+                c2 = c if tuple_char == "" else tuple_char
+                print_color(c2, color=Fore.CYAN, ending=ending)
             elif [i, j] in results:
                 print_color(c, color=Fore.MAGENTA, ending=ending)
             elif [i, j] in counts:

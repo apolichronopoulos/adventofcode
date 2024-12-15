@@ -75,7 +75,7 @@ def move_robot(x, y, m, h, l, part=1):
 
     moved = True
     if (x1, y1) in boxes:
-        moved = move_box(x1, y1, m, h, l, part)
+        moved = move_box(x1, y1, m, h, l)
 
     if moved:
         robot.clear()
@@ -84,20 +84,18 @@ def move_robot(x, y, m, h, l, part=1):
     return moved
 
 
-def move_box(x, y, m, h, l, part=1):
+def move_box(x, y, m, h, l):
     c = elements[x][y]
     dy = 1 if c == "[" else -1
-    x0, y0 = x, y + dy
-
     if c == "[":
         xl, yl = x, y
-        xr, yr = x0, y0
+        xr, yr = x, y + dy
         x1 = x + moves_forward[m][0]
         y1 = y + moves_forward[m][1]
         x2 = x + moves_forward[m][0]
         y2 = y + 1 + moves_forward[m][1]
     elif c == "]":
-        xl, yl = x0, y0
+        xl, yl = x, y + dy
         xr, yr = x, y
         x1 = x + moves_forward[m][0]
         y1 = y - 1 + moves_forward[m][1]
@@ -150,9 +148,6 @@ def move_box(x, y, m, h, l, part=1):
 
 
 def move_back(x, y, m):
-    if debug:
-        print_index(elements)
-
     c = elements[x][y]
     if c == "[":
         x1, y1 = x, y
@@ -177,9 +172,6 @@ def move_back(x, y, m):
     elements[x1 + i][y1 + j] = "["
     elements[x2 + i][y2 + j] = "]"
 
-    if debug:
-        print_index(elements)
-
 
 def print_grid(h, l):
     for i in range(h):
@@ -197,7 +189,8 @@ def print_grid(h, l):
         counts=[[i, j] for i, j in boxes],
         results=[[i, j] for i, j in walls],
         tuples=robot,
-        tuple_char="@",
+        tuple_char="",
+        ending=" ",
     )
 
 
@@ -240,8 +233,6 @@ def solve(part=1):
             moved = move_robot(r[0], r[1], m, h, l)
             if debug and moved:
                 print(f"\nMove: {m}")
-                r = robot.pop()
-                robot.add(r)
                 print_grid(h, l)
 
     if part == 1:
@@ -252,6 +243,8 @@ def solve(part=1):
         box_scores = {}
         for b in boxes:
             i, j = b
+            if (i, j) in box_scores:
+                continue
             c = elements[i][j]
             if c == "[":
                 x1, y1 = i, j
@@ -260,13 +253,12 @@ def solve(part=1):
                 x1, y1 = i, j - 1
                 x2, y2 = i, j
 
-            score = x1 * 100 + y1
-            box_scores[(x1, y1, x2, y2)] = score
+            box_scores[(x1, y1, x2, y2)] = x1 * 100 + y1
 
-        for k in box_scores:
+        for k in sorted(list(box_scores)):
             v = box_scores[k]
             if debug:
-                print(f"{k} --> {v}")
+                print(f"{k[0]} * 100 + {k[1]} = {v}")
             res += v
 
     return res
@@ -275,18 +267,25 @@ def solve(part=1):
 if __name__ == "__main__":
     time_and_color(start=True)
     debug = False
+    submit = True  # be careful
 
     # assert puzzle(file("/2024/15/example.txt"), read_file, solve, 1) == 2028
     # assert puzzle(file("/2024/15/example2.txt"), read_file, solve, 1) == 10092
     # answer1 = puzzle(file("/2024/15/input.txt"), read_file, solve, 1)
     # assert answer1 == 1492518
-    # aoc_submit("2024", "15", 1, answer1)
+    # if submit:
+    #     aoc_submit("2024", "15", 1, answer1)
 
-    # debug = True
     # assert puzzle(file("/2024/15/example3.txt"), read_file, solve, 2) == 618
-    assert puzzle(file("/2024/15/example2.txt"), read_file, solve, 2) == 9021
+    # debug = True
+    # assert puzzle(file("/2024/15/example2.txt"), read_file, solve, 2) == 9021
+    # debug = False
     answer2 = puzzle(file("/2024/15/input.txt"), read_file, solve, 2)
+    assert answer2 != 1500827
+    assert answer2 != 1501117
+    assert answer2 != 722919
     assert answer2 > 1500827
-    # aoc_submit("2024", "15", 2, answer2)
+    if submit:
+        aoc_submit("2024", "15", 2, answer2)
 
     time_and_color(start=False)
