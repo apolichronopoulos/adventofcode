@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
+import subprocess
 import sys
 
+import numpy as np
 import sympy as sp
+from colorama import Back, Fore
 from sympy import Integer
-from utils.utils import aoc_submit, file, print_index, puzzle, time_and_color
+from utils.utils import (
+    aoc_submit,
+    clean,
+    draw_image_from_text,
+    file,
+    print_color,
+    print_index,
+    puzzle,
+    set_print_color,
+    time_and_color,
+)
 
 sys.setrecursionlimit(20000)
 
@@ -47,7 +60,7 @@ def solve(part=1):
     for i in range(h):
         row = []
         for j in range(l):
-            row.append(0)
+            row.append(" ")
         grid.append(row)
 
     if part == 1:
@@ -77,24 +90,33 @@ def solve(part=1):
 
         res += q[0] * q[1] * q[2] * q[3]
     else:
-        for j in range(100, 1000):
+        pos = set()
+        for second in range(7132, 7133):
             pos.clear()
             for i in range(len(p)):
                 p_x, p_y = p[i][0], p[i][1]
                 v_x, v_y = v[i][0], v[i][1]
-                x = (p_x + j * v_x) % h
-                y = (p_y + j * v_y) % l
-                pos.append((x, y))
-            print("---------------------")
-            print_index(grid, tuples=pos)
-            print(f"---- j = {j}-----")
+                x = (p_x + second * v_x) % h
+                y = (p_y + second * v_y) % l
+                pos.add((x, y))
+
+            if debug:
+                print(f"---------------------------")
+                print_index(grid, tuples=pos, tuple_char="*")
+                print(f"---- second = {second}-----")
+
+            text_pattern = "\n".join(
+                "".join("x" if (i, j) in pos else " " for j in range(len(grid[i])))
+                for i in range(len(grid))
+            )
+            draw_image_from_text(text_pattern, f"img/{second}", ".png")
 
     return res
 
 
 if __name__ == "__main__":
     time_and_color(start=True)
-    debug = True
+    debug = False
 
     # assert puzzle(file("/2024/14/example.txt"), read_file, solve, 1) == 12
     # answer1 = puzzle(file("/2024/14/input.txt"), read_file, solve, 1)
@@ -103,7 +125,9 @@ if __name__ == "__main__":
 
     # assert puzzle(file("/2024/14/example.txt"), read_file, solve, 2) == 0
     answer2 = puzzle(file("/2024/14/input.txt"), read_file, solve, 2)
-    # assert answer2 == 0
+    assert answer2 > 4842
+    assert answer2 < 10000
+    assert answer2 == 7132
     # aoc_submit("2024", "14", 2, answer2)
 
     time_and_color(start=False)

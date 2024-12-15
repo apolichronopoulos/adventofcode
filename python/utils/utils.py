@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import subprocess
 import sys
 from datetime import datetime
 from functools import lru_cache
@@ -255,3 +256,29 @@ def aoc_submit(year, day, part, answer):
         print(f"Command ran successfully:\n{result.stdout}")
     else:
         print(f"Error: {result.stderr}")
+
+
+def draw_image_from_text(text_pattern, filename, suffix=".png"):
+    from PIL import Image, ImageDraw
+
+    lines = text_pattern.strip().split("\n")
+    points = []
+    for y, line in enumerate(lines):
+        for x, char in enumerate(line):
+            if char == "x":
+                points.append((x, y))
+
+    width = max(len(line) for line in lines)
+    height = len(lines)
+    scale = 10  # Scale for better
+
+    image = Image.new("RGB", (width * scale, height * scale), "black")
+    draw = ImageDraw.Draw(image)
+
+    for x, y in points:
+        draw.rectangle(
+            [x * scale, y * scale, (x + 1) * scale - 1, (y + 1) * scale - 1],
+            fill="white",
+        )
+
+    image.save(f"{filename}{suffix}")
