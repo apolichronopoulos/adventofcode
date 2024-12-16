@@ -8,15 +8,11 @@ sys.setrecursionlimit(20000)
 elements = []
 walls = set()
 visited = set()
+visited2 = {}
+best_score = -1
+best_path = set()
 start = [-1, -1]
 end = [-1, -1]
-
-moves_forward = {
-    "^": (-1, 0),
-    ">": (0, 1),
-    "v": (1, 0),
-    "<": (0, -1),
-}
 
 directions = {
     "^": [
@@ -47,6 +43,10 @@ def read_file(filename, separator=""):
     elements.clear()
     walls.clear()
     visited.clear()
+    visited2.clear()
+    best_path.clear()
+    global best_score
+    best_score = -1
 
     for line in f:
         elements_i = []
@@ -60,45 +60,31 @@ def read_file(filename, separator=""):
         elements.append(elements_i)
 
 
-def print_grid(h, l, e=None):
-    print()
-    for i in range(h):
-        for j in range(l):
-            if (i, j) in start:
-                a = 1
-            elif (i, j) in walls:
-                elements[i][j] = "#"
-            else:
-                elements[i][j] = "."
-
-    if not e:
-        print_index(
-            elements,
-            counts=[[i, j] for i, j in start],
-            results=[[i, j] for i, j in walls],
-            tuples=start,
-            tuple_char="",
-            ending="",
-        )
-
-
 def move(x, y, d, score=0, path=[]):
-    if elements[x][y] in ["#"]:
+    if (x, y) in walls:
         return -1, path
     if (x, y) in path:
-        return -1, path
-    if elements[x][y] in ["E"]:
-        return score, path
-
-    if (x, y, d) in visited:
         return -1, path
 
     current_path = path.copy()
     current_path.append((x, y))
 
-    if debug:
-        print(f"({x}, {y}) - {d} - {score} - {current_path}")
-        print_index(elements, results=[[i, j] for i, j in current_path])
+    if elements[x][y] in ["E"]:
+        global best_score
+        if score <= best_score or best_score == -1:
+            if score < best_score:
+                best_path.clear()
+            best_score = score
+            for p in current_path:
+                best_path.add(p)
+
+        return score, current_path
+
+    if (x, y, d) in visited2:
+        if visited2[(x, y, d)] < score:
+            return -1, path
+
+    visited2[(x, y, d)] = score
 
     min_path = []
     min_score = -1
@@ -132,43 +118,41 @@ def solve(part=1):
                 end[0], end[1] = i, j
 
     if debug:
-        print()
-        print("------")
-        print()
+        print_index(elements, results=[start, end])
+        print("\n------\n")
 
-    if debug:
-        print_index(elements, counts=[[i, j] for i, j in walls])
-
-    # Start facing East --> ">"
-    #    N
-    # W  +  E
-    #    S
     res, path = move(start[0], start[1], d=">", score=0)
 
-    # print_grid(h, l)
+    if part == 1:
+        if debug:
+            print_index(
+                elements, results=[start, end], counts=[[i, j] for i, j in path]
+            )
+    else:
+        if debug:
+            print_index(elements, tuples=[(i, j) for i, j in best_path], tuple_char="0")
+        res = len(best_path)
+
     return res
 
 
 if __name__ == "__main__":
     time_and_color(start=True)
     debug = False
-    submit = True  # be careful
+    submit = False  # be careful
 
-    # debug = True
     assert puzzle(file("/2024/16/example.txt"), read_file, solve, 1) == 7036
     assert puzzle(file("/2024/16/example2.txt"), read_file, solve, 1) == 11048
     answer1 = puzzle(file("/2024/16/input.txt"), read_file, solve, 1)
-    assert answer1 < 131500
+    assert answer1 == 109496
     if submit:
         aoc_submit("2024", "16", 1, answer1)
 
-    # debug = True
-    # assert puzzle(file("/2024/16/example2.txt"), read_file, solve, 2) == 9021
-    # debug = True
-    # answer2 = puzzle(file("/2024/16/input.txt"), read_file, solve, 2)
-    # answer2 = 0
-    # assert answer2 == 1612860
-    # if submit:
-    #     aoc_submit("2024", "16", 2, answer2)
+    assert puzzle(file("/2024/16/example.txt"), read_file, solve, 2) == 45
+    assert puzzle(file("/2024/16/example2.txt"), read_file, solve, 2) == 64
+    answer2 = puzzle(file("/2024/16/input.txt"), read_file, solve, 2)
+    assert answer2 == 551
+    if submit:
+        aoc_submit("2024", "16", 2, answer2)
 
     time_and_color(start=False)
