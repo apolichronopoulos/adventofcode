@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
+import networkx as nx
+
 
 class Graph:
     def __init__(self):
@@ -92,3 +94,16 @@ def test_dijkstra():
 
 
 test_dijkstra()
+
+
+def grid_to_graph(grid):
+    rows, cols = len(grid), len(grid[0])
+    graph = nx.DiGraph()
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 1:
+                for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                        graph.add_edge((r, c), (nr, nc))
+    return graph
