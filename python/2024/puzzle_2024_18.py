@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import math
+
 import sys
 
 import networkx as nx
-import sympy as sp
-from sympy import Eq, Integer, Mod, Xor
 from utils.graph_utils import grid_to_graph
 from utils.utils import aoc_submit, file, print_index, puzzle, time_and_color
 
@@ -12,7 +10,6 @@ sys.setrecursionlimit(20000)
 
 falling_bytes = []
 fallen_bytes = []
-grid = []
 global size
 global falls
 
@@ -21,7 +18,6 @@ def read_file(filename, separator=","):
     f = open(filename, "r")
     falling_bytes.clear()
     fallen_bytes.clear()
-    grid.clear()
     for line in f:
         line = line.strip()
         if line == "":
@@ -30,29 +26,50 @@ def read_file(filename, separator=","):
         falling_bytes.append((int(x), int(y)))
 
 
+def init_grid(s, empty=1):
+    g = []
+    for i in range(s):
+        row = []
+        for j in range(s):
+            row.append(empty)
+        g.append(row)
+    return g
+
+
 def solve(part=1):
     res = 0
-
-    grid = []
-    for i in range(size):
-        row = []
-        for j in range(size):
-            row.append(1)
-        grid.append(row)
-
-    fallen_bytes.extend(falling_bytes[:falls])
-    print_index(grid, tuples=fallen_bytes, tuple_char="#")
-
-    for i, j in fallen_bytes:
-        grid[i][j] = 0
-
-    graph = grid_to_graph(grid)
     start = (0, 0)
     end = (size - 1, size - 1)
 
-    path = nx.shortest_path(graph, source=start, target=end)
-    print("Shortest Path:", path)
-    res = len(path) - 1
+    if part == 1:
+        grid = init_grid(size)
+        fallen_bytes.extend(falling_bytes[:falls])
+        if debug:
+            print_index(grid, tuples=fallen_bytes, tuple_char="#")
+        for i, j in fallen_bytes:
+            grid[i][j] = 0
+        graph = grid_to_graph(grid)
+        path = nx.shortest_path(graph, source=start, target=end)
+        res = len(path) - 1
+    else:
+        for b in range(falls, len(falling_bytes)):
+            grid = init_grid(size)
+            fallen_bytes.clear()
+            fallen_bytes.extend(falling_bytes[:b])
+            for i, j in fallen_bytes:
+                grid[i][j] = 0
+
+            graph = grid_to_graph(grid)
+            try:
+                path = nx.shortest_path(graph, source=start, target=end)
+                if debug:
+                    print(f"Found path found on {b} falls")
+            except nx.NetworkXNoPath:
+                x, y = fallen_bytes[-1]
+                res = f"{x},{y}"
+                if debug:
+                    print(f"No path found on {b} falls: {res}")
+                break
 
     return res
 
@@ -60,7 +77,7 @@ def solve(part=1):
 if __name__ == "__main__":
     time_and_color(start=True)
     debug = True
-    submit = True  # be careful
+    submit = False  # be careful
 
     size = 7
     falls = 12
@@ -68,14 +85,18 @@ if __name__ == "__main__":
     size = 71
     falls = 1024
     answer1 = puzzle(file("/2024/18/input.txt"), read_file, solve, 1)
-    assert answer1 > 22
+    assert answer1 == 296
     if submit:
         aoc_submit("2024", "18", 1, answer1)
 
-    # assert (puzzle(file("/2024/18/example2.txt"), read_file, solve, 2) == 117440)
-    # answer2 = puzzle(file("/2024/18/input.txt"), read_file, solve, 2)  # takes > 6 mins
-    # assert answer2 > 1249276142
-    # if submit:
-    #     aoc_submit("2024", "18", 2, answer2)
+    size = 7
+    falls = 12
+    assert puzzle(file("/2024/18/example.txt"), read_file, solve, 2) == "6,1"
+    size = 71
+    falls = 1024
+    answer2 = puzzle(file("/2024/18/input.txt"), read_file, solve, 2)
+    assert answer2 == "28,44"
+    if submit:
+        aoc_submit("2024", "18", 2, answer2)
 
     time_and_color(start=False)

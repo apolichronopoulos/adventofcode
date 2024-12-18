@@ -74,8 +74,6 @@ Simulate the first kilobyte (`1024` bytes) falling onto your memory space. After
 
 Your puzzle answer was `296`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -113,8 +111,12 @@ So, in this example, the coordinates of the first byte that prevents the exit fr
 
 Simulate more of the bytes that are about to corrupt your memory space. *What are the coordinates of the first byte that will prevent the exit from being reachable from your starting position?* (Provide the answer as two integers separated by a comma with no other characters.)
 
-Answer:
+Your puzzle answer was `28,44`.
 
-Although it hasn't changed, you can still [get your puzzle input](18/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
 
-You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22RAM+Run%22+%2D+Day+18+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F18) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22RAM+Run%22+%2D+Day+18+%2D+Advent+of+Code+2024&url=https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F18&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
+At this point, you should [return to your Advent calendar](/2024) and try another puzzle.
+
+If you still want to see it, you can [get your puzzle input](18/input).
+
+You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+%22RAM+Run%22+%2D+Day+18+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F18) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22RAM+Run%22+%2D+Day+18+%2D+Advent+of+Code+2024&url=https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F18&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
