@@ -35,14 +35,10 @@ Run as module
 
 ```bash
 cd ./python
-python -m 2024.puzzle_2024_01 ../puzzles
-python -m 2024.puzzle_2024_02 ../puzzles
-python -m 2024.puzzle_2024_03 ../puzzles
-python -m 2024.puzzle_2024_04 ../puzzles
-python -m 2024.puzzle_2024_05 ../puzzles
-python -m 2024.puzzle_2024_06 ../puzzles
-python -m 2024.puzzle_2024_07 ../puzzles
-python -m 2024.puzzle_2024_08 ../puzzles
+year=$(date -v -11m +%Y)
+for day in {01..25} do
+  python -m ${year}.puzzle_${year}_${day} ../puzzles
+done
 ```
 
 or include path, to use utils
@@ -50,23 +46,24 @@ or include path, to use utils
 ```bash
 cd ./python
 export PYTHONPATH=$(pwd)
-python ./2024/puzzle_2024_01.py ../puzzles
-python ./2024/puzzle_2024_02.py ../puzzles
-python ./2024/puzzle_2024_03.py ../puzzles
-python ./2024/puzzle_2024_04.py ../puzzles
+year=$(date -v -11m +%Y)
+for day in {01..25} do
+  python ./${year}/puzzle_${year}_${day}.py ../puzzles
+done
 ```
 
 # aoc-cli
 
-Download puzzle description using [aoc-cli](https://github.com/scarvalhojr/aoc-cli)
+Download puzzle description and/or input using [aoc-cli](https://github.com/scarvalhojr/aoc-cli)
+
+_Note: to use authenticated requests put your session token in `~/.adventofcode.session`_
 
 ```bash
-current_year=$(date +%Y)
-for day in {01..25}
-do
-  mkdir -p ./puzzles/$current_year/$day/
-  aoc download -y $current_year -d $day -o -P -p ./puzzles/$current_year/$day/puzzle.md
-  aoc download -y $current_year -d $day -o -I -i ./puzzles/$current_year/$day/input.txt
+year=$(date -v -11m +%Y)
+for day in {01..25} do
+  mkdir -p ./puzzles/$year/$day/
+  aoc download -y $year -d $day -o -P -p ./puzzles/$year/$day/puzzle.md
+  aoc download -y $year -d $day -o -I -i ./puzzles/$year/$day/input.txt
 done
 pre-commit run --files ./puzzles/**/*
 ```
