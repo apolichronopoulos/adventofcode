@@ -96,9 +96,9 @@ def test_dijkstra():
 test_dijkstra()
 
 
-def grid_to_graph(grid):
+def grid_to_graph(grid, directed=True):
     rows, cols = len(grid), len(grid[0])
-    graph = nx.DiGraph()
+    graph = nx.DiGraph() if directed else nx.Graph()
     for r in range(rows):
         for c in range(cols):
             if grid[r][c] == 1:
@@ -106,4 +106,15 @@ def grid_to_graph(grid):
                     nr, nc = r + dr, c + dc
                     if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
                         graph.add_edge((r, c), (nr, nc))
+    return graph
+
+
+def pos_to_graph(pos, directed=True):
+    graph = nx.DiGraph() if directed else nx.Graph()
+    for r, c in pos:
+        graph.add_node((r, c))
+        for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            nr, nc = r + dr, c + dc
+            if (nr, nc) in pos:
+                graph.add_edge((r, c), (nr, nc))
     return graph

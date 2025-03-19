@@ -1,22 +1,9 @@
 # -*- coding: utf-8 -*-
-import subprocess
 import sys
 
-import numpy as np
-import sympy as sp
-from colorama import Back, Fore
-from sympy import Integer
-from utils.utils import (
-    aoc_submit,
-    clean,
-    draw_image_from_text,
-    file,
-    print_color,
-    print_index,
-    puzzle,
-    set_print_color,
-    time_and_color,
-)
+import networkx as nx
+from utils.graph_utils import pos_to_graph
+from utils.utils import draw_image_from_text, file, print_index, puzzle, time_and_color
 
 sys.setrecursionlimit(20000)
 
@@ -91,7 +78,7 @@ def solve(part=1):
         res += q[0] * q[1] * q[2] * q[3]
     else:
         pos = set()
-        for second in range(7132, 7133):
+        for second in range(1, 8000):
             pos.clear()
             for i in range(len(p)):
                 p_x, p_y = p[i][0], p[i][1]
@@ -109,7 +96,15 @@ def solve(part=1):
                 "".join("x" if (i, j) in pos else " " for j in range(len(grid[i])))
                 for i in range(len(grid))
             )
-            draw_image_from_text(text_pattern, f"img/{second}", ".png")
+
+            graph = pos_to_graph(pos, False)
+            clusters = list(nx.connected_components(graph))
+            largest_cluster = max(clusters, key=len) if clusters else []
+
+            if len(largest_cluster) > 100:
+                if debug:
+                    draw_image_from_text(text_pattern, f"img/2024_14_{second}", ".png")
+                return second
 
     return res
 
@@ -118,15 +113,12 @@ if __name__ == "__main__":
     time_and_color(start=True)
     debug = False
 
-    # assert puzzle(file("/2024/14/example.txt"), read_file, solve, 1) == 12
-    # answer1 = puzzle(file("/2024/14/input.txt"), read_file, solve, 1)
-    # assert answer1 == 229980828
+    assert puzzle(file("/2024/14/example.txt"), read_file, solve, 1) == 12
+    answer1 = puzzle(file("/2024/14/input.txt"), read_file, solve, 1)
+    assert answer1 == 229980828
     # aoc_submit("2024", "14", 1, answer1)
 
-    # assert puzzle(file("/2024/14/example.txt"), read_file, solve, 2) == 0
     answer2 = puzzle(file("/2024/14/input.txt"), read_file, solve, 2)
-    assert answer2 > 4842
-    assert answer2 < 10000
     assert answer2 == 7132
     # aoc_submit("2024", "14", 2, answer2)
 

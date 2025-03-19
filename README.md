@@ -31,12 +31,22 @@ Use venv (or any other python env you want)
 . ./python/venv/bin/activate
 ```
 
+### Run specific puzzle
+
+```bash
+cd ./python && year=2024 && day=14
+python -m ${year}.puzzle_${year}_${day} ../puzzles
+```
+
+### Run all puzzles
+
 Run as module
 
 ```bash
 cd ./python
 year=$(date -v -11m +%Y)
-for day in {01..25} do
+for day in {01..25}
+do
   python -m ${year}.puzzle_${year}_${day} ../puzzles
 done
 ```
@@ -47,7 +57,8 @@ or include path, to use utils
 cd ./python
 export PYTHONPATH=$(pwd)
 year=$(date -v -11m +%Y)
-for day in {01..25} do
+for day in {01..25}
+do
   python ./${year}/puzzle_${year}_${day}.py ../puzzles
 done
 ```
@@ -60,7 +71,8 @@ _Note: to use authenticated requests put your session token in `~/.adventofcode.
 
 ```bash
 year=$(date -v -11m +%Y)
-for day in {01..25} do
+for day in {01..25}
+do
   mkdir -p ./puzzles/$year/$day/
   aoc download -y $year -d $day -o -P -p ./puzzles/$year/$day/puzzle.md
   aoc download -y $year -d $day -o -I -i ./puzzles/$year/$day/input.txt
