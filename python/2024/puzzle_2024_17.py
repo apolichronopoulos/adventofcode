@@ -84,10 +84,6 @@ def run_program(a, b, c, expected=[]):
     while intr_pointer < len(opcodes) - 1:
         opcode, operand = opcodes[intr_pointer], opcodes[intr_pointer + 1]
         calculate(opcode, operand)
-        for i in range(min(len(expected), len(results))):
-            if expected[i] != results[i]:
-                return None
-
     return ",".join([str(r) for r in results])
 
 
@@ -98,42 +94,51 @@ def solve(part=1):
     if part == 1:
         return res
 
-    expected = opcodes
-    expected_res = ",".join([str(s) for s in opcodes])
+    expected_output = [s for s in opcodes]
+    found_bits = 0
+    solutions = [0]
 
-    if debug:
-        print(res)
-        print(expected_res)
+    lshr_operand = 3
+    check_range = 2**lshr_operand
 
-    min_a = -1
-    while True:
-        min_a += 1
-        if min_a == a:
-            continue
-        res2 = run_program(min_a, b, c, expected)
-        if res2 and res2 == expected_res:
-            if debug:
-                print(res2)
-            break
+    while found_bits != len(expected_output):
+        target = expected_output[-found_bits - 1 :]
+        if len(solutions) == 0:
+            return None
+        all_n = [s for s in solutions]
+        solutions.clear()
+        for x in range(check_range):
+            for n in all_n:
+                a = x + (n * check_range)
+                res = run_program(a, 0, 0)
+                if res == ",".join([str(r) for r in target]):
+                    if debug:
+                        print(f"A={a} --> {res}")
+                    solutions.append(a)
+        if len(solutions) > 0:
+            found_bits += 1
 
-    return min_a
+    return min(solutions)
 
 
 if __name__ == "__main__":
     time_and_color(start=True)
-    debug = True
+    debug = False
     submit = False  # be careful
 
-    # assert (puzzle(file("/2024/17/example.txt"), read_file, solve, 1) == "4,6,3,5,6,3,5,2,1,0")
-    # answer1 = puzzle(file("/2024/17/input.txt"), read_file, solve, 1)
-    # assert answer1 == "6,7,5,2,1,3,5,1,7"
-    # if submit:
-    #     aoc_submit("2024", "17", 1, answer1)
+    assert (
+        puzzle(file("/2024/17/example.txt"), read_file, solve, 1)
+        == "4,6,3,5,6,3,5,2,1,0"
+    )
+    answer1 = puzzle(file("/2024/17/input.txt"), read_file, solve, 1)
+    assert answer1 == "6,7,5,2,1,3,5,1,7"
+    if submit:
+        aoc_submit("2024", "17", 1, answer1)
 
-    # assert (puzzle(file("/2024/17/example2.txt"), read_file, solve, 2) == 117440)
-    answer2 = puzzle(file("/2024/17/input.txt"), read_file, solve, 2)  # takes > 6 mins
-    assert answer2 != 117440
-    # if submit:
-    #     aoc_submit("2024", "17", 2, answer2)
+    assert puzzle(file("/2024/17/example2.txt"), read_file, solve, 2) == 117440
+    answer2 = puzzle(file("/2024/17/input.txt"), read_file, solve, 2)
+    assert answer2 == 216549846240877
+    if submit:
+        aoc_submit("2024", "17", 2, answer2)
 
     time_and_color(start=False)
