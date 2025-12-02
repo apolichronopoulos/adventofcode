@@ -76,14 +76,5 @@ Download puzzle description and/or input using [aoc-cli](https://github.com/scar
 _Note: to use authenticated requests put your session token in `~/.adventofcode.session`_
 
 ```bash
-year=$(date -v -11m +%Y)
-days=12
-for day in {01..$days}
-do
-  mkdir -p ./puzzles/$year/$day/
-  aoc download -y $year -d $day -o -P -p ./puzzles/$year/$day/puzzle.md
-  aoc download -y $year -d $day -o -I -i ./puzzles/$year/$day/input.txt
-  echo '' >> ./puzzles/$year/$day/example.txt
-done
-pre-commit run --files ./puzzles/**/*
+AOC_YEAR=2025 AOC_DAYS=12 ./scripts/download-aoc-files.sh
 ```
