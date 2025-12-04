@@ -35,29 +35,46 @@ def read_file(filename, part=1):
 
 
 def solve(part=1):
-    res = 0
+    results.clear()
 
     if debug:
         print(f"------------------------------")
         print_index(grid, papers)
 
     for i, j in papers:
-        neighbors = find_all_neighbors(i, j, grid)
-        count = 0
-
-        for [x, y] in neighbors:
-            if grid[x][y] == "@":
-                count += 1
-
-        if count < 4:
-            res += 1
+        if check_if_roll_can_be_lifted(i, j):
             results.append((i, j))
+
+    if part == 2:
+        while True:
+            removed = 0
+            for i, j in results:
+                if grid[i][j] == "@":
+                    grid[i][j] = "."
+                    removed += 1
+
+            if removed == 0:
+                break
+
+            for i, j in papers:
+                if (i, j) in results:
+                    continue
+                if check_if_roll_can_be_lifted(i, j):
+                    results.append((i, j))
 
     if debug:
         print(f"------------------------------")
         print_index(grid, tuples=results, tuple_char="x")
 
-    return res
+    return len(results)
+
+
+def check_if_roll_can_be_lifted(i, j):
+    count = 0
+    for [x, y] in find_all_neighbors(i, j, grid):
+        if grid[x][y] == "@":
+            count += 1
+    return count < 4
 
 
 if __name__ == "__main__":
@@ -73,12 +90,12 @@ if __name__ == "__main__":
     if submit:
         aoc_submit("2025", "04", 1, answer1)
 
-    # assert puzzle(file("/2025/04/example.txt"), read_file, solve, 2) == 43
+    assert puzzle(file("/2025/04/example.txt"), read_file, solve, 2) == 43
 
-    # answer2 = puzzle(file("/2025/04/input.txt"), read_file, solve, 2)
-    # assert answer2 == 172681562473501
+    answer2 = puzzle(file("/2025/04/input.txt"), read_file, solve, 2)
+    assert answer2 == 9280
 
-    # if submit:
-    #     aoc_submit("2025", "04", 2, answer2)
+    if submit:
+        aoc_submit("2025", "04", 2, answer2)
 
     time_and_color(start=False)
