@@ -63,12 +63,12 @@ def print_index(
     for i in range(0, len(index)):
         for j in range(0, len(index[i])):
             c = index[i][j]
-            if (i, j) in tuples:
+            if (i, j) in tuples or [i, j] in tuples:
                 c2 = c if tuple_char == "" else tuple_char
                 print_color(c2, color=Fore.CYAN, ending=ending)
-            elif [i, j] in results:
+            elif [i, j] in results or (i, j) in results:
                 print_color(c, color=Fore.MAGENTA, ending=ending)
-            elif [i, j] in counts:
+            elif [i, j] in counts or (i, j) in counts:
                 print_color(c, color=Fore.RED, ending=ending)
             else:
                 print_color(c, color=color, ending=ending)
@@ -136,6 +136,30 @@ def rotate_grid(grid, index=1):
 
 def find_neighbors(x, y, tiles):
     all_cases = [[x, y + 1], [x - 1, y], [x + 1, y], [x, y - 1]]
+    cases = []
+    for case in all_cases:
+        if (
+            case[0] < 0
+            or case[1] < 0
+            or case[0] >= len(tiles)
+            or case[1] >= len(tiles[0])
+        ):
+            continue
+        cases.append(case)
+    return cases
+
+
+def find_all_neighbors(x, y, tiles):
+    all_cases = [
+        [x, y + 1],
+        [x - 1, y],
+        [x + 1, y],
+        [x, y - 1],
+        [x + 1, y + 1],
+        [x - 1, y - 1],
+        [x + 1, y - 1],
+        [x - 1, y + 1],
+    ]
     cases = []
     for case in all_cases:
         if (
