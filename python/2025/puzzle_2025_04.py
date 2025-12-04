@@ -3,6 +3,7 @@ import sys
 
 from utils.utils import (
     aoc_submit,
+    custom_args,
     file,
     find_all_neighbors,
     print_index,
@@ -79,8 +80,7 @@ def check_if_roll_can_be_lifted(i, j):
 
 if __name__ == "__main__":
     time_and_color(start=True)
-    submit = False  # be careful
-    debug = False
+    submit, debug = custom_args().submit, custom_args().debug
 
     assert puzzle(file("/2025/04/example.txt"), read_file, solve, 1) == 13
     answer1 = puzzle(file("/2025/04/input.txt"), read_file, solve, 1)

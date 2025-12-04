@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import argparse
 import subprocess
 import sys
 from datetime import datetime
@@ -10,7 +11,7 @@ from colorama import Back, Fore, init
 
 
 def file(filename):
-    puzzle_folder = sys.argv[1] if len(sys.argv) > 1 else "../../puzzles"
+    puzzle_folder = custom_args().puzzles
     return f"{puzzle_folder}/{filename}".replace("//", "/")
 
 
@@ -273,8 +274,6 @@ def valid_loc(i, j, h, l):
 
 
 def aoc_submit(year, day, part, answer):
-    import subprocess
-
     command = ["aoc", "submit", "-y", str(year), "-d", str(day), str(part), str(answer)]
     result = subprocess.run(command, capture_output=True, text=True)
     if result.returncode == 0:
@@ -307,3 +306,20 @@ def draw_image_from_text(text_pattern, filename, suffix=".png"):
         )
 
     image.save(f"{filename}{suffix}")
+
+
+def custom_args():
+    parser = argparse.ArgumentParser()
+
+    # Check if argv[1] exists and is not an option
+    puzzles = "../../puzzles"
+    argv = sys.argv[1:]
+    if argv and not argv[0].startswith("--"):
+        puzzles = argv[0]
+        argv = argv[1:]
+
+    parser.add_argument("--submit", action="store_true", help="Submit the answer")
+    parser.add_argument("--debug", action="store_true", help="Enable debug output")
+    args = parser.parse_args(argv)
+    args.puzzles = puzzles
+    return args
