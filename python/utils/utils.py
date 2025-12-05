@@ -308,6 +308,12 @@ def draw_image_from_text(text_pattern, filename, suffix=".png"):
     image.save(f"{filename}{suffix}")
 
 
+def ranges_overlap(r1, r2):
+    s1, e1 = r1
+    s2, e2 = r2
+    return (s1 <= s2 <= e1) or (s1 <= e2 <= e1) or (s2 <= s1 <= e2) or (s2 <= e1 <= e2)
+
+
 def custom_args():
     parser = argparse.ArgumentParser()
 
