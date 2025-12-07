@@ -9,7 +9,7 @@ sys.setrecursionlimit(10000)
 reports = []
 
 
-def read_file(filename):
+def read_file(filename, part=1):
     f = open(filename, "r")
     reports.clear()
     for i, line in enumerate(f):

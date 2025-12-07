@@ -6,7 +6,7 @@ from utils.utils import file, puzzle, time_and_color
 sys.setrecursionlimit(10000)
 
 
-def read_file(filename):
+def read_file(filename, part=1):
     elements = []
     f = open(filename, "r")
     for line in f:

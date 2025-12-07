@@ -16,7 +16,7 @@ steps = [
 ]
 
 
-def read_file(filename):
+def read_file(filename, part=1):
     f = open(filename, "r")
     map_key = ""
     key_list = []

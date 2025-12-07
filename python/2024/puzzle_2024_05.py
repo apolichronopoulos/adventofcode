@@ -12,7 +12,7 @@ correct_updates = []
 incorrect_updates = []
 
 
-def read_file(filename):
+def read_file(filename, part=1):
     orders.clear()
     updates.clear()
     correct_updates.clear()

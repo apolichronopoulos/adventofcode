@@ -14,7 +14,7 @@ sys.setrecursionlimit(10000)
 lines = []
 
 
-def read_file(filename):
+def read_file(filename, part=1):
     f = open(filename, "r")
     lines.clear()
     for i, line in enumerate(f):
