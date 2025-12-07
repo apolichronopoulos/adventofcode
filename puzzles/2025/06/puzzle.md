@@ -36,8 +36,6 @@ Solve the problems on the math worksheet. *What is the grand total found by addi
 
 Your puzzle answer was `5060053676136`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -66,8 +64,12 @@ Now, the grand total is `1058` + `3253600` + `625` + `8544` = `*3263827*`.
 
 Solve the problems on the math worksheet again. *What is the grand total found by adding together all of the answers to the individual problems?*
 
-Answer:
+Your puzzle answer was `9695042567249`.
 
-Although it hasn't changed, you can still [get your puzzle input](6/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
 
-You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Trash+Compactor%22+%2D+Day+6+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F6) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Trash+Compactor%22+%2D+Day+6+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F6&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
+At this point, you should [return to your Advent calendar](/2025) and try another puzzle.
+
+If you still want to see it, you can [get your puzzle input](6/input).
+
+You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+%22Trash+Compactor%22+%2D+Day+6+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F6) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Trash+Compactor%22+%2D+Day+6+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F6&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.

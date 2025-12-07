@@ -7,16 +7,20 @@ print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 columns = []
+max_j = 0
 
 
 def read_file(filename, part=1):
     f = open(filename, "r")
     columns.clear()
     for i, line in enumerate(f):
-        line = line.strip()
+        line = line.strip() if part == 1 else line
         if line == "":
             continue
-        items = line.split()
+        items = line.split() if part == 1 else [s for s in line]
+        global max_j
+        if len(items) > max_j:
+            max_j = len(items)
         for index, item in enumerate(items):
             if len(columns) <= index:
                 columns.append([])
@@ -40,6 +44,35 @@ def solve(part=1):
             if debug:
                 print(f"Column: {col} => {temp}")
             res += temp
+    else:
+        temp = []
+        global max_j
+        for j in range(max_j - 1, -1, -1):
+            num = ""
+            for c in columns[j]:
+                if c == "+":
+                    temp.append(num)
+                    num = ""
+                    if debug:
+                        print(f"Column: {j} => {c} with temp {temp}")
+                    for n in temp:
+                        res += int(n)
+                    temp.clear()
+                elif c == "*":
+                    temp.append(num)
+                    num = ""
+                    if debug:
+                        print(f"Column: {j} => {c} with temp {temp}")
+                    prod = 1
+                    for c in temp:
+                        prod *= int(c)
+                    res += prod
+                    temp.clear()
+                else:
+                    num = num + str(c)
+            if num.strip() != "":
+                temp.append(num)
+
     return res
 
 
@@ -54,12 +87,12 @@ if __name__ == "__main__":
     if submit:
         aoc_submit("2025", "06", 1, answer1)
 
-    # assert puzzle(file("/2025/06/example.txt"), read_file, solve, 2) == -1
-    #
-    # answer2 = puzzle(file("/2025/06/input.txt"), read_file, solve, 2)
-    # assert answer2 == -1
-    #
-    # if submit:
-    #     aoc_submit("2025", "06", 2, answer2)
+    assert puzzle(file("/2025/06/example.txt"), read_file, solve, 2) == 3263827
+
+    answer2 = puzzle(file("/2025/06/input.txt"), read_file, solve, 2)
+    assert answer2 == 9695042567249
+
+    if submit:
+        aoc_submit("2025", "06", 2, answer2)
 
     time_and_color(start=False)

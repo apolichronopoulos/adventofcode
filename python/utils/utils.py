@@ -36,7 +36,7 @@ def read_file(filename, separator=""):
 def puzzle(filename, read, solve, part=1):
     t_start = timer()
     print_color(f"puzzle{part}: {filename}", Fore.MAGENTA)
-    elements = read(filename)
+    elements = read(filename, part)
     if elements:
         res = solve(part, elements)
     else:
