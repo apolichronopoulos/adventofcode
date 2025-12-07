@@ -329,3 +329,7 @@ def custom_args():
     args = parser.parse_args(argv)
     args.puzzles = puzzles
     return args
+
+
+def are_coordinates_inside_grid(i, j, grid):
+    return 0 <= i < len(grid) and 0 <= j < len(grid[0])
