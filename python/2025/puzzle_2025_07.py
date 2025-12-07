@@ -14,11 +14,11 @@ from utils.utils import (
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
-
 grid = []
 tachyons = []
 beams = []
 start = []
+visited = {}
 
 
 def read_file(filename, part=1):
@@ -27,6 +27,7 @@ def read_file(filename, part=1):
     tachyons.clear()
     beams.clear()
     start.clear()
+    visited.clear()
     for i, line in enumerate(f):
         row = []
         line = line.strip()
@@ -44,22 +45,18 @@ def read_file(filename, part=1):
 def solve(part=1):
     res = 0
 
+    if debug:
+        print_index(grid, results=start, counts=tachyons, tuples=beams, tuple_char="|")
+
     if part == 1:
-        if debug:
-            print_index(
-                grid, results=start, counts=tachyons, tuples=beams, tuple_char="|"
-            )
-
         while len(start) > 0:
-
             if debug:
-                print(f"--- New iteration ---")
+                print(f"------------------------")
                 print_index(
                     grid, results=start, counts=tachyons, tuples=beams, tuple_char="|"
                 )
 
             i, j = start.pop(0)
-
             x, y = (i + 1, j)
             while (x, y) not in tachyons:
                 if x > len(grid) - 1 or (x, y) in beams:
@@ -69,11 +66,41 @@ def solve(part=1):
             if (x, y) in tachyons:
                 res += 1
                 for n in [-1, 1]:
-                    if are_coordinates_inside_grid(x + 1, y + n, grid):
-                        if (x + 1, y + n) not in beams:
-                            beams.append((x + 1, y + n))
-                            start.append((x + 1, y + n))
+                    nx, ny = (x, y + n)
+                    if are_coordinates_inside_grid(nx, ny, grid):
+                        if (nx, ny) not in beams:
+                            beams.append((nx, ny))
+                            start.append((nx, ny))
+    else:
+        i, j = start.pop(0)
+        res = visit(i, j)
 
+    return res
+
+
+def visit(i, j):
+    res = 0
+
+    if (i, j) in visited:
+        return visited[(i, j)]
+
+    x, y = (i + 1, j)
+
+    while True:
+        if (x, y) in tachyons:
+            break
+        if x > len(grid) - 1:
+            visited[(i, j)] = 1
+            return 1
+        x += 1
+
+    if (x, y) in tachyons:
+        for n in [-1, 1]:
+            nx, ny = (x, y + n)
+            if are_coordinates_inside_grid(nx, ny, grid):
+                res += visit(nx, ny)
+
+    visited[(i, j)] = res
     return res
 
 
@@ -88,12 +115,11 @@ if __name__ == "__main__":
     if submit:
         aoc_submit("2025", "07", 1, answer1)
 
-    # assert puzzle(file("/2025/07/example.txt"), read_file, solve, 2) == -1
-    #
-    # answer2 = puzzle(file("/2025/07/input.txt"), read_file, solve, 2)
-    # assert answer2 == -1
-    #
-    # if submit:
-    #     aoc_submit("2025", "07", 2, answer2)
+    assert puzzle(file("/2025/07/example.txt"), read_file, solve, 2) == 40
+    answer2 = puzzle(file("/2025/07/input.txt"), read_file, solve, 2)
+    assert answer2 == 76624086587804
+
+    if submit:
+        aoc_submit("2025", "07", 2, answer2)
 
     time_and_color(start=False)
