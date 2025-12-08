@@ -333,3 +333,16 @@ def custom_args():
 
 def are_coordinates_inside_grid(i, j, grid):
     return 0 <= i < len(grid) and 0 <= j < len(grid[0])
+
+
+def euclidean_distance(p1, p2, dimensions=3):
+    if dimensions == 1:
+        return abs(p1[0] - p2[0])
+    elif dimensions == 2:
+        return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
+    elif dimensions == 3:
+        return (
+            (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2 + (p1[2] - p2[2]) ** 2
+        ) ** 0.5
+
+    return 0
