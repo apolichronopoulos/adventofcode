@@ -346,3 +346,10 @@ def euclidean_distance(p1, p2, dimensions=3):
         ) ** 0.5
 
     return 0
+
+
+def calculate_area(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+
+    return (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1)
