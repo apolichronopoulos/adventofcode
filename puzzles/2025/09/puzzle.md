@@ -100,8 +100,6 @@ Using two red tiles as opposite corners, *what is the largest area of any rectan
 
 Your puzzle answer was `4777409595`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -190,8 +188,12 @@ The largest rectangle you can make in this example using only red and green tile
 
 Using two red tiles as opposite corners, *what is the largest area of any rectangle you can make using only red and green tiles?*
 
-Answer:
+Your puzzle answer was `1473551379`.
 
-Although it hasn't changed, you can still [get your puzzle input](9/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
 
-You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Movie+Theater%22+%2D+Day+9+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F9) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Movie+Theater%22+%2D+Day+9+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F9&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
+At this point, you should [return to your Advent calendar](/2025) and try another puzzle.
+
+If you still want to see it, you can [get your puzzle input](9/input).
+
+You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+%22Movie+Theater%22+%2D+Day+9+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F9) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Movie+Theater%22+%2D+Day+9+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F9&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
