@@ -45,21 +45,31 @@ def solve(part=1):
     distances = sorted(distances.items(), key=lambda x: x[1])
 
     groups = []
-    for d in distances[:NUMBER_OF_PAIRS]:
-        # p1, p2 = grid[d[0][0]], grid[d[0][1]] # use points directly
-        p1, p2 = d[0]  # use indices to avoid duplicates
+
+    count = 0
+    i = 0
+    while count < NUMBER_OF_PAIRS:
+        p1, p2 = distances[i][0]
 
         found = False
         for g in groups:
-            if p1 in g or p2 in g:
+            if p1 in g and p2 in g:
+                found = True
+                break
+            elif p1 in g or p2 in g:
                 if not p1 in g:
                     g.append(p1)
                 if not p2 in g:
                     g.append(p2)
                 found = True
+                count += 1
                 break
+
         if not found:
+            count += 1
             groups.append([p1, p2])
+
+        i += 1
 
     groups = sorted(groups, key=lambda x: -len(x))
     if debug:
@@ -77,14 +87,16 @@ if __name__ == "__main__":
     time_and_color(start=True)
     submit, debug = custom_args().submit, custom_args().debug
 
-    NUMBER_OF_PAIRS = 10 + 1
+    NUMBER_OF_PAIRS = 10
     assert puzzle(file("/2025/08/example.txt"), read_file, solve, 1) == 40
 
-    # NUMBER_OF_PAIRS = 1000 + 100
-    # answer1 = puzzle(file("/2025/08/input.txt"), read_file, solve, 1)
-    # assert answer1 != 12
-    # assert answer1 > 1331
-    # assert answer1 == -1
+    NUMBER_OF_PAIRS = 1000
+    answer1 = puzzle(file("/2025/08/input.txt"), read_file, solve, 1)
+    assert answer1 != 12
+    assert answer1 > 1331
+    assert answer1 > 3808
+    assert answer1 != 6624
+    assert answer1 == -1
 
     # if submit:
     #     aoc_submit("2025", "08", 1, answer1)
