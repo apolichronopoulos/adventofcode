@@ -353,3 +353,15 @@ def calculate_area(p1, p2):
     x2, y2 = p2
 
     return (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1)
+
+
+def substring_between(text, s, e, keep_edges=True):
+    start_idx = text.find(s)
+    end_idx = text.rfind(e)
+    if start_idx == -1 or end_idx == -1:
+        return ""
+    if keep_edges:
+        end_idx += len(e)
+    else:
+        start_idx += len(s)
+    return text[start_idx:end_idx]
