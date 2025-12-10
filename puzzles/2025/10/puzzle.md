@@ -62,8 +62,6 @@ Analyze each machine's indicator light diagram and button wiring schematics. *Wh
 
 Your puzzle answer was `441`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -100,8 +98,12 @@ So, the fewest button presses required to correctly configure the joltage level 
 
 Analyze each machine's joltage requirements and button wiring schematics. *What is the fewest button presses required to correctly configure the joltage level counters on all of the machines?*
 
-Answer:
+Your puzzle answer was `18559`.
 
-Although it hasn't changed, you can still [get your puzzle input](10/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
 
-You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
+At this point, you should [return to your Advent calendar](/2025) and try another puzzle.
+
+If you still want to see it, you can [get your puzzle input](10/input).
+
+You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.

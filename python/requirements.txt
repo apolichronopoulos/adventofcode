@@ -10,3 +10,4 @@ momepy==0.9.1 # pip link https://pypi.org/project/momepy/
 contextily==1.6.2 # pip link https://pypi.org/project/contextily/
 libpysal==4.12.1 # pip link https://pypi.org/project/libpysal/
 sympy==1.13.3 # pip link https://pypi.org/project/sympy/
+pulp==3.3.0 # pip link https://pypi.org/project/PuLP/
