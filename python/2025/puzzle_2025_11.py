@@ -5,8 +5,8 @@ from utils.utils import (
     aoc_submit,
     custom_args,
     file,
+    get_permutations,
     puzzle,
-    substring_between,
     time_and_color,
 )
 
@@ -16,7 +16,6 @@ sys.setrecursionlimit(10000)
 devices = []
 outputs = []
 dev_positions = {}
-START_DEVICE = "you"
 END_DEVICE = "out"
 
 
@@ -34,10 +33,6 @@ def read_file(filename, part=1):
         devices.append(device)
         outputs.append([x for x in output.strip().split()])
 
-    if debug:
-        for i in range(len(devices)):
-            print("Device:", devices[i], "Output:", outputs[i])
-
 
 def solve(part=1):
     res = 0
@@ -46,33 +41,34 @@ def solve(part=1):
         dev_positions[devices[i]] = i
 
     if part == 1:
-        paths = travel([[dev_positions[START_DEVICE]]], [])
-        if debug:
-            for p in paths:
-                print(f"Path: {p}")
-        res += len(paths)
+        START_DEVICE = "you"
+        res += dfs(START_DEVICE, END_DEVICE, {})
+    else:
+        START_DEVICE = "svr"
+        MUST_VISIT = ["dac", "fft"]
+        for a, b in get_permutations(MUST_VISIT):
+            p1 = dfs(START_DEVICE, a, {})
+            p2 = dfs(a, b, {})
+            p3 = dfs(b, END_DEVICE, {})
+            res += p1 * p2 * p3
 
     return res
 
 
-def travel(paths=[], end_paths=[]):
-    if len(paths) == 0:
-        return []
+def dfs(start, end, cache={}):
+    if start == end:
+        return 1
+    elif start not in dev_positions:
+        return 0
+    elif (start, end) in cache:
+        return cache[(start, end)]
 
-    new_paths = []
-    while len(paths) > 0:
-        path = paths.pop(0)
-        pos = path[-1]
-        for o in outputs[pos]:
-            if o == END_DEVICE:
-                path.append(END_DEVICE)
-                end_paths.append(path)
-            else:
-                new_pos = dev_positions[o]
-                if new_pos not in path:
-                    new_paths.append(path + [new_pos])
+    paths = 0
+    for o in outputs[dev_positions[start]]:
+        paths += dfs(o, end, cache)
+    cache[(start, end)] = paths
 
-    return travel(new_paths, end_paths) if len(new_paths) > 0 else end_paths
+    return paths
 
 
 if __name__ == "__main__":
@@ -86,11 +82,11 @@ if __name__ == "__main__":
     if submit:
         aoc_submit("2025", "11", 1, answer1)
 
-    # assert puzzle(file("/2025/11/example.txt"), read_file, solve, 2) == -1
-    # answer2 = puzzle(file("/2025/11/input.txt"), read_file, solve, 2)
-    # assert answer2 == -1
-    #
-    # if submit:
-    #     aoc_submit("2025", "11", 2, answer2)
+    assert puzzle(file("/2025/11/example2.txt"), read_file, solve, 2) == 2
+    answer2 = puzzle(file("/2025/11/input.txt"), read_file, solve, 2)
+    assert answer2 == 383307150903216
+
+    if submit:
+        aoc_submit("2025", "11", 2, answer2)
 
     time_and_color(start=False)
