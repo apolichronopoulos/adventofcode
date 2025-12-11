@@ -6,6 +6,7 @@ from datetime import datetime
 from functools import lru_cache
 from timeit import default_timer as timer
 
+import networkx as nx
 import numpy as np
 from colorama import Back, Fore, init
 
@@ -81,6 +82,15 @@ def get_combinations(my_list):  # creating a user-defined method
     my_result = []
     for i in range(0, len(my_list)):
         for j in range(i, len(my_list)):
+            if i != j:
+                my_result.append((my_list[i], my_list[j]))
+    return my_result
+
+
+def get_permutations(my_list):  # creating a user-defined method
+    my_result = []
+    for i in range(0, len(my_list)):
+        for j in range(0, len(my_list)):
             if i != j:
                 my_result.append((my_list[i], my_list[j]))
     return my_result
@@ -365,3 +375,14 @@ def substring_between(text, s, e, keep_edges=True):
     else:
         start_idx += len(s)
     return text[start_idx:end_idx]
+
+
+def create_graph(components, connections, directed=True):
+    g = nx.DiGraph()
+    for c in components:
+        g.add_node(c)
+    for c in connections:
+        g.add_edge(c[0], c[1])
+    if not directed:
+        g = g.to_undirected()
+    return g
